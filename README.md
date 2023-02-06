@@ -21,7 +21,7 @@ The whole iteration is going to be something like this:
 * A function that can divide a cell.
 * A function to define the new population each generation.
 
-# Thing to implement:
+# Things to implement:
 * Make so every cell tries to find food every iteration (maybe using the permutation function to select the cells randomly).
 * Add a cost to the foraging process.
 * After each iteration check whether they have to die, reproduce or do nothing at all.
