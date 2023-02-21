@@ -1,0 +1,36 @@
+import functions.func as ff
+
+class Agent():
+
+    def __init__(self, energy: int) -> None:
+        # assert energy > 0, "Energy must be positive."
+        self.genotype = ff.binary_generator()
+        self.energy = energy
+
+    def __str__(self) -> str:
+        return f"Genotype: {self.genotype}. Energy: {self.energy}"
+
+    def check_energy_reproduce(self) -> bool:
+        """Checks whether the Agent has enough food to reproduce"""
+        return self.energy >= 10
+
+    def check_energy_die(self) -> bool:
+        """Checks if the agent has run out of energy"""
+        return self.energy < 0
+
+    def eat(self, food: str) -> None:
+        """Describe the interation between an Agent and the food.
+        We make an AND operation between the two binary strings and 
+        the energy gained by the Agent is the number of '1' that the
+        final string has.
+
+        Args:
+            food (str): a binary string representing the food.
+        """
+
+        genotype = int(self.genotype, 2)
+        food = int(food, 2)
+
+        eaten = bin(genotype & food)  # The size of food doesn't matter
+
+        self.energy += eaten.count('1')
