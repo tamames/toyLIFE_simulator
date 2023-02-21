@@ -1,3 +1,5 @@
+from random import uniform
+
 import functions.func as ff
 
 class Agent():
@@ -34,3 +36,35 @@ class Agent():
         eaten = bin(genotype & food)  # The size of food doesn't matter
 
         self.energy += eaten.count('1')
+
+class Population():
+    """Representation of a population"""
+
+    def __init__(self, size: int) -> None:
+        self.generations = 0
+
+        energies = [uniform(1,8) for _ in range(size)]  # maybe better with a normal dist
+        self.population = [Agent(energy) for energy in energies]
+
+    def __str__(self) -> str:
+        return f"{[str(agent) for agent in self.population]}"
+    
+    def __len__(self) -> int:
+        return len(self.population)
+
+    def __getitem__(self, element: int) -> Agent:
+        assert element < len(self), "Index out of range"
+        return self.population[element]
+
+    def delete_elements(self, indeces: list[int]) -> None:
+        """Deletes individuals from the population.
+        This could happen if the individual doesn't have enough energy
+        or because it has been divided
+
+        Args:
+            indeces (list[int]): the indices to remove from the population
+        """
+        for index in sorted(indeces, reverse=True):
+            del self[index]
+
+        

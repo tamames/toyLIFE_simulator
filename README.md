@@ -17,11 +17,25 @@ The whole iteration is going to be something like this:
         * Energy: a value representing the energy of the cell.
     * And the following methods:
         * check_energy: which tells us if the cell has enough energy to reproduce.
+        * check_die: tells us if the cell doesn't have energy.
+* The class `Population` with:
+    * Atributes
+        * generation: the number of generations that have occurred.
+        * population: a list with all the agents.
+    * Methods
+        * delete items: delete the necesarry agents in each iteration.
 * A function that gives us a random binary string.
 * A function that can divide a cell.
 * A function to define the new population each generation.
 
-# Thing to implement:
-* Make so every cell tries to find food every iteration (maybe using the permutation function to select the cells randomly).
-* Add a cost to the foraging process.
-* After each iteration check whether they have to die, reproduce or do nothing at all.
+# Things to implement:
+* The main loop:
+    * Make so every cell tries to find food every iteration (maybe using the permutation function to select the cells randomly).
+    * Add a cost to the foraging process.
+    * After each iteration check whether they have to die, reproduce or do nothing at all.
+        * to check if they have to die create a boolean list with True in all the indices that have energy below 0.
+        * After eleminating the dead ones see check the ones that can reproduce.
+    (maybe all this can be methods??)
+* Maybe the initial energy has to be normal distributed, not uniform.
+
+* Add some representations of the population size. 
