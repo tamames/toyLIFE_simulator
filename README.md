@@ -36,6 +36,7 @@ The whole iteration is going to be something like this:
         * to check if they have to die create a boolean list with True in all the indices that have energy below 0.
         * After eleminating the dead ones see check the ones that can reproduce.
     (maybe all this can be methods??)
+* The way we devide cells, we should have some information about the parent. Maybe the first one has the first half of the genotype and the second one the second half.
 * Maybe the initial energy has to be normal distributed, not uniform.
 
 * Add some representations of the population size. 

@@ -53,8 +53,22 @@ class Population():
         return len(self.population)
 
     def __getitem__(self, element: int) -> Agent:
-        assert element < len(self), "Index out of range"
         return self.population[element]
+
+    def iteration(self, amount_food: int):
+        """Ths should be the main loop, just chose each agent to go for food
+        add a cost to the foraring process (first a cte value and then something else)
+        Maybe we can do a permutation on the elements of the population to choose them randomly.
+        Maybe we can control the available food to see what happends.
+        """
+        pass
+
+    def after_iteration():
+        """Here we check the energy of each agent and do the 
+        corresponding action
+        """
+        pass
+
 
     def delete_elements(self, indeces: list[int]) -> None:
         """Deletes individuals from the population.
