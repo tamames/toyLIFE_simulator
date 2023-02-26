@@ -1,12 +1,18 @@
-from random import uniform
+from random import uniform, shuffle
 
 import functions.func as ff
 
+import numpy as np
+
 class Agent():
 
-    def __init__(self, energy: int) -> None:
-        # assert energy > 0, "Energy must be positive."
-        self.genotype = ff.binary_generator()
+    def __init__(self, energy: float, size_genotype: int = 8, genotype: str|None = None) -> None:
+
+        if genotype == None:
+            self.genotype = ff.binary_generator()
+        else:
+            elements2complete = size_genotype - len(genotype)
+            self.genotype = genotype + ff.binary_generator(elements2complete)
         self.energy = energy
 
     def __str__(self) -> str:
@@ -21,7 +27,7 @@ class Agent():
         return self.energy < 0
 
     def eat(self, food: str) -> None:
-        """Describe the interation between an Agent and the food.
+        """Describe the interaction between an Agent and the food.
         We make an AND operation between the two binary strings and 
         the energy gained by the Agent is the number of '1' that the
         final string has.
@@ -29,13 +35,11 @@ class Agent():
         Args:
             food (str): a binary string representing the food.
         """
-
         genotype = int(self.genotype, 2)
         food = int(food, 2)
-
         eaten = bin(genotype & food)  # The size of food doesn't matter
-
         self.energy += eaten.count('1')
+
 
 class Population():
     """Representation of a population"""
@@ -55,22 +59,55 @@ class Population():
     def __getitem__(self, element: int) -> Agent:
         return self.population[element]
 
-    def iteration(self, amount_food: int):
-        """Ths should be the main loop, just chose each agent to go for food
-        add a cost to the foraring process (first a cte value and then something else)
-        Maybe we can do a permutation on the elements of the population to choose them randomly.
-        Maybe we can control the available food to see what happends.
-        """
-        pass
+    def iteration(self, amount_food: int, cost: float = 1) -> None:
+        """The main loop of our population. We choose a random
+        order for our agents to eat, generate an amount of food
+        and sends every agent to eat. They lose energy searching for food
 
-    def after_iteration():
+        Args:
+            amount_food (int): the food available for each generation
+            cost (float): the cost of the foraging process
+        """
+        order = range(len(self))
+        shuffle(order) 
+
+        foods = ff.list_food(amount_food)
+        iter_food = iter(foods)
+
+        for i in order:
+            try:
+                food = next(iter_food)
+            except StopIteration:
+                print("Not enough food for everybody")
+                break
+            else:
+                current_agent = self[i]
+                current_agent.energy -= cost
+                current_agent.eat(food)
+
+        self.generations += 1
+
+    def after_iteration(self) -> None:
         """Here we check the energy of each agent and do the 
-        corresponding action
+        corresponding action. First we check the ones that died.
+        Then we check the ones that can reproduce and we reproduce them.
         """
-        pass
+        whole_population = np.arange(len(self))
+        deads = [agent.check_energy_die() for agent in self.population] # boolean list
+        self.delete_elements(whole_population[deads])
 
+        whole_population = np.arange(len(self))
+        reproduce = [agent.check_energy_reproduce()
+                     for agent in self.population]  # boolean list
+        new_individuals = []
+        for i, agent in enumerate(self.population):
+            if reproduce[i]:
+                new_individuals.extend(ff.divide(agent))
 
-    def delete_elements(self, indeces: list[int]) -> None:
+        self.delete_elements(whole_population[reproduce])
+        self.population += new_individuals
+
+    def delete_elements(self, indexes: list[int]) -> None:
         """Deletes individuals from the population.
         This could happen if the individual doesn't have enough energy
         or because it has been divided
@@ -78,7 +115,7 @@ class Population():
         Args:
             indeces (list[int]): the indices to remove from the population
         """
-        for index in sorted(indeces, reverse=True):
-            del self[index]
+        for index in indexes[::-1]:
+            del self.population[index]
 
         

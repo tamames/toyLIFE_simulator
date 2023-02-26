@@ -12,31 +12,30 @@ The whole iteration is going to be something like this:
 
 # Already implemented
 * I have defined the main class `Agent`.
-    * This class has the following atributes:
-        * Genotype: a string of 0 and 1.
+    * This class has the following attributes:
+        * Genotype: a string of 0 and 1. If the cell has a parent the first half of the genotype is the genotype of the parent.
         * Energy: a value representing the energy of the cell.
     * And the following methods:
         * check_energy: which tells us if the cell has enough energy to reproduce.
         * check_die: tells us if the cell doesn't have energy.
 * The class `Population` with:
-    * Atributes
+    * Attributes
         * generation: the number of generations that have occurred.
         * population: a list with all the agents.
     * Methods
-        * delete items: delete the necesarry agents in each iteration.
+        * delete items: delete the necessary agents in each iteration.
+        * iteration: the main loop of our cells.
+        * after_iteration: First we check the dead ones and then the ones that can reproduce.
 * A function that gives us a random binary string.
 * A function that can divide a cell.
 * A function to define the new population each generation.
 
 # Things to implement:
 * The main loop:
-    * Make so every cell tries to find food every iteration (maybe using the permutation function to select the cells randomly).
-    * Add a cost to the foraging process.
     * After each iteration check whether they have to die, reproduce or do nothing at all.
         * to check if they have to die create a boolean list with True in all the indices that have energy below 0.
-        * After eleminating the dead ones see check the ones that can reproduce.
+        * After eliminating the dead ones see check the ones that can reproduce.
     (maybe all this can be methods??)
-* The way we devide cells, we should have some information about the parent. Maybe the first one has the first half of the genotype and the second one the second half.
 * Maybe the initial energy has to be normal distributed, not uniform.
 
 * Add some representations of the population size. 
