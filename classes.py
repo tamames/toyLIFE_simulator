@@ -95,18 +95,16 @@ class Population:
         corresponding action. First we check the ones that died.
         Then we check the ones that can reproduce and we reproduce them.
         """
-        whole_population = np.arange(len(self))
-        deads = [agent.check_energy_die() for agent in self.population]  # boolean list
+        whole_population = np.arange(len(self), dtype=int)
+        deads = [agent.check_energy_die() for agent in self.population]  # Boolean list
         self.delete_elements(whole_population[deads])
 
-        whole_population = np.arange(len(self))
+        whole_population = np.arange(len(self), dtype=int)
         reproduce = [
             agent.check_energy_reproduce() for agent in self.population
-        ]  # boolean list
-        new_individuals = []
-        for i, agent in enumerate(self.population):
-            if reproduce[i]:
-                new_individuals.extend(ff.divide(agent))
+        ]  # Boolean list
+        new_individuals = [divide(self[i]) for i in whole_population[reproduce]]
+        new_individuals = ff.flatten_list(new_individuals)
 
         self.delete_elements(whole_population[reproduce])
         self.population += new_individuals
@@ -117,7 +115,26 @@ class Population:
         or because it has been divided
 
         Args:
-            indeces (list[int]): the indices to remove from the population
+            indexes (list[int]): the indexes to remove from the population
         """
         for index in indexes[::-1]:
             del self.population[index]
+
+
+def divide(parent: Agent) -> tuple[Agent, Agent]:
+    """Divide an agent that can reproduce in two. The energy of the children
+    is half the energy of the parent.
+
+    Args:
+        parent (Agent): the agent that is going to be divided.
+
+    Returns:
+        tuple[Agent, Agent]: the two children.
+    """
+    energy = parent.energy // 2
+    size_genotype = int(len(parent.genotype) // 2)
+    genotype_1, genotype_2 = (
+        parent.genotype[:size_genotype],
+        parent.genotype[size_genotype:],
+    )
+    return Agent(energy, genotype_1), Agent(energy, genotype_2)

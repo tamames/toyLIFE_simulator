@@ -1,8 +1,8 @@
 """This module contains some functions that we are going to use in different parts"""
 
+from typing import Any
+import itertools
 import numpy as np
-
-from classes import Agent
 
 
 def binary_generator(length: int = 8) -> str:
@@ -31,20 +31,13 @@ def list_food(amount: int) -> list[str]:
     return [binary_generator() for _ in range(amount)]
 
 
-def divide(parent: Agent) -> tuple[Agent, Agent]:
-    """Divide an agent that can reproduce in two. The energy of the childs
-    is half the energy of the parent.
+def flatten_list(l: list[list[Any]]) -> list[Any]:
+    """Flattens a list into one dimension
 
     Args:
-        parent (Agent): the agent that is going to be divided.
+        l (list[list[Any]]): the list we want to flatten.
 
     Returns:
-        tuple[Agent, Agent]: the two childs.
+        list[Any]: the flattened list.
     """
-    energy = parent.energy // 2
-    size_genotype = int(len(parent.genotype) // 2)
-    genotype_1, genotype_2 = (
-        parent.genotype[:size_genotype],
-        parent.genotype[size_genotype:],
-    )
-    return Agent(energy, genotype_1), Agent(energy, genotype_2)
+    return list(itertools.chain.from_iterable(l))

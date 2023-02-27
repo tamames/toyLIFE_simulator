@@ -32,10 +32,5 @@ The whole iteration is going to be something like this:
 
 # Things to implement:
 * The main loop:
-    * After each iteration check whether they have to die, reproduce or do nothing at all.
-        * to check if they have to die create a boolean list with True in all the indices that have energy below 0.
-        * After eliminating the dead ones see check the ones that can reproduce.
-    (maybe all this can be methods??)
 * Maybe the initial energy has to be normal distributed, not uniform.
-
 * Add some representations of the population size. 
