@@ -71,7 +71,12 @@ class Population:
             amount_food (int): the food available for each generation
             cost (float): the cost of the foraging process
         """
-        order = range(len(self))
+
+        # Every agent searches for food
+        for agent in self.population:
+            agent.energy -= cost
+
+        order = list(range(len(self)))
         shuffle(order)
 
         foods = ff.list_food(amount_food)
@@ -81,11 +86,10 @@ class Population:
             try:
                 food = next(iter_food)
             except StopIteration:
-                print("Not enough food for everyone")
+                # print("Not enough food for everyone")
                 break
             else:
                 current_agent = self[i]
-                current_agent.energy -= cost
                 current_agent.eat(food)
 
         self.generations += 1
