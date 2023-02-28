@@ -31,6 +31,5 @@ The whole iteration is going to be something like this:
 * A function to define the new population each generation.
 
 # Things to implement:
-* The main loop:
 * Maybe the initial energy has to be normal distributed, not uniform.
-* Add some representations of the population size. 
+* Do better representations
