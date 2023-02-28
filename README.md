@@ -33,3 +33,5 @@ The whole iteration is going to be something like this:
 # Things to implement:
 * Maybe the initial energy has to be normal distributed, not uniform.
 * Do better representations
+* Change the way new agents are generated. Change random bits with a binomial distribution.
+* Add the age attribute to the agents, sort the agents by their age.
