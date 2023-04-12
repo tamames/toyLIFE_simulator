@@ -33,7 +33,3 @@ The whole iteration is going to be something like this:
 # Things to implement:
 * Maybe the initial energy has to be normal distributed, not uniform.
 * Do better representations
-* Change the way new agents are generated. Change random bits with a binomial distribution.
-* Add the age attribute to the agents, sort the agents by their age.
-* Create an initial sample of food for the whole population.
-    - make it for putting a initial value of food and then adding each iteration another number of food so we can see if we check we arrive to the caring capacity.

@@ -2,6 +2,7 @@
 
 from typing import Any
 import itertools
+import random
 import numpy as np
 
 
@@ -41,3 +42,26 @@ def flatten_list(l: list[list[Any]]) -> list[Any]:
         list[Any]: the flattened list.
     """
     return list(itertools.chain.from_iterable(l))
+
+
+def mutate(bin_string: str, p: int) -> str:
+    """Given a string representing a binary number,
+    it flips the bits with a probability p.
+
+    Args:
+        bin_string (str): the binary number as a string.
+        p (int): the probability of flipping a bit.
+
+    Returns:
+        str: the binary string with the flipped bits.
+    """
+    if p < 0 or p > 1:
+        raise ValueError("The probability must be between 0 and 1")
+
+    new_string = ""
+    for bit in bin_string:
+        if random.random() < p:
+            new_string += str(int(not int(bit)))  # flip the bit
+        else:
+            new_string += bit
+    return new_string

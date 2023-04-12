@@ -12,9 +12,9 @@ class Agent:
         if genotype is None:
             self.genotype = ff.binary_generator()
         else:
-            elements2complete = size_genotype - len(genotype)
-            self.genotype = genotype + ff.binary_generator(elements2complete)
+            self.genotype = genotype
         self.energy = energy
+        self.age = 0
 
     def __str__(self) -> str:
         return f"Genotype: {self.genotype}. Energy: {self.energy}"
@@ -62,13 +62,14 @@ class Population:
     def __getitem__(self, element: int) -> Agent:
         return self.population[element]
 
-    def iteration(self, amount_food: int, cost: float = 1) -> None:
+    def iteration(self, food: list[str], cost: float = 1) -> None:
         """The main loop of our population. We choose a random
         order for our agents to eat, generate an amount of food
         and sends every agent to eat. They lose energy searching for food
 
         Args:
-            amount_food (int): the food available for each generation
+            food (list[str]): the food available for all generations.
+                The food doesn't change from one generation to another.
             cost (float): the cost of the foraging process
         """
 
@@ -79,8 +80,7 @@ class Population:
         order = list(range(len(self)))
         shuffle(order)
 
-        foods = ff.list_food(amount_food)
-        iter_food = iter(foods)
+        iter_food = iter(food)
 
         for i in order:
             try:
@@ -93,11 +93,15 @@ class Population:
                 current_agent.eat(food)
 
         self.generations += 1
+        self.add_ages()
 
-    def after_iteration(self) -> None:
+    def after_iteration(self, p: int) -> None:
         """Here we check the energy of each agent and do the
         corresponding action. First we check the ones that died.
         Then we check the ones that can reproduce and we reproduce them.
+
+        Args:
+            p (int): the probability of mutation
         """
         whole_population = np.arange(len(self), dtype=int)
         deads = [agent.check_energy_die() for agent in self.population]  # Boolean list
@@ -107,7 +111,7 @@ class Population:
         reproduce = [
             agent.check_energy_reproduce() for agent in self.population
         ]  # Boolean list
-        new_individuals = [divide(self[i]) for i in whole_population[reproduce]]
+        new_individuals = [divide(self[i], p) for i in whole_population[reproduce]]
         new_individuals = ff.flatten_list(new_individuals)
 
         self.delete_elements(whole_population[reproduce])
@@ -124,21 +128,24 @@ class Population:
         for index in indexes[::-1]:
             del self.population[index]
 
+    def add_ages(self) -> None:
+        """Add one to the age of every agent"""
+        for agent in self.population:
+            agent.age += 1
 
-def divide(parent: Agent) -> tuple[Agent, Agent]:
+
+def divide(parent: Agent, p: int) -> tuple[Agent, Agent]:
     """Divide an agent that can reproduce in two. The energy of the children
     is half the energy of the parent.
 
     Args:
         parent (Agent): the agent that is going to be divided.
+        p (int): the probability of mutation.
 
     Returns:
         tuple[Agent, Agent]: the two children.
     """
     energy = parent.energy // 2
-    size_genotype = int(len(parent.genotype) // 2)
-    genotype_1, genotype_2 = (
-        parent.genotype[:size_genotype],
-        parent.genotype[size_genotype:],
-    )
+    genotype_1 = ff.mutate(parent.genotype, p)
+    genotype_2 = ff.mutate(parent.genotype, p)
     return Agent(energy, genotype_1), Agent(energy, genotype_2)
