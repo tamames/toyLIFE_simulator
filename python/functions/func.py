@@ -7,7 +7,7 @@ import numpy as np
 
 
 def binary_generator(length: int = 8) -> str:
-    """generates a random binary number as a str
+    """Generates a random binary number as a str
 
     Args:
         amount (int, optional): The length of our binary number. Defaults to 8.
