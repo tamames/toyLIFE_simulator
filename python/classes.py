@@ -95,13 +95,13 @@ class Population:
         self.generations += 1
         self.add_ages()
 
-    def after_iteration(self, p: int) -> None:
+    def after_iteration(self, p: float) -> None:
         """Here we check the energy of each agent and do the
         corresponding action. First we check the ones that died.
         Then we check the ones that can reproduce and we reproduce them.
 
         Args:
-            p (int): the probability of mutation
+            p (float): the probability of mutation
         """
         whole_population = np.arange(len(self), dtype=int)
         deads = [agent.check_energy_die() for agent in self.population]  # Boolean list

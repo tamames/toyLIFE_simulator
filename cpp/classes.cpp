@@ -121,9 +121,10 @@ public:
             agents[order[i]].eat(food[i]);
 
         generation++;
+        addAges();
     }
 
-    void afterIteration()
+    void afterIteration(float p)
     {
 
         std::vector<int> deadsPositions; // store the indexes of the deads
@@ -145,8 +146,17 @@ public:
             if (agents[i].checkEnergyReproduce())
                 reproducePositions.push_back(i);
         }
-        // falta lo de la reproduccion
-        // sería reproducir a los necesarios.
+
+        std::vector<Agent> newElements(reproducePositions.size() * 2);
+        for (int i = 0; i < reproducePositions.size(); ++i)
+        {
+            std::pair<Agent, Agent> children = divide(agents[reproducePositions[i]], p);
+            newElements[i * 2] = children.first;
+            newElements[i * 2 + 1] = children.second;
+        }
+
+        deleteElements(agents, reproducePositions);
+        agents.insert(agents.end(), newElements.begin(), newElements.end());
     }
 
     void deleteElements(std::vector<Agent> &agents, std::vector<int> indexes)
@@ -158,14 +168,11 @@ public:
     void addAges()
     {
         for (Agent i : agents)
-        {
             i.age++;
-        }
     }
 
 private:
     int size_population;
-    // int size_genotype;
     std::vector<Agent> agents;
 };
 
@@ -185,19 +192,4 @@ std::pair<Agent, Agent> divide(Agent parent, int p)
     Agent child2(energyC, genotype2);
 
     return std::make_pair(child1, child2);
-}
-
-int main()
-{
-    // Agent agent(6);
-    // agent.print();
-    // // std::cout << agent.print() << std::endl;
-    // std::string food = binaryGenerator();
-    // std::cout << "Food:     " << food << std::endl;
-    // agent.eat(food);
-    // agent.print();
-    // std::cout << "Population size: ";
-    Population population(10);
-    population.afterIteration();
-    // population.print();
 }

@@ -38,19 +38,43 @@ void fillRandomArray(int *arr, int size, int max = 8)
     }
 }
 
-std::string mutate(std::string bin_string, double p) {
-    if (p < 0 || p > 1) {
+std::string mutate(std::string bin_string, double p)
+{
+    /**
+     * Mutates a binary string.
+     * @param bin_string The binary string to be mutated.
+     * @param p The probability of mutation.
+     * @return The mutated binary string.
+     */
+
+    if (p < 0 || p > 1)
         throw std::invalid_argument("The probability must be between 0 and 1");
-    }
-    std::string new_string = "";
+
+    std::string newString(bin_string.size(), ' ');
     std::random_device rd;
     std::mt19937 gen(rd());
-    for (char bit : bin_string) {
-        if (std::generate_canonical<double, 5>(gen) < p) {
-            new_string += std::to_string(!std::stoi(std::string(1, bit)));
-        } else {
-            new_string += bit;
-        }
+    for (int i = 0; i < bin_string.size(); ++i)
+    {
+        if (std::generate_canonical<double, 5>(gen) < p)
+            newString[i] = bin_string[i] == '0' ? '1' : '0';
+        else
+            newString[i] = bin_string[i];
     }
-    return new_string;
+    return newString;
+}
+
+std::vector<std::string> listFood(unsigned int length)
+{
+    /**
+     * Generates a list of random binary strings that represent the
+     *  food available for a population.
+     * @param length The length of the list.
+     * @return The list of random binary strings.
+     */
+
+    std::vector<std::string> listFood(length);
+    for (int i = 0; i < length; ++i)
+        listFood[i] = binaryGenerator();
+
+    return listFood;
 }
