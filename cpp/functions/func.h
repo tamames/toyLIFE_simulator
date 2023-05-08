@@ -20,11 +20,10 @@ std::string binaryGenerator(int length = 8)
     return binary_string;
 }
 
-void fillRandomArray(int *arr, int size, int max = 8)
+std::vector<int> createRandomArray(int size, int max = 8)
 {
     /**
-     * Fills an array with random integers.
-     * @param arr The array to be filled.
+     * Creates a vector and fill it with random numbers.
      * @param size The size of the array.
      * @param max The maximum value of the random integers. Defaults to 8.
      */
@@ -32,10 +31,13 @@ void fillRandomArray(int *arr, int size, int max = 8)
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(1, max);
 
+    std::vector<int> energies(size);
+
     for (int i = 0; i < size; ++i)
     {
-        arr[i] = dis(gen);
+        energies[i] = dis(gen);
     }
+    return energies;
 }
 
 std::string mutate(std::string bin_string, double p)

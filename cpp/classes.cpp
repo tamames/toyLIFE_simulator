@@ -19,7 +19,7 @@ public:
             this->genotype = binaryGenerator();
         else
             this->genotype = genotype;
-            
+
         this->energy = energy;
         this->age = 0;
     }
@@ -63,7 +63,7 @@ public:
         // this->size_genotype = size_genotype;
         this->agents = std::vector<Agent>();
         int energies[size_population];
-        fillRandomArray(energies, size_population, 8);
+        std::vector<int> energies = createRandomArray(size_population, 8);
         for (int i = 0; i < size_population; ++i)
         {
             Agent agent(energies[i]);
