@@ -16,36 +16,14 @@ public:
     Agent(float energy, std::string genotype = "", int size_genotype = 8)
     {
         if (genotype.empty())
-        {
             this->genotype = binaryGenerator();
-        }
         else
-        {
             this->genotype = genotype;
-        }
+            
         this->energy = energy;
         this->age = 0;
     }
-    // std::string get_genotype()
-    // {
-    //     return genotype;
-    // }
-    // float get_energy()
-    // {
-    //     return energy;
-    // }
-    // void set_energy(float energy)
-    // {
-    //     this->energy = energy;
-    // }
-    // int get_age()
-    // {
-    //     return age;
-    // }
-    // void set_age(int age)
-    // {
-    //     this->age = age;
-    // }
+
     void print()
     {
         std::cout << "Genotype: " << genotype << ". Energy: " << energy << std::endl;
