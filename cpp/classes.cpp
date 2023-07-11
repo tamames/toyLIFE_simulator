@@ -28,6 +28,7 @@ public:
     {
         std::cout << "Genotype: " << genotype << ". Energy: " << energy << std::endl;
     }
+
     bool checkEnergyReproduce()
     {
         return energy >= 10;
@@ -57,6 +58,7 @@ class Population
 {
 public:
     int generation = 0;
+    int size_population;
     Population(int size_population)
     {
         this->size_population = size_population;
@@ -80,7 +82,7 @@ public:
         }
     }
 
-    void iteration(std::string food[], int sizeFood, float cost)
+    void iteration(std::vector<std::string> food, int sizeFood, float cost)
     {
         for (Agent i : agents) // every agent search for food
             i.energy -= cost;
@@ -104,6 +106,12 @@ public:
 
     void afterIteration(float p)
     {
+        /**
+         * Here we check the energy of each agent and do the
+         *corresponding action. First we check the ones that died.
+         *Then we check the ones that can reproduce and we reproduce them.
+         * @param p The probability of mutation.
+         */
 
         std::vector<int> deadsPositions; // store the indexes of the deads
         for (int i = 0; i < size_population; ++i)
@@ -118,7 +126,7 @@ public:
         deleteElements(agents, deadsPositions);
         // std::cout << "After the remove: " << agents.size() << std::endl;
 
-        std::vector<int> reproducePositions; // store the indexes of the deads
+        std::vector<int> reproducePositions; // store the indexes of the ones to reproduce
         for (int i = 0; i < size_population; ++i)
         {
             if (agents[i].checkEnergyReproduce())
