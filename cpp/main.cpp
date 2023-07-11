@@ -4,7 +4,7 @@
 int main()
 {
     Population population(10);
-    int generations = 100;
+    int generations = 20;
 
     int sizes[generations];
 
@@ -18,4 +18,7 @@ int main()
         population.afterIteration(0.1);
         sizes[i] = population.size_population;
     }
+
+    std::cout << "After all iterations:" << sizes << std::endl;
+
 }
