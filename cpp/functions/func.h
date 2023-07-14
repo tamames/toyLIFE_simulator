@@ -20,22 +20,25 @@ std::string binaryGenerator(int length = 8)
     return binary_string;
 }
 
-std::vector<int> createRandomArray(int size, int max = 8)
+std::vector<float> createRandomArray(int size, int max = 8)
 {
     /**
      * Creates a vector and fill it with random numbers.
      * @param size The size of the array.
      * @param max The maximum value of the random integers. Defaults to 8.
      */
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(1, max);
+    // std::random_device rd;
+    // std::mt19937 gen(rd());
+    // std::uniform_int_distribution<> dis(1, max);
 
-    std::vector<int> energies(size);
+    std::default_random_engine gen;
+    std::uniform_real_distribution<double> distribution(0.0,
+                                                   max);
 
+    std::vector<float> energies(size);
     for (int i = 0; i < size; ++i)
     {
-        energies[i] = dis(gen);
+        energies[i] = distribution(gen);
     }
     return energies;
 }
