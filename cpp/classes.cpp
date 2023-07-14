@@ -3,7 +3,7 @@
 #include <vector>
 #include <stdexcept> // std::invalid_argument
 #include <bitset>    // std::bitset
-#include <algorithm> // std::count
+#include <algorithm> // std::count std::min
 #include "functions/func.h"
 
 class Agent
@@ -28,7 +28,7 @@ public:
 
     void print()
     {
-        std::cout << "Genotype: " << genotype << ". Energy: " << energy << std::endl;
+        std::cout << "Genotype: " << genotype << ". Energy: " << energy << ". Age:" << age << std::endl;
     }
 
     bool checkEnergyReproduce()
@@ -48,6 +48,7 @@ public:
          *final string has.
          * @param food The food that the Agent is going to eat.
          */
+
         int genotype_int = std::stoi(genotype, nullptr, 2);
         int food_int = std::stoi(food, nullptr, 2);
         int eaten_int = genotype_int & food_int;
@@ -60,15 +61,15 @@ class Population
 {
 public:
     int generation = 0;
-    int size_population;
+    int sizePopulation;
     std::vector<Agent> agents;
-    Population(int size_population)
+    Population(int sizePopulation)
     {
-        this->size_population = size_population;
+        this->sizePopulation = sizePopulation;
         this->agents = std::vector<Agent>();
-        // int energies[size_population];
-        std::vector<int> energies = createRandomArray(size_population, 8);
-        for (int i = 0; i < size_population; ++i)
+        // int energies[sizePopulation];
+        std::vector<float> energies = createRandomArray(sizePopulation, 8);
+        for (int i = 0; i < sizePopulation; ++i)
         {
             Agent agent(energies[i]);
             agents.push_back(agent);
@@ -77,29 +78,51 @@ public:
 
     void print()
     {
-        std::cout << "Population: \n";
-        for (int i = 0; i < size_population; ++i)
+        std::cout << "The whole population: \n";
+        for (int i = 0; i < sizePopulation; ++i)
         {
             agents[i].print();
         }
     }
 
-    void iteration(std::vector<std::string> food, int sizeFood, float cost)
+    void iteration(std::vector<std::string> food, float cost)
     {
-        for (Agent i : agents) // every agent search for food
+        /**
+         * Here we do the iteration of the population. First we
+         *make the agents search for food. Then we generate a random
+         *order to eat the food. Then we check the energy of each agent
+         *and do the corresponding action. First we check the ones that died.
+         *Then we check the ones that can reproduce and we reproduce them.
+         * @param food The food that the agents are going to eat.
+         * @param cost The cost of searching for food.
+         */
+
+        int sizeFood = food.size();
+
+        for (Agent &i : agents) // every agent search for food
             i.energy -= cost;
 
+        if (sizePopulation > sizeFood)
+            std::cout << "There is not enough food for everybody.\n";
+
+        int smaller = std::min(sizePopulation, sizeFood);
+
         // generate random order
-        std::vector<int> order(sizeFood);
+        std::vector<int> order(smaller);
         std::iota(order.begin(), order.end(), 0);
         std::random_device rd;
         std::mt19937 g(rd());
         std::shuffle(order.begin(), order.end(), g);
 
-        if (size_population < sizeFood) // maybe there is not enough food to everybody
-            std::cout << "There is not enough food for everybody.\n";
+        for (auto i : order)
+            std::cout << i << " ";
 
-        for (int i = 0; i < sizeFood; ++i)
+        std::cout << "Hay " << sizePopulation << " agentes y " << sizeFood << " comida." << std::endl;
+
+        for (int i = 0; i < smaller; ++i)
+            std::cout << food[i] << "\n";
+
+        for (int i = 0; i < smaller; ++i)
             agents[order[i]].eat(food[i]);
 
         generation++;
@@ -116,7 +139,7 @@ public:
          */
 
         std::vector<int> deadsPositions; // store the indexes of the deads
-        for (int i = 0; i < size_population; ++i)
+        for (int i = 0; i < sizePopulation; ++i)
         {
             if (agents[i].checkEnergyDie())
                 deadsPositions.push_back(i);
@@ -129,7 +152,7 @@ public:
         // // std::cout << "After the remove: " << agents.size() << std::endl;
 
         // std::vector<int> reproducePositions; // store the indexes of the ones to reproduce
-        // for (int i = 0; i < size_population; ++i)
+        // for (int i = 0; i < sizePopulation; ++i)
         // {
         //     if (agents[i].checkEnergyReproduce())
         //         reproducePositions.push_back(i);
@@ -155,7 +178,7 @@ public:
 
     void addAges()
     {
-        for (Agent i : agents)
+        for (Agent &i : agents)
             i.age++;
     }
 };
@@ -180,6 +203,17 @@ std::pair<Agent, Agent> divide(Agent parent, int p)
 
 int main()
 {
+    // std::vector<float> energies = createRandomArray(10, 8);
+    // std::cout << "Energies size: " << energies.size() << std::endl;
+    // for (float i : energies)
+    //     std::cout << i << std::endl;
+
     Population popu(10);
     popu.print();
+    std::vector<std::string> foodList = listFood(100);
+    std::cout << "Food list: " << foodList.size() << std::endl;
+    popu.iteration(foodList, 1.0);
+    popu.print();
+
+    // Agent agente(10);
 }

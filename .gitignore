@@ -3,6 +3,7 @@ prueba.*
 .vscode
 try_cpp/
 *.exe
+tempCodeRunnerFile.cpp
 
 
 # Byte-compiled / optimized / DLL files
