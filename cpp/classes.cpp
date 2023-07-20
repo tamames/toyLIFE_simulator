@@ -26,9 +26,12 @@ public:
         this->age = 0;
     }
 
-    void print()
+    void print(bool printAge = false)
     {
-        std::cout << "Genotype: " << genotype << ". Energy: " << energy << ". Age:" << age << std::endl;
+        if (printAge)
+            std::cout << "Genotype: " << genotype << ". Energy: " << energy << ". Age:" << age << std::endl;
+        else
+            std::cout << "Genotype: " << genotype << ". Energy: " << energy << std::endl;
     }
 
     bool checkEnergyReproduce()
@@ -57,6 +60,24 @@ public:
     }
 };
 
+std::pair<Agent, Agent> divide(Agent parent, float p)
+{
+    /**
+     * Divide an agent into two agents.
+     * @param parent The agent that is going to be divided.
+     * @param p The probability of the children of being mutated.
+     */
+
+    float energyC = parent.energy / 2;
+    std::string genotype1 = mutate(parent.genotype, p);
+    std::string genotype2 = mutate(parent.genotype, p);
+
+    Agent child1(energyC, genotype1);
+    Agent child2(energyC, genotype2);
+
+    return std::make_pair(child1, child2);
+}
+
 class Population
 {
 public:
@@ -68,7 +89,7 @@ public:
         this->sizePopulation = sizePopulation;
         this->agents = std::vector<Agent>();
         // int energies[sizePopulation];
-        std::vector<float> energies = createRandomArray(sizePopulation, 8);
+        std::vector<float> energies = createRandomArray(sizePopulation, 15);
         for (int i = 0; i < sizePopulation; ++i)
         {
             Agent agent(energies[i]);
@@ -114,14 +135,6 @@ public:
         std::mt19937 g(rd());
         std::shuffle(order.begin(), order.end(), g);
 
-        for (auto i : order)
-            std::cout << i << " ";
-
-        std::cout << "Hay " << sizePopulation << " agentes y " << sizeFood << " comida." << std::endl;
-
-        for (int i = 0; i < smaller; ++i)
-            std::cout << food[i] << "\n";
-
         for (int i = 0; i < smaller; ++i)
             agents[order[i]].eat(food[i]);
 
@@ -139,41 +152,47 @@ public:
          */
 
         std::vector<int> deadsPositions; // store the indexes of the deads
+
+        // for (int i : deadsPositions)
+        //     std::cout << i << " ";
         for (int i = 0; i < sizePopulation; ++i)
         {
             if (agents[i].checkEnergyDie())
                 deadsPositions.push_back(i);
         }
 
-        // std::cout << "Before the remove: " << agents.size() << std::endl;
-        // std::cout << "To remove: " << deadsPositions.size() << std::endl;
+        deleteElements(agents, deadsPositions);
 
-        // deleteElements(agents, deadsPositions);
-        // // std::cout << "After the remove: " << agents.size() << std::endl;
+        std::vector<int> reproducePositions; // store the indexes of the ones to reproduce
+        for (int i = 0; i < sizePopulation; ++i)
+        {
+            if (agents[i].checkEnergyReproduce())
+                reproducePositions.push_back(i);
+        }
 
-        // std::vector<int> reproducePositions; // store the indexes of the ones to reproduce
-        // for (int i = 0; i < sizePopulation; ++i)
-        // {
-        //     if (agents[i].checkEnergyReproduce())
-        //         reproducePositions.push_back(i);
-        // }
+        std::vector<Agent> newElements(reproducePositions.size() * 2, Agent(0));
+        for (int i = 0; i < reproducePositions.size(); ++i)
+        {
+            std::pair<Agent, Agent> children = divide(agents[reproducePositions[i]], p);
+            newElements[i * 2] = children.first;
+            newElements[i * 2 + 1] = children.second;
+        }
 
-        // std::vector<Agent> newElements(reproducePositions.size() * 2);
-        // for (int i = 0; i < reproducePositions.size(); ++i)
-        // {
-        //     std::pair<Agent, Agent> children = divide(agents[reproducePositions[i]], p);
-        //     newElements[i * 2] = children.first;
-        //     newElements[i * 2 + 1] = children.second;
-        // }
+        std::cout << "New elements: \n";
+        for (Agent i : newElements)
+            i.print();
 
-        // deleteElements(agents, reproducePositions);
-        // agents.insert(agents.end(), newElements.begin(), newElements.end());
+        deleteElements(agents, reproducePositions);
+        agents.insert(agents.end(), newElements.begin(), newElements.end());
+        this->sizePopulation = agents.size(); // update the size of the population
     }
 
     void deleteElements(std::vector<Agent> &agents, std::vector<int> indexes)
     {
         for (auto it = indexes.rbegin(); it != indexes.rend(); it++)
             agents.erase(agents.begin() + *it);
+
+        this->sizePopulation = agents.size(); // update the size of the population
     }
 
     void addAges()
@@ -182,38 +201,3 @@ public:
             i.age++;
     }
 };
-
-std::pair<Agent, Agent> divide(Agent parent, int p)
-{
-    /**
-     * Divide an agent into two agents.
-     * @param parent The agent that is going to be divided.
-     * @param p The probability of the children of being mutated.
-     */
-
-    int energyC = parent.energy / 2;
-    std::string genotype1 = mutate(parent.genotype, p);
-    std::string genotype2 = mutate(parent.genotype, p);
-
-    Agent child1(energyC, genotype1);
-    Agent child2(energyC, genotype2);
-
-    return std::make_pair(child1, child2);
-}
-
-int main()
-{
-    // std::vector<float> energies = createRandomArray(10, 8);
-    // std::cout << "Energies size: " << energies.size() << std::endl;
-    // for (float i : energies)
-    //     std::cout << i << std::endl;
-
-    Population popu(10);
-    popu.print();
-    std::vector<std::string> foodList = listFood(100);
-    std::cout << "Food list: " << foodList.size() << std::endl;
-    popu.iteration(foodList, 1.0);
-    popu.print();
-
-    // Agent agente(10);
-}

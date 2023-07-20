@@ -33,7 +33,7 @@ std::vector<float> createRandomArray(int size, int max = 8)
 
     std::default_random_engine gen;
     std::uniform_real_distribution<double> distribution(0.0,
-                                                   max);
+                                                        max);
 
     std::vector<float> energies(size);
     for (int i = 0; i < size; ++i)
@@ -43,27 +43,30 @@ std::vector<float> createRandomArray(int size, int max = 8)
     return energies;
 }
 
-std::string mutate(std::string bin_string, double p)
+std::string mutate(std::string binString, float p)
 {
     /**
      * Mutates a binary string.
-     * @param bin_string The binary string to be mutated.
+     * @param binString The binary string to be mutated.
      * @param p The probability of mutation.
      * @return The mutated binary string.
      */
 
-    if (p < 0 || p > 1)
+    if (p < 0.0f || p > 1.0f)
+    {
+        std::cout << "The probability must be between 0 and 1\n";
         throw std::invalid_argument("The probability must be between 0 and 1");
+    }
 
-    std::string newString(bin_string.size(), ' ');
+    std::string newString(binString.size(), ' ');
     std::random_device rd;
     std::mt19937 gen(rd());
-    for (int i = 0; i < bin_string.size(); ++i)
+    for (int i = 0; i < binString.size(); ++i)
     {
         if (std::generate_canonical<double, 5>(gen) < p)
-            newString[i] = bin_string[i] == '0' ? '1' : '0';
+            newString[i] = binString[i] == '0' ? '1' : '0';
         else
-            newString[i] = bin_string[i];
+            newString[i] = binString[i];
     }
     return newString;
 }
