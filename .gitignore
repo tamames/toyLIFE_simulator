@@ -4,6 +4,7 @@ prueba.*
 try_cpp/
 *.exe
 tempCodeRunnerFile.cpp
+patterns/
 
 
 # Byte-compiled / optimized / DLL files
