@@ -71,7 +71,7 @@ std::string mutate(std::string binString, float p)
     return newString;
 }
 
-std::vector<std::string> listFood(unsigned int length)
+std::vector<std::string> listOfFood(unsigned int length)
 {
     /**
      * Generates a list of random binary strings that represent the
@@ -80,9 +80,9 @@ std::vector<std::string> listFood(unsigned int length)
      * @return The list of random binary strings.
      */
 
-    std::vector<std::string> listFood(length);
+    std::vector<std::string> listOfFood(length);
     for (int i = 0; i < length; ++i)
-        listFood[i] = binaryGenerator();
+        listOfFood[i] = binaryGenerator();
 
-    return listFood;
+    return listOfFood;
 }

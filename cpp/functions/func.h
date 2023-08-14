@@ -1,3 +1,5 @@
+#pragma once
+
 #include <random>
 #include <string>
 #include <stdexcept>
@@ -80,9 +82,9 @@ std::vector<std::string> listFood(unsigned int length)
      * @return The list of random binary strings.
      */
 
-    std::vector<std::string> listFood(length);
+    std::vector<std::string> listOFFood(length);
     for (int i = 0; i < length; ++i)
-        listFood[i] = binaryGenerator();
+        listOFFood[i] = binaryGenerator();
 
-    return listFood;
+    return listOFFood;
 }

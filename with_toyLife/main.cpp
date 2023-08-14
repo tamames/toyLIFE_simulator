@@ -10,7 +10,7 @@ int main()
 
     float cost = 0.1; // the cost of the foraging process
 
-    std::vector<std::string> foodList = listFood(100);
+    std::vector<std::string> foodList = listOfFood(100);
 
     for (int i = 0; i < generations; ++i)
     {
