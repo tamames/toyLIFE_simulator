@@ -3,9 +3,6 @@
 
 int main()
 {
-    foodList food = listFood(10);
-
-    statistic(food);
-
+    writeResults("aver", "esto es una prueba");
     // std::system("pause");
 }

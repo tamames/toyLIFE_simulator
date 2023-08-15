@@ -200,4 +200,13 @@ public:
         for (Agent &i : agents)
             i.age++;
     }
+
+    std::vector<std::string> getGenotypes()
+    {
+        std::vector<std::string> genotypes(sizePopulation);
+        for (int i = 0; i < sizePopulation; ++i)
+            genotypes[i] = agents[i].genotype;
+
+        return genotypes;
+    }
 };
