@@ -8,20 +8,20 @@
 
 typedef std::vector<std::string> foodList;
 
-std::string binaryGenerator(int length = 8)
+std::string binaryGenerator(int length = 8, float control = 0.5f)
 {
     /**
      * Generates a random binary number as a string.
+     * We can control the distribution of 1s and 0s with the control parameter.
      * @param amount The length of our binary number. Defaults to 8.
+     * @param control The probability of a 1 appearing in the binary number. Defaults to 0.5.
      * @return The binary number as a string.
      */
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> distrib(0, 1);
     std::string binary_string = "";
     for (int i = 0; i < length; i++)
     {
-        binary_string += std::to_string(distrib(gen));
+        float numero = (float)rand() / (float)RAND_MAX;
+        binary_string += numero < control ? '1' : '0';
     }
     return binary_string;
 }
