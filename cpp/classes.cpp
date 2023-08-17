@@ -16,12 +16,16 @@ public:
 
     Agent(float energy, std::string genotype = "", int size_genotype = 8)
     {
-        this->size_genotype = size_genotype;
         if (genotype.empty())
+        {
             this->genotype = binaryGenerator(this->size_genotype);
+            this->size_genotype = size_genotype;
+        }
         else
+        {
             this->genotype = genotype;
-
+            this->size_genotype = genotype.size();
+        }
         this->energy = energy;
         this->age = 0;
     }
@@ -38,25 +42,29 @@ public:
     {
         return energy >= 10;
     }
+
     bool checkEnergyDie()
     {
         return energy < 5;
     }
+
     void eat(std::string food)
     {
         /**
          * Describe the interaction between an Agent and the food.
-         *We make an AND operation between the two binary strings and
-         *the energy gained by the Agent is the number of '1' that the
-         *final string has.
+         * The more similar the genotype and the food are, the more energy
+         * the Agent gains.
          * @param food The food that the Agent is going to eat.
          */
 
-        int genotype_int = std::stoi(genotype, nullptr, 2);
-        int food_int = std::stoi(food, nullptr, 2);
-        int eaten_int = genotype_int & food_int;
-        std::string eaten = std::bitset<8>(eaten_int).to_string();
-        this->energy += std::count(eaten.begin(), eaten.end(), '1');
+        int energy_gain = 0;
+
+        for (int i = 0; i < food.size(); ++i)
+        {
+            if (food[i] == genotype[i])
+                energy_gain++;
+        }
+        this->energy += energy_gain;
     }
 };
 
