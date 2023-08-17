@@ -14,14 +14,18 @@ public:
     int size_genotype;
     int age;
 
-    Agent(float energy, std::string genotype = "", int size_genotype = 8)
+    Agent(float energy, std::string genotype = "", int size_genotype = 20)
     {
-        this->size_genotype = size_genotype;
         if (genotype.empty())
+        {
             this->genotype = binaryGenerator(this->size_genotype);
+            this->size_genotype = size_genotype;
+        }
         else
+        {
             this->genotype = genotype;
-
+            this->size_genotype = genotype.size();
+        }
         this->energy = energy;
         this->age = 0;
     }
@@ -38,25 +42,29 @@ public:
     {
         return energy >= 10;
     }
+
     bool checkEnergyDie()
     {
         return energy < 5;
     }
+
     void eat(std::string food)
     {
         /**
          * Describe the interaction between an Agent and the food.
-         *We make an AND operation between the two binary strings and
-         *the energy gained by the Agent is the number of '1' that the
-         *final string has.
+         * The more similar the genotype and the food are, the more energy
+         * the Agent gains.
          * @param food The food that the Agent is going to eat.
          */
 
-        int genotype_int = std::stoi(genotype, nullptr, 2);
-        int food_int = std::stoi(food, nullptr, 2);
-        int eaten_int = genotype_int & food_int;
-        std::string eaten = std::bitset<8>(eaten_int).to_string();
-        this->energy += std::count(eaten.begin(), eaten.end(), '1');
+        int energy_gain = 0;
+
+        for (int i = 0; i < food.size(); ++i)
+        {
+            if (food[i] == genotype[i])
+                energy_gain++;
+        }
+        this->energy += energy_gain;
     }
 };
 
@@ -106,7 +114,7 @@ public:
         }
     }
 
-    void iteration(std::vector<std::string> food, float cost)
+    void iteration(std::vector<std::string> food, float cost, bool print = false)
     {
         /**
          * Here we do the iteration of the population. First we
@@ -116,6 +124,7 @@ public:
          *Then we check the ones that can reproduce and we reproduce them.
          * @param food The food that the agents are going to eat.
          * @param cost The cost of searching for food.
+         * @param print If true it logs information.
          */
 
         int sizeFood = food.size();
@@ -123,7 +132,7 @@ public:
         for (Agent &i : agents) // every agent search for food
             i.energy -= cost;
 
-        if (sizePopulation > sizeFood)
+        if ((sizePopulation > sizeFood) && print)
             std::cout << "There is not enough food for everybody.\n";
 
         int smaller = std::min(sizePopulation, sizeFood);
@@ -177,10 +186,6 @@ public:
             newElements[i * 2] = children.first;
             newElements[i * 2 + 1] = children.second;
         }
-
-        std::cout << "New elements: \n";
-        for (Agent i : newElements)
-            i.print();
 
         deleteElements(agents, reproducePositions);
         agents.insert(agents.end(), newElements.begin(), newElements.end());

@@ -9,12 +9,12 @@
 
 std::string DIRECTORY = "C:\\Users\\arcos\\Documents\\Universidad\\Master\\TFM\\codigos\\simulations\\simulation1";
 
-std::string binaryGenerator(int length = 8, float control = 0.5f)
+std::string binaryGenerator(int length = 20, float control = 0.5f)
 {
     /**
      * Generates a random binary number as a string.
      * We can control the distribution of 1s and 0s with the control parameter.
-     * @param amount The length of our binary number. Defaults to 8.
+     * @param amount The length of our binary number. Defaults to 20.
      * @param control The probability of a 1 appearing in the binary number. Defaults to 0.5.
      * @return The binary number as a string.
      */
@@ -165,7 +165,7 @@ void writeResults(std::string fileName, std::string description)
     }
 
     desFile << "\n"
-            << fileName + ".txt"
+            << fileName + ".csv"
             << " -> "
             << description
             << "\n";
@@ -174,7 +174,7 @@ void writeResults(std::string fileName, std::string description)
 
     std::cout << "Writing the results in " << fileName << "...\n";
 
-    std::string path = DIRECTORY + "\\data\\" + fileName + ".txt";
+    std::string path = DIRECTORY + "\\data\\" + fileName + ".csv";
     std::ofstream myFile;
     myFile.open(path, std::ios::out);
 
