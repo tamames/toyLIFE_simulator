@@ -17,3 +17,4 @@ food_info1.csv &rarr; The food information of the first simulation, we have a co
 population_info1.csv &rarr; The population information of the first simulation, we have a control parameter of 0.5
 food_info1.csv &rarr; The food information of the first simulation, we have a control parameter of 0.5
 population_info1.csv &rarr; The population information of the first simulation, we have a control parameter of 0.5
+food_info1.csv &rarr; The food information of the first simulation, we have a control parameter of 0.5\population_info1.csv &rarr; The population information of the first simulation, we have a control parameter of 0.5\

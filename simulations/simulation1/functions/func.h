@@ -172,7 +172,7 @@ void writeResults(std::string fileName, std::string description,
     }
 
     desFile << fileName + ".csv"
-            << " &rarr; " << description << "\n";
+            << " &rarr; " << description << "\\";
 
     desFile.close();
 
