@@ -11,7 +11,7 @@ int main() {
     std::vector<std::string> dataOfFood = statistic(listOFFood);
     writeResults(
         "food_info1",
-        "The food information of the first simulation, Control = 0.5",
+        "The food information of the first simulation, **Control = 0.5**",
         {"Max_1s", "Index", "Binary", "Total 1s", "Total 0s", "Total Elements"},
         {dataOfFood});
 
@@ -31,7 +31,7 @@ int main() {
 
     writeResults(
         "genotype_info1",
-        "The information of the genotypes at each iteration, Control = 0.5",
+        "The information of the genotypes at each iteration, **Control = 0.5**",
         {"Max_1s", "Index", "Binary", "Total 1s", "Total 0s", "Total Elements",
          "Generation"},
         dataOfGenotypes);
@@ -50,12 +50,12 @@ int main() {
         dataOfPopulation.push_back(dataOfGeneration);
     }
 
-    writeResults(
-        "population_info1",
-        "The population information of the first simulation. Control = 0.5 ",
-        {"Generation", "Average Energy Gain", "Max Energy Gain",
-         "Min Energy Gain"},
-        dataOfPopulation);
+    writeResults("population_info1",
+                 "The population information of the first simulation. "
+                 "**Control = 0.5** ",
+                 {"Generation", "Average Energy Gain", "Max Energy Gain",
+                  "Min Energy Gain"},
+                 dataOfPopulation);
 
     // std::system("pause");
 }
