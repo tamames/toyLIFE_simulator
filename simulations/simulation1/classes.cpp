@@ -150,8 +150,8 @@ class Population {
         std::iota(order.begin(), order.end(), 0);
         std::shuffle(order.begin(), order.end(), g);
 
-        std::vector<float> gainedEnergies(
-            smaller);  // store the energies gained by each agent
+        std::vector<float>
+            gainedEnergies;  // store the energies gained by each agent
 
         for (int i = 0; i < smaller; ++i) {
             Agent &agent = agents[order[i]];
@@ -159,7 +159,7 @@ class Population {
             if (agent.checkEnergyDie())  // When searching for food the agent
                                          // died.
                 continue;
-            gainedEnergies[i] = agent.eat(food[i]);
+            gainedEnergies.push_back(agent.eat(food[i]));
         }
 
         // Fill the vectors for statistics.

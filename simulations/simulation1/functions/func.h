@@ -98,6 +98,13 @@ std::vector<std::string> statistic(std::vector<std::string> listOFBinaries) {
      * @param listOFBinaries The list of binary strings.
      *                       For instance it could be the food given to a
      *                       population or the genotypes of a population.
+     * @return A vector of strings with the following statistics:
+     *                      1 - The maximum number of ones
+     *                      2 - The index where this maximum is obtained
+     *                      3 - The binary string with the maximum # of ones
+     *                      4 - The total number of ones
+     *                      5 - The total number of zeros
+     *                      6 - The total number of elements
      */
 
     std::size_t totalSize = listOFBinaries.size();
