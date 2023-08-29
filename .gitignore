@@ -5,6 +5,7 @@ try_cpp/
 *.exe
 tempCodeRunnerFile.cpp
 patterns/
+graphs/
 
 
 # Byte-compiled / optimized / DLL files

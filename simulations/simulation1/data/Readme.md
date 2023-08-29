@@ -15,3 +15,9 @@ population_info_75.000000.csv &rarr; The population information of the first sim
 food_info_75.csv &rarr; The food information of the simulation, **Control = 0.750000**  
 genotype_info_75.csv &rarr; The information of the genotypes at each iteration, **Control = 0.750000**  
 population_info_75.csv &rarr; The population information of the first simulation. **Control = 0.750000**  
+food_info_75.csv &rarr; The food information of the simulation, **Control = 0.750000**  
+genotype_info_75.csv &rarr; The information of the genotypes at each iteration, **Control = 0.750000**  
+population_info_75.csv &rarr; The population information of the first simulation. **Control = 0.750000**  
+food_info_75.csv &rarr; The food information of the simulation, **Control = 0.750000**  
+genotype_info_75.csv &rarr; The information of the genotypes at each iteration, **Control = 0.750000**  
+population_info_75.csv &rarr; The population information of the first simulation. **Control = 0.750000**  
