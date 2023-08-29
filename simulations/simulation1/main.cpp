@@ -8,12 +8,14 @@ int main() {
 
     float control =
         0.75f;  // The probability of a 1 appearing in the binary number.
+    std::string fileName;
 
     std::vector<std::string> listOFFood = listFood(100, control);
-
     std::vector<std::string> dataOfFood = statistic(listOFFood);
+
+    fileName = "food_info_" + std::to_string((int)(control * 100));
     writeResults(
-        "food_info2",
+        fileName,
         "The food information of the simulation, **Control = " +
             std::to_string(control) + "**",
         {"Max_1s", "Index", "Binary", "Total 1s", "Total 0s", "Total Elements"},
@@ -33,8 +35,9 @@ int main() {
         dataOfGenotypes.push_back(infoGenotypes);
     }
 
+    fileName = "genotype_info_" + std::to_string((int)(control * 100));
     writeResults(
-        "genotype_info2",
+        fileName,
         "The information of the genotypes at each iteration, **Control = " +
             std::to_string(control) + "**",
         {"Max_1s", "Index", "Binary", "Total 1s", "Total 0s", "Total Elements",
@@ -55,7 +58,8 @@ int main() {
         dataOfPopulation.push_back(dataOfGeneration);
     }
 
-    writeResults("population_info2",
+    fileName = "population_info_" + std::to_string((int)(control * 100));
+    writeResults(fileName,
                  "The population information of the first simulation. "
                  "**Control = " +
                      std::to_string(control) + "**",

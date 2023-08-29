@@ -138,13 +138,13 @@ std::vector<std::string> statistic(std::vector<std::string> listOFBinaries) {
 }
 
 template <typename T>
-void printVector(const std::vector<T> &vector2Print) {
+void printVector(const std::vector<T>& vector2Print) {
     /**
      * Prints the elements of a vector.
      * @param vector2Print The vector to be printed.
      */
 
-    for (const T &element : vector2Print) {
+    for (const T& element : vector2Print) {
         std::cout << element << "\n";
     }
 }
@@ -232,3 +232,71 @@ void writeResults(std::string fileName, std::string description,
     myFile.close();
     std::cout << "Finished writing the results.\n";
 }
+
+// Now we introduce some functions to compute the similarities between the
+// genotypes of a population.
+
+// float jaccardSimilarity(const std::string& str1, const std::string& str2) {
+//     int intersection = 0;
+//     int unionSize = 0;
+
+//     for (int i = 0; i < str1.size(); ++i) {
+//         if (str1[i] == '1' && str2[i] == '1') {
+//             intersection++;
+//         }
+//         if (str1[i] == '1' || str2[i] == '1') {
+//             unionSize++;
+//         }
+//     }
+
+//     if (unionSize == 0) {
+//         return 0.0f;  // Handle case where both strings are all zeros
+//     }
+
+//     return static_cast<float>(intersection) / static_cast<float>(unionSize);
+// }
+
+// int hammingDistance(const std::string& str1, const std::string& str2) {
+//     int distance = 0;
+//     for (int i = 0; i < str1.size(); ++i) {
+//         if (str1[i] != str2[i]) {
+//             distance++;
+//         }
+//     }
+//     return distance;
+// }
+
+// float averageHammingDistance(const std::vector<Agent>& population) {
+//     int totalDistance = 0;
+//     int numComparisons = 0;
+
+//     for (int i = 0; i < population.size(); ++i) {
+//         for (int j = i + 1; j < population.size(); ++j) {
+//             totalDistance +=
+//                 hammingDistance(population[i].genotype,
+//                 population[j].genotype);
+//             numComparisons++;
+//         }
+//     }
+
+//     return static_cast<float>(totalDistance) /
+//            static_cast<float>(numComparisons);
+// }
+
+// #include <map>
+// float shannonDiversityIndex(const std::vector<Agent>& population) {
+//     std::map<std::string, int> genotypeCounts;
+//     for (const Agent& agent : population) {
+//         genotypeCounts[agent.genotype]++;
+//     }
+
+//     float diversityIndex = 0.0f;
+//     int totalAgents = population.size();
+
+//     for (const auto& [genotype, count] : genotypeCounts) {
+//         float p = static_cast<float>(count) /
+//         static_cast<float>(totalAgents); diversityIndex -= p * std::log2(p);
+//     }
+
+//     return diversityIndex;
+// }

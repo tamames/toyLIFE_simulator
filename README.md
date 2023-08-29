@@ -29,7 +29,3 @@ The whole iteration is going to be something like this:
 * A function that gives us a random binary string.
 * A function that can divide a cell.
 * A function to define the new population each generation.
-
-# Things to implement:
-* Maybe the initial energy has to be normal distributed, not uniform.
-* Do better representations
