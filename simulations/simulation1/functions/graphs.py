@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import matplotlib.figure as mplf  # just for type hints
 import pandas as pd
 
+DIR_PATH = Path("simulations/simulation1/graphs")
+
 
 def get_df(file: str) -> pd.DataFrame:
     """Reads a csv file and returns a pandas DataFrame with the data.
@@ -70,9 +72,7 @@ def save_graph(fig: mplf.Figure, name: str) -> None:
         file (mplf.Figure): the figure to save
         name (str): The name of the file to save
     """
-
-    file_to_save = "simulations/simulation1/graphs/" + name
-
+    file_to_save = str(DIR_PATH / name)
     fig.savefig(file_to_save)
 
 
@@ -84,14 +84,14 @@ def write_results(file_name: str, description: str, data_source: str = "") -> No
         description (str): a description to identify the picture.
     """
     # First, we open the description file to write what is going to be in the file.
-    readme_path = Path("simulations/simulation1/graphs/Readme.md")
+    readme_path = DIR_PATH / "Readme.md"
 
     with open(readme_path, "a") as des_file:
         des_file.write(file_name + ".png" + " &rarr " + description + "  \n")
 
 
 def save_and_write(
-    fig: mplf.Figure, name: str, description: str = "", data_source: str = ""
+    fig: mplf.Figure, data_source: str, plot_type: str, description: str = ""
 ) -> None:
     """Handle the call of the save_fig and write_results functions.
 
@@ -100,13 +100,18 @@ def save_and_write(
         name (str): The name of the file to save
         description (str): a description to identify the picture.
     """
-    params_for_descrp = name.split("_")
-    save_graph(fig, name)
+
+    fig_name = get_fig_name(data_source, plot_type)
+
+    # in this case we don't need to check if we are going to overwrite the image because
+    # we can always recreate a missing image because we have the data source.
+    save_graph(fig, fig_name)
+    params_for_descrp = fig_name.split("_")
 
     if not description:
         description = f"Is a {params_for_descrp[0]} plot that represent a {params_for_descrp[1]}. *Data = {data_source}*. **Control={params_for_descrp[-1]}**"
 
-    write_results(name, description, data_source)
+    write_results(fig_name, description, data_source)
 
 
 def bar_only_1(df: pd.DataFrame) -> mplf.Figure:
@@ -181,8 +186,7 @@ def main() -> None:
     df = get_df(file_name)
     fig1, plot_type = stackplot_1_0(df)
 
-    fig_name = get_fig_name(file_name, plot_type)
-    save_and_write(fig1, fig_name, data_source=file_name)
+    save_and_write(fig1, file_name, plot_type)
 
 
 def do_all(file_name: str) -> None:
