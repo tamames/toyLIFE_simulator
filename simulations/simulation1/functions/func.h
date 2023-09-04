@@ -1,16 +1,13 @@
 #pragma once
 
 #include <algorithm>  // std::count std::max_element
-#include <numeric>    // std::accumulate
+#include <iostream>
+#include <numeric>  // std::accumulate
 #include <random>
 #include <stdexcept>
 #include <string>
 
-const std::string DIRECTORY =
-    "C:"
-    "\\Users\\arcos\\Documents\\Universidad\\Master\\TFM\\codigos\\simulations"
-    "\\simulation1";
-const int SIZE_GENOTYPE = 20;
+#include "globals.h"
 
 std::string binaryGenerator(int length = 20, float control = 0.5f) {
     /**
@@ -178,15 +175,22 @@ void writeResults(std::string fileName, std::string description,
         exit(EXIT_FAILURE);
     }
 
-    desFile << fileName + ".csv"
-            << " &rarr; " << description;
-    desFile << "  \n";
+    fileName = fileName + "_" + std::to_string(NUMBER_OF_SIMULATION) + "_" +
+               std::to_string((int)(CONTROL * 100)) + ".csv";
+    description =
+        description + "Correspond to simulation number **" +
+        std::to_string(NUMBER_OF_SIMULATION) +
+        "**. **Control = " + std::to_string(CONTROL) + "**" +
+        "**Energy to reproduce = " + std::to_string(ENERGY_TO_REPRODUCE) +
+        "**, **Energy to die = " + std::to_string(ENERGY_TO_DIE) +
+        "**, **Age to die = " + std::to_string(AGE_TO_DIE) + "**.";
 
+    desFile << fileName << " &rarr; " << description << "  \n";
     desFile.close();
 
     // Now we deal with the results file.
     // We check if the file already exists, so we don't lose any data.
-    const std::string path = DIRECTORY + "\\data\\" + fileName + ".csv";
+    std::string path = DIRECTORY + "\\data\\" + fileName;
     if (std::filesystem::exists(path)) {
         std::cout << "The file " << fileName << " already exists.\n";
         std::cout << "Do you want to overwrite it? (y/n)\n";
@@ -233,6 +237,29 @@ void writeResults(std::string fileName, std::string description,
     std::cout << "Finished writing the results.\n";
 }
 
+void foodWriting(std::vector<std::string> foodList) {
+    /** Writes all the food into a file just to plot a histogram of the
+     * distribution I had an idea about plotting the food but I am realizing
+     * that this can also be used to plot the genotypes
+     *
+     * @param foodList The list of food or genotypes that we want to write.
+     */
+
+    // First we have to past from a vector of strings to a vector of vectors of
+    // strings
+    std::vector<std::vector<std::string>> foodList2D;
+    foodList2D.reserve(foodList.size());
+    for (const std::string& food : foodList) {
+        std::vector<std::string> food2D = {food};
+        foodList2D.push_back(food2D);
+    }
+
+    // Now we write the results
+    std::string fileName = "food_total";
+    std::string desc = "The food used in this simulation.";
+    std::vector<std::string> head = {"Binary"};
+    writeResults(fileName, desc, head, foodList2D);
+}
 // Now we introduce some functions to compute the similarities between the
 // genotypes of a population.
 

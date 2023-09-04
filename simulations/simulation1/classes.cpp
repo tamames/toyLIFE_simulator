@@ -5,10 +5,9 @@
 #include <vector>
 
 #include "functions/func.h"
+#include "functions/globals.h"
 
-// Some global variables
-const int ENERGY_TO_REPRODUCE = 10;
-const int ENERGY_TO_DIE = 5;
+// TODO add an ID to the agents so we can track an agent through the generations
 
 class Agent {
    public:
@@ -42,7 +41,9 @@ class Agent {
 
     bool checkEnergyReproduce() { return energy >= ENERGY_TO_REPRODUCE; }
 
-    bool checkEnergyDie() { return energy < ENERGY_TO_DIE; }
+    bool checkEnergyDie() {
+        return (energy < ENERGY_TO_DIE || age > AGE_TO_DIE);
+    }  // cambiar el nombre a checkdie
 
     int eat(std::string food) {
         /**

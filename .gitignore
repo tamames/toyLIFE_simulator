@@ -6,6 +6,7 @@ try_cpp/
 tempCodeRunnerFile.cpp
 patterns/
 graphs/
+globals.cpp
 
 
 # Byte-compiled / optimized / DLL files
