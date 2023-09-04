@@ -12,7 +12,9 @@ DIR_PATH = Path("simulations/simulation1/graphs")
 def get_df(file: str) -> pd.DataFrame:
     """Reads a csv file and returns a pandas DataFrame with the data.
     we mainly have three types of files:
-            food: information about the food pool
+            food: information about the food pool.
+                total: all the food for the generation
+                stats: the stats of the food pool
             geno: information about the genotypes at each generation
             popu: information about the population at each generation
     if the file doesn't match any of these cases, it will be read anyway.
@@ -28,15 +30,25 @@ def get_df(file: str) -> pd.DataFrame:
     file_to_open = data_folder / file
 
     if file.startswith("food"):
-        types = {
-            "Max_1s": int,
-            "Index": int,
-            "Binary": str,
-            "Total 1s": int,
-            "Total 0s": int,
-            "Total Elements": int,
-        }
-        df = pd.read_csv(file_to_open, sep=",", header=0, dtype=types, index_col=False)
+        type_of_food = file.split("_")[1]
+        if type_of_food.startswith("stats"):
+            types = {
+                "Max_1s": int,
+                "Index": int,
+                "Binary": str,
+                "Total 1s": int,
+                "Total 0s": int,
+                "Total Elements": int,
+            }
+            df = pd.read_csv(
+                file_to_open, sep=",", header=0, dtype=types, index_col=False
+            )
+        elif type_of_food.startswith("total"):
+            types = {"Binary": str}
+            df = pd.read_csv(file_to_open, sep=",", header=0, dtype=types)
+        else:
+            print("Unknown type of food file. Reading anyway...")
+            df = pd.read_csv(file_to_open, sep=",", header=0, index_col=False)
 
     elif file.startswith("geno"):
         types = {
@@ -114,6 +126,7 @@ def save_and_write(
     write_results(fig_name, description, data_source)
 
 
+# TODO improve the representation functions
 def bar_only_1(df: pd.DataFrame) -> mplf.Figure:
     df["1s Ratio"] = df["Total 1s"] / df["Total Elements"]
 
@@ -159,6 +172,30 @@ def stackplot_1_0(df: pd.DataFrame) -> tuple[mplf.Figure, str]:
     return fig, plot_type
 
 
+def food_histogram(df: pd.DataFrame) -> tuple[mplf.Figure, str]:
+    plot_type = "hist"
+    size = len(df["Binary"][0])
+    # Count the number of 0s and 1s in each binary string
+    df["1s Count"] = df["Binary"].apply(lambda x: x.count("1"))
+    df["0s Count"] = size - df["1s Count"]
+
+    # Create a histogram for 0s count
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Create a histogram for the count of 1s
+    bins = range(size + 1)  # Create bins from 0 to size
+    ax.hist(df["1s Count"], bins=bins, alpha=0.7, color="b", label="1s Count")
+
+    # Customize the plot
+    ax.set_xlabel("Count of 1s")
+    ax.set_ylabel("Frequency")
+    ax.set_title("Distribution of 1s in Binary Strings")
+    ax.legend()
+    ax.grid(axis="y", linestyle="--", alpha=0.7)
+
+    return fig, plot_type
+
+
 def get_fig_name(source_name: str, plot_type: str) -> str:
     """Gives the figure name based on the file name.
     The figures name have the following structure:
@@ -179,14 +216,14 @@ def get_fig_name(source_name: str, plot_type: str) -> str:
 
 
 def main() -> None:
-    file_name = "genotype_info_75.csv"
+    file_name = "food_total_0_25.csv"
     # the last two characters of the file name are the control parameter of the population
     #  that number gives us the way the foodList is distributed.
 
     df = get_df(file_name)
-    fig1, plot_type = stackplot_1_0(df)
+    food_histogram(df)
 
-    save_and_write(fig1, file_name, plot_type)
+    # save_and_write(fig1, file_name, plot_type)
 
 
 def do_all(file_name: str) -> None:
