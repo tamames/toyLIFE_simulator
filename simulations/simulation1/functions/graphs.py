@@ -70,6 +70,17 @@ def get_df(file: str) -> pd.DataFrame:
             "Min Energy Gain": int,
         }
         df = pd.read_csv(file_to_open, sep=",", header=0, dtype=types, index_col=False)
+
+    elif file.startswith("total"):
+        types = {
+            "ID": int,
+            "Genotype": str,
+            "Energy": float,
+            "Age": int,
+            "Iteration": int,
+        }
+
+        df = pd.read_csv(file_to_open, sep=",", header=0, dtype=types, index_col=False)
     else:
         print(f"The file {file} doesn't match any case. Reading anyway...")
         df = pd.read_csv(file_to_open, sep=",", header=0, index_col=False)

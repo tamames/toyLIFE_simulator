@@ -260,6 +260,100 @@ void foodWriting(std::vector<std::string> foodList) {
     std::vector<std::string> head = {"Binary"};
     writeResults(fileName, desc, head, foodList2D);
 }
+
+void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
+                       int iteration) {
+    /**This is a modification of the writeResults function.
+     * Basically I want to write all the information about the population in
+     * each generation, The csv contains one row for each agent in each
+     * generation. And the data displayed is the following: An id to identify
+     * the agent The genotype of the agent The energy of the agent The age of
+     * the agent The net energy of that simulation.
+     *
+     */
+
+    // First we define some variables that we always need.
+    std::string fileName = "total_" + std::to_string(NUMBER_OF_SIMULATION) +
+                           "_" + std::to_string((int)(CONTROL * 100)) + ".csv";
+
+    std::string path = DIRECTORY + "\\data\\" + fileName;
+    std::ofstream myFile;
+
+    if (iteration == 0) {
+        std::ofstream desFile;
+        std::string desFileDir = DIRECTORY + "\\data\\" + "Readme.md";
+        desFile.open(desFileDir, std::ios::app);
+
+        if (!desFile) {
+            std::cout << "Impossible to open the description file.";
+            exit(EXIT_FAILURE);
+        }
+
+        std::string description =
+            "All the info about the simulation. Correspond to simulation "
+            "number **" +
+            std::to_string(NUMBER_OF_SIMULATION) +
+            "**. **Control = " + std::to_string(CONTROL) + "**" +
+            "**Energy to reproduce = " + std::to_string(ENERGY_TO_REPRODUCE) +
+            "**, **Energy to die = " + std::to_string(ENERGY_TO_DIE) +
+            "**, **Age to die = " + std::to_string(AGE_TO_DIE) + "**.";
+
+        desFile << fileName << " &rarr; " << description << "  \n";
+        desFile.close();
+
+        // Now we deal with the results file.
+        myFile.open(path, std::ios::out);
+
+        if (!myFile) {
+            std::cout << "There was an error while opening your file.\n";
+            exit(EXIT_FAILURE);
+        }
+
+        std::vector<std::string> headers = {"ID", "Genotype", "Energy", "Age",
+                                            "Iteration"};
+        // First we write the headers
+        for (std::size_t i = 0; i < headers.size(); ++i) {
+            myFile << headers[i];
+            if (i < headers.size() - 1)
+                myFile << ",";
+        }
+
+        myFile << "\n";
+
+        // Then we write the results
+        for (std::size_t i = 0; i < dataOfPopulation.size(); ++i) {
+            for (std::size_t j = 0; j < dataOfPopulation[i].size(); ++j) {
+                myFile << dataOfPopulation[i][j];
+                if (j < dataOfPopulation[i].size())
+                    myFile << ",";
+            }
+            myFile << std::to_string(iteration);
+            myFile << "\n";
+        }
+
+        myFile.close();
+        return;
+    }
+
+    // Now we see what happends when we are not in the first iteration
+    myFile.open(path, std::ios::app);
+    if (!myFile) {
+        std::cout << "There was an error while opening your file.\n";
+        exit(EXIT_FAILURE);
+    }
+
+    for (std::size_t i = 0; i < dataOfPopulation.size(); ++i) {
+        for (std::size_t j = 0; j < dataOfPopulation[i].size(); ++j) {
+            myFile << dataOfPopulation[i][j];
+            if (j < dataOfPopulation[i].size())
+                myFile << ",";
+        }
+        myFile << std::to_string(iteration);
+        myFile << "\n";
+    }
+    myFile.close();
+}
+
 // Now we introduce some functions to compute the similarities between the
 // genotypes of a population.
 

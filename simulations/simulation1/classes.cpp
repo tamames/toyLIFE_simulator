@@ -7,13 +7,12 @@
 #include "functions/func.h"
 #include "functions/globals.h"
 
-// TODO add an ID to the agents so we can track an agent through the generations
-
 class Agent {
    public:
     std::string genotype;
     float energy;
     int age;
+    int id;
 
     Agent(float energy, std::string genotype = "") {
         if (genotype.empty()) {
@@ -28,22 +27,22 @@ class Agent {
         }
         this->energy = energy;
         this->age = 0;
+        this->id = ID_COUNT;
+        ID_COUNT++;
     }
 
     void print(bool printAge = false) {
+        std::cout << "ID: " << id << ". Genotype: " << genotype
+                  << ". Energy: " << energy << ". ";
         if (printAge)
-            std::cout << "Genotype: " << genotype << ". Energy: " << energy
-                      << ". Age:" << age << std::endl;
-        else
-            std::cout << "Genotype: " << genotype << ". Energy: " << energy
-                      << std::endl;
+            std::cout << "Age:" << age;
     }
 
     bool checkEnergyReproduce() { return energy >= ENERGY_TO_REPRODUCE; }
 
     bool checkEnergyDie() {
         return (energy < ENERGY_TO_DIE || age > AGE_TO_DIE);
-    }  // cambiar el nombre a checkdie
+    }  // todo cambiar el nombre a checkdie
 
     int eat(std::string food) {
         /**
@@ -64,6 +63,16 @@ class Agent {
         this->energy += energy_gain;
 
         return energy_gain;
+    }
+
+    std::vector<std::string> getAgentData() {
+        std::vector<std::string> data(4);
+        data[0] = std::to_string(id);
+        data[1] = genotype;
+        data[2] = std::to_string(energy);
+        data[3] = std::to_string(age);
+
+        return data;
     }
 };
 
@@ -110,6 +119,7 @@ class Population {
         std::cout << "You are printing the whole population: \n";
         for (int i = 0; i < sizePopulation; ++i) {
             agents[i].print();
+            std::cout << "\n";
         }
     }
 
@@ -237,5 +247,13 @@ class Population {
             genotypes[i] = agents[i].genotype;
 
         return genotypes;
+    }
+
+    std::vector<std::vector<std::string>> getPopulationData() {
+        std::vector<std::vector<std::string>> data(sizePopulation);
+        for (int i = 0; i < sizePopulation; ++i)
+            data[i] = agents[i].getAgentData();
+
+        return data;
     }
 };

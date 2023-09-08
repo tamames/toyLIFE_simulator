@@ -11,3 +11,4 @@ extern int NUMBER_OF_SIMULATION;  // Jus to to keep track of which simulation we
 extern int ENERGY_TO_REPRODUCE;
 extern int ENERGY_TO_DIE;
 extern int AGE_TO_DIE;
+extern int ID_COUNT;
