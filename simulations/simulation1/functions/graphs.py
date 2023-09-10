@@ -29,6 +29,7 @@ def get_df(file: str) -> pd.DataFrame:
 
     data_folder = Path("simulations/simulation1/data")
     file_to_open = data_folder / file
+    print(file_to_open)
 
     if file.startswith("food"):
         type_of_food = file.split("_")[1]
@@ -78,6 +79,7 @@ def get_df(file: str) -> pd.DataFrame:
             "Genotype": str,
             "Energy": float,
             "Age": int,
+            "Parent": int,
             "Iteration": int,
         }
 
@@ -236,12 +238,13 @@ def get_fig_name(source_name: str, plot_type: str) -> str:
 
 
 def main() -> None:
-    file_name = "food_total_0_25.csv"
+    file_name = "total_0_25.csv"
     # the last two characters of the file name are the control parameter of the population
     #  that number gives us the way the foodList is distributed.
 
     df = get_df(file_name)
-    food_histogram(df)
+    # food_histogram(df)
+    print(df.head())
 
     # save_and_write(fig1, file_name, plot_type)
 
