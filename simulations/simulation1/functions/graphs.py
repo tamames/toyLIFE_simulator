@@ -1,4 +1,4 @@
-"""In this file we define some python function to graph the data generated with the C++ code."""
+"""In this file we define some python functions to study the data generated with the C++ code."""
 
 from pathlib import Path
 
@@ -11,12 +11,13 @@ DIR_PATH = Path("simulations/simulation1/graphs")
 
 def get_df(file: str) -> pd.DataFrame:
     """Reads a csv file and returns a pandas DataFrame with the data.
-    we mainly have three types of files:
+    we mainly have this types of files:
             food: information about the food pool.
                 total: all the food for the generation
                 stats: the stats of the food pool
             geno: information about the genotypes at each generation
             popu: information about the population at each generation
+            total: all the info of one simulation in one file
     if the file doesn't match any of these cases, it will be read anyway.
 
     Args:
@@ -127,7 +128,7 @@ def save_and_write(
     fig_name = get_fig_name(data_source, plot_type)
 
     # in this case we don't need to check if we are going to overwrite the image because
-    # we can always recreate a missing image because we have the data source.
+    # we can always recreate a missing image with the data source.
     save_graph(fig, fig_name)
     params_for_descrp = fig_name.split("_")
 
@@ -184,6 +185,14 @@ def stackplot_1_0(df: pd.DataFrame) -> tuple[mplf.Figure, str]:
 
 
 def food_histogram(df: pd.DataFrame) -> tuple[mplf.Figure, str]:
+    """This generates a histogram to see the distribution of a list of genotypes.
+
+    Args:
+        df (pd.DataFrame): The data frame with the binary strings
+
+    Returns:
+        tuple[mplf.Figure, str]: the plot and the type of plot
+    """
     plot_type = "hist"
     size = len(df["Binary"][0])
     # Count the number of 0s and 1s in each binary string

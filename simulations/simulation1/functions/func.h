@@ -309,8 +309,8 @@ void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
             exit(EXIT_FAILURE);
         }
 
-        std::vector<std::string> headers = {"ID", "Genotype", "Energy", "Age",
-                                            "Iteration"};
+        std::vector<std::string> headers = {"ID",  "Genotype", "Energy",
+                                            "Age", "Parent",   "Iteration"};
         // First we write the headers
         for (std::size_t i = 0; i < headers.size(); ++i) {
             myFile << headers[i];

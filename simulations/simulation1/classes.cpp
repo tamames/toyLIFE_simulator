@@ -13,8 +13,9 @@ class Agent {
     float energy;
     int age;
     int id;
+    int parent;  // If it's 0 it's from the first generation
 
-    Agent(float energy, std::string genotype = "") {
+    Agent(float energy, std::string genotype = "", int parent = 0) {
         if (genotype.empty()) {
             this->genotype = binaryGenerator(SIZE_GENOTYPE);
         } else {
@@ -28,6 +29,7 @@ class Agent {
         this->energy = energy;
         this->age = 0;
         this->id = ID_COUNT;
+        this->parent = parent;
         ID_COUNT++;
     }
 
@@ -40,9 +42,7 @@ class Agent {
 
     bool checkEnergyReproduce() { return energy >= ENERGY_TO_REPRODUCE; }
 
-    bool checkEnergyDie() {
-        return (energy < ENERGY_TO_DIE || age > AGE_TO_DIE);
-    }  // todo cambiar el nombre a checkdie
+    bool checkDie() { return (energy < ENERGY_TO_DIE || age > AGE_TO_DIE); }
 
     int eat(std::string food) {
         /**
@@ -66,11 +66,12 @@ class Agent {
     }
 
     std::vector<std::string> getAgentData() {
-        std::vector<std::string> data(4);
+        std::vector<std::string> data(5);
         data[0] = std::to_string(id);
         data[1] = genotype;
         data[2] = std::to_string(energy);
         data[3] = std::to_string(age);
+        data[4] = std::to_string(parent);
 
         return data;
     }
@@ -87,8 +88,8 @@ std::pair<Agent, Agent> divide(Agent parent, float p) {
     std::string genotype1 = mutate(parent.genotype, p);
     std::string genotype2 = mutate(parent.genotype, p);
 
-    Agent child1(energyC, genotype1);
-    Agent child2(energyC, genotype2);
+    Agent child1(energyC, genotype1, parent.id);
+    Agent child2(energyC, genotype2, parent.id);
 
     return std::make_pair(child1, child2);
 }
@@ -167,8 +168,8 @@ class Population {
         for (int i = 0; i < smaller; ++i) {
             Agent &agent = agents[order[i]];
 
-            if (agent.checkEnergyDie())  // When searching for food the agent
-                                         // died.
+            if (agent.checkDie())  // When searching for food the agent
+                                   // died.
                 continue;
             gainedEnergies.push_back(agent.eat(food[i]));
         }
@@ -201,7 +202,7 @@ class Population {
         std::vector<int> deadsPositions;  // store the indexes of the deads
 
         for (int i = 0; i < sizePopulation; ++i) {
-            if (agents[i].checkEnergyDie())
+            if (agents[i].checkDie())
                 deadsPositions.push_back(i);
         }
 
