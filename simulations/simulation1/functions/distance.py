@@ -50,7 +50,7 @@ def study_distance(genotypes: list[str], distance_type: str) -> list:
 
     if distance_type.startswith("hamm"):
         func = hamming_distance
-    if distance_type.startswith("jacc"):
+    elif distance_type.startswith("jacc"):
         func = jaccard_similarity
     else:
         raise ValueError("The distance type must be hamming or jaccard")
