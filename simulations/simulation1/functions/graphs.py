@@ -172,8 +172,8 @@ def stackplot_1_0(df: pd.DataFrame) -> tuple[mplf.Figure, str]:
         df["1s Ratio"],
         df["0s Ratio"],
         labels=["1s Ratio", "0s Ratio"],
-        colors=["blue", "red"],
-        alpha=0.7,
+        colors=["#157F1F", "#07020D"],
+        alpha=1.0,
     )
 
     # Customize the plot
@@ -238,15 +238,15 @@ def get_fig_name(source_name: str, plot_type: str) -> str:
 
 
 def main() -> None:
-    file_name = "total_0_25.csv"
+    file_name = "genotype_info_75.csv"
     # the last two characters of the file name are the control parameter of the population
     #  that number gives us the way the foodList is distributed.
 
     df = get_df(file_name)
-    # food_histogram(df)
-    print(df.head())
+    fig1, plot_type = stackplot_1_0(df)
+    # print(df.head())
 
-    # save_and_write(fig1, file_name, plot_type)
+    save_and_write(fig1, file_name, plot_type)
 
 
 def do_all(file_name: str) -> None:
