@@ -1,7 +1,7 @@
 """Some functions to compute distance between binary strings"""
 
 
-def hamming_distance(s1: str, s2: str) -> float:
+def hamming_distance(s1: str, s2: str) -> int:
     """Compute the hamming distance between two binary strings.
     The hamming distance is the number of positions where the two strings differ.
 
@@ -34,7 +34,8 @@ def jaccard_similarity(s1: str, s2: str) -> float:
     return sum(c1 == c2 for c1, c2 in zip(s1, s2)) / len(s1)
 
 
-def study_distance(genotypes: list[str], distance_type: str) -> list:
+# TODO: create something that gives us the index(id) of genotypes that have a particular distance.
+def study_distance(genotypes: list[str], distance_type: str) -> list[int]:
     """Compute the distance between the genotypes of a study.
 
     Args:

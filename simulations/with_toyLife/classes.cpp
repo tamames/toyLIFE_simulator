@@ -1,58 +1,61 @@
+#include <algorithm>  // std::count std::min
+#include <bitset>     // std::bitset
 #include <iostream>
+#include <stdexcept>  // std::invalid_argument
 #include <string>
 #include <vector>
-#include <stdexcept> // std::invalid_argument
-#include <bitset>    // std::bitset
-#include <algorithm> // std::count std::min
 
 // my functions
 #include "functions/func.h"
+#include "functions/globals.h"
 
 // toyLife code
 #include "toylife/helper_functions.cpp"
 #include "toylife/toy_plugin.cpp"
 
-class Agent
-{
-public:
+class Agent {
+   public:
     std::string genotype;
     float energy;
-    int size_genotype;
     int age;
+    int id;
+    int parent;  // If it's 0 it's from the first generation
     mapa_prot prots;
     mapa_dim dims;
     mapa_met mets;
 
-    Agent(float energy, std::string genotype = "", int size_genotype = 8)
-    {
-        this->size_genotype = size_genotype;
-        if (genotype.empty())
-            this->genotype = binaryGenerator(this->size_genotype);
-        else
-            this->genotype = genotype;
+    Agent(float energy, std::string genotype = "", int parent = 0) {
+        if (genotype.empty()) {
+            this->genotype = binaryGenerator(SIZE_GENOTYPE);
+        } else {
+            if (genotype.size() != SIZE_GENOTYPE)  // to prevent errors
+                throw std::invalid_argument("The genotype must be of size " +
+                                            std::to_string(SIZE_GENOTYPE) +
+                                            ".");
 
+            this->genotype = genotype;
+        }
         this->energy = energy;
         this->age = 0;
+        this->id = ID_COUNT;
+        this->parent = parent;
+        ID_COUNT++;
     }
 
-    void print(bool printAge = false)
-    {
+    void print(bool printAge = false) {
         if (printAge)
-            std::cout << "Genotype: " << genotype << ". Energy: " << energy << ". Age:" << age << std::endl;
+            std::cout << "Genotype: " << genotype << ". Energy: " << energy
+                      << ". Age:" << age << std::endl;
         else
-            std::cout << "Genotype: " << genotype << ". Energy: " << energy << std::endl;
+            std::cout << "Genotype: " << genotype << ". Energy: " << energy
+                      << std::endl;
     }
 
-    bool checkEnergyReproduce()
-    {
-        return energy >= 10;
-    }
-    bool checkEnergyDie()
-    {
-        return energy < 5;
-    }
-    void eat(std::string food)
-    {
+    bool checkEnergyReproduce() { return energy >= ENERGY_TO_REPRODUCE; }
+
+    bool checkDie() { return (energy < ENERGY_TO_DIE || age > AGE_TO_DIE); }
+
+    void eat(std::string food) {
         /**
          * Describe the interaction between an Agent and the food.
          *We make an AND operation between the two binary strings and
@@ -67,10 +70,21 @@ public:
         std::string eaten = std::bitset<8>(eaten_int).to_string();
         this->energy += std::count(eaten.begin(), eaten.end(), '1');
     }
+
+    std::vector<std::string> getAgentData() {
+        // TODO add here the data of the mets, dims and prots
+        std::vector<std::string> data(5);
+        data[0] = std::to_string(id);
+        data[1] = genotype;
+        data[2] = std::to_string(energy);
+        data[3] = std::to_string(age);
+        data[4] = std::to_string(parent);
+
+        return data;
+    }
 };
 
-std::pair<Agent, Agent> divide(Agent parent, float p)
-{
+std::pair<Agent, Agent> divide(Agent parent, float p) {
     /**
      * Divide an agent into two agents.
      * @param parent The agent that is going to be divided.
@@ -81,42 +95,44 @@ std::pair<Agent, Agent> divide(Agent parent, float p)
     std::string genotype1 = mutate(parent.genotype, p);
     std::string genotype2 = mutate(parent.genotype, p);
 
-    Agent child1(energyC, genotype1);
-    Agent child2(energyC, genotype2);
+    Agent child1(energyC, genotype1, parent.id);
+    Agent child2(energyC, genotype2, parent.id);
 
     return std::make_pair(child1, child2);
 }
 
-class Population
-{
-public:
+class Population {
+   public:
     int generation = 0;
     int sizePopulation;
     std::vector<Agent> agents;
-    Population(int sizePopulation)
-    {
+
+    // For statistics
+    std::vector<float> averageEnergyGain;
+    std::vector<float> averageEnergyLoss;
+    std::vector<int> maxEnergyGain;
+    std::vector<int> minEnergyGain;
+
+    Population(int sizePopulation) {
         this->sizePopulation = sizePopulation;
         this->agents = std::vector<Agent>();
-        // int energies[sizePopulation];
         std::vector<float> energies = createRandomArray(sizePopulation, 15);
-        for (int i = 0; i < sizePopulation; ++i)
-        {
+        for (int i = 0; i < sizePopulation; ++i) {
             Agent agent(energies[i]);
             agents.push_back(agent);
         }
     }
 
-    void print()
-    {
-        std::cout << "The whole population: \n";
-        for (int i = 0; i < sizePopulation; ++i)
-        {
+    void print() {
+        std::cout << "You are printing the whole population: \n";
+        for (int i = 0; i < sizePopulation; ++i) {
             agents[i].print();
+            std::cout << "\n";
         }
     }
 
-    void iteration(std::vector<std::string> food, float cost)
-    {
+    void iteration(std::vector<std::string> food, float cost,
+                   double costVariation = 0.1, bool print = false) {
         /**
          * Here we do the iteration of the population. First we
          *make the agents search for food. Then we generate a random
@@ -125,14 +141,25 @@ public:
          *Then we check the ones that can reproduce and we reproduce them.
          * @param food The food that the agents are going to eat.
          * @param cost The cost of searching for food.
+         * @param costVariation The variation of the cost so every agent
+         *                      doesn't spend the same energy searching for
+         *food.
+         * @param print If true it logs extra information.
          */
 
         int sizeFood = food.size();
 
-        for (Agent &i : agents) // every agent search for food
-            i.energy -= cost;
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::uniform_real_distribution<double> variationDist(
+            -cost * costVariation, cost * costVariation);
 
-        if (sizePopulation > sizeFood)
+        for (Agent &i : agents) {  // every agent search for food
+            double randomCost = cost + variationDist(g);
+            i.energy -= randomCost;
+        }
+
+        if ((sizePopulation > sizeFood) && print)
             std::cout << "There is not enough food for everybody.\n";
 
         int smaller = std::min(sizePopulation, sizeFood);
@@ -140,19 +167,38 @@ public:
         // generate random order
         std::vector<int> order(smaller);
         std::iota(order.begin(), order.end(), 0);
-        std::random_device rd;
-        std::mt19937 g(rd());
         std::shuffle(order.begin(), order.end(), g);
 
-        for (int i = 0; i < smaller; ++i)
-            agents[order[i]].eat(food[i]);
+        std::vector<float>
+            gainedEnergies;  // store the energies gained by each agent
+
+        for (int i = 0; i < smaller; ++i) {
+            Agent &agent = agents[order[i]];
+
+            if (agent.checkDie())  // When searching for food the agent
+                                   // died.
+                continue;
+            // gainedEnergies.push_back(agent.eat(food[i]));
+        }
+
+        // Fill the vectors for statistics.
+        int sum =
+            std::accumulate(gainedEnergies.begin(), gainedEnergies.end(), 0);
+        averageEnergyGain.push_back(static_cast<double>(sum) / (float)smaller);
+
+        auto maxGain =
+            std::max_element(gainedEnergies.begin(), gainedEnergies.end());
+        maxEnergyGain.push_back(*maxGain);
+
+        auto minGain =
+            std::min_element(gainedEnergies.begin(), gainedEnergies.end());
+        minEnergyGain.push_back(*minGain);
 
         generation++;
         addAges();
     }
 
-    void afterIteration(float p)
-    {
+    void afterIteration(float p) {
         /**
          * Here we check the energy of each agent and do the
          *corresponding action. First we check the ones that died.
@@ -160,53 +206,62 @@ public:
          * @param p The probability of mutation.
          */
 
-        std::vector<int> deadsPositions; // store the indexes of the deads
+        std::vector<int> deadsPositions;  // store the indexes of the deads
 
-        // for (int i : deadsPositions)
-        //     std::cout << i << " ";
-        for (int i = 0; i < sizePopulation; ++i)
-        {
-            if (agents[i].checkEnergyDie())
+        for (int i = 0; i < sizePopulation; ++i) {
+            if (agents[i].checkDie())
                 deadsPositions.push_back(i);
         }
 
         deleteElements(agents, deadsPositions);
 
-        std::vector<int> reproducePositions; // store the indexes of the ones to reproduce
-        for (int i = 0; i < sizePopulation; ++i)
-        {
+        std::vector<int>
+            reproducePositions;  // store the indexes of the ones to reproduce
+        for (int i = 0; i < sizePopulation; ++i) {
             if (agents[i].checkEnergyReproduce())
                 reproducePositions.push_back(i);
         }
 
         std::vector<Agent> newElements(reproducePositions.size() * 2, Agent(0));
-        for (int i = 0; i < reproducePositions.size(); ++i)
-        {
-            std::pair<Agent, Agent> children = divide(agents[reproducePositions[i]], p);
+        for (int i = 0; i < reproducePositions.size(); ++i) {
+            std::pair<Agent, Agent> children =
+                divide(agents[reproducePositions[i]], p);
             newElements[i * 2] = children.first;
             newElements[i * 2 + 1] = children.second;
         }
 
-        std::cout << "New elements: \n";
-        for (Agent i : newElements)
-            i.print();
-
         deleteElements(agents, reproducePositions);
         agents.insert(agents.end(), newElements.begin(), newElements.end());
-        this->sizePopulation = agents.size(); // update the size of the population
+        this->sizePopulation =
+            agents.size();  // update the size of the population
     }
 
-    void deleteElements(std::vector<Agent> &agents, std::vector<int> indexes)
-    {
+    void deleteElements(std::vector<Agent> &agents, std::vector<int> indexes) {
         for (auto it = indexes.rbegin(); it != indexes.rend(); it++)
             agents.erase(agents.begin() + *it);
 
-        this->sizePopulation = agents.size(); // update the size of the population
+        this->sizePopulation =
+            agents.size();  // update the size of the population
     }
 
-    void addAges()
-    {
+    void addAges() {
         for (Agent &i : agents)
             i.age++;
+    }
+
+    std::vector<std::string> getGenotypes() {
+        std::vector<std::string> genotypes(sizePopulation);
+        for (int i = 0; i < sizePopulation; ++i)
+            genotypes[i] = agents[i].genotype;
+
+        return genotypes;
+    }
+
+    std::vector<std::vector<std::string>> getPopulationData() {
+        std::vector<std::vector<std::string>> data(sizePopulation);
+        for (int i = 0; i < sizePopulation; ++i)
+            data[i] = agents[i].getAgentData();
+
+        return data;
     }
 };
