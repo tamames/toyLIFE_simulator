@@ -3,6 +3,7 @@
 
 extern std::string DIRECTORY;
 extern int SIZE_GENOTYPE;
+extern int FOOD_SIZE;
 extern float CONTROL;  // The probability of a 1 appearing in the binary string.
 
 extern int NUMBER_OF_SIMULATION;  // Jus to to keep track of which simulation we

@@ -20,9 +20,12 @@ class Agent {
     int age;
     int id;
     int parent;  // If it's 0 it's from the first generation
+
+    // toyLife things
     mapa_prot prots;
     mapa_dim dims;
     mapa_met mets;
+    mapa_owm owns;
 
     Agent(float energy, std::string genotype = "", int parent = 0) {
         if (genotype.empty()) {
@@ -63,12 +66,6 @@ class Agent {
          *final string has.
          * @param food The food that the Agent is going to eat.
          */
-
-        int genotype_int = std::stoi(genotype, nullptr, 2);
-        int food_int = std::stoi(food, nullptr, 2);
-        int eaten_int = genotype_int & food_int;
-        std::string eaten = std::bitset<8>(eaten_int).to_string();
-        this->energy += std::count(eaten.begin(), eaten.end(), '1');
     }
 
     std::vector<std::string> getAgentData() {
