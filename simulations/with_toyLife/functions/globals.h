@@ -13,3 +13,5 @@ extern int ENERGY_TO_REPRODUCE;
 extern int ENERGY_TO_DIE;
 extern int AGE_TO_DIE;
 extern int ID_COUNT;
+extern float TRANSLATION_ENERGY;
+extern float BREAKING_ENERGY;

@@ -152,7 +152,7 @@ class ToyPlugin {
     std::map<std::vector<int>, int> regulatory_evolvability(
         const std::string& genotype, const std::vector<int>& logic_vector);
     std::vector<std::pair<int, int> > genotype_str_to_vec(
-        const std::string& genotype);
+        const std::string& genotype) const;
 
    private:
     // FUNCTIONS TO INITIALIZE LOOKUP TABLES

@@ -1,6 +1,10 @@
+#include <iostream>
 #include <random>
 #include <stdexcept>
 #include <string>
+#pragma once
+
+#include "globals.h"
 
 std::string binaryGenerator(int length = 8) {
     /**

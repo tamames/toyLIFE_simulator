@@ -426,7 +426,7 @@ int ToyPlugin::promoter_expression(
         while (1) {
             double min = 0.0;
             bool i_min = 0;  //"0" means the minimum is a protein; "1" means it
-                             //is a dimer
+                             // is a dimer
             std::map<Prot, double>::const_iterator prot_min;
             std::map<Dim, double>::const_iterator dim_min;
             for (std::map<Prot, double>::const_iterator it1 =
@@ -556,7 +556,7 @@ bool ToyPlugin::finding_cycles(
     // ARGUMENTS
     //(1) (std::vector<int>& ITERATIONS: the vector of visited states
     //(2) (int) EXPRESSION: the last state visited (it is not part of the
-    //ITERATIONS vector)
+    // ITERATIONS vector)
 
     // LOOP OVER ITERATIONS VECTOR
     for (int i = 0; i != iterations.size(); ++i)
@@ -847,7 +847,7 @@ void ToyPlugin::reacting(std::pair<mapa_prot, mapa_dim>& objects, mapa_met& met,
                     prot_energies[it_dm->first.dim.p1] +
                     prot_energies[it_dm->first.dim.p2];  // E of the existing
                                                          // complex
-                if (d_less(b_energy, met_energy)) {  // then it could break
+                if (d_less(b_energy, met_energy)) {      // then it could break
                     OWM new_complex(it_prot->first, it_dm->first.dim,
                                     it_dm->first.met);
                     binding_energies[b_energy][new_complex] =
@@ -867,13 +867,13 @@ void ToyPlugin::reacting(std::pair<mapa_prot, mapa_dim>& objects, mapa_met& met,
         mapa_prot number_prots;  // will hold how many complexes each protein is
                                  // involved in (if it's greater than
                                  // objects.first[i], then no dimers is formed
-        mapa_dim number_dims;  // will hold how many complexes each protein is
-                               // involved in (if it's greater than
-                               // objects.first[i], then no dimers is formed
-        mapa_met number_mets;  // will hold how many complexes each protein is
-                               // involved in (if it's greater than
-                               // objects.first[i], then no dimers is formed
-        mapa_owm number_dm;  // because std::map doesn't work well with
+        mapa_dim number_dims;    // will hold how many complexes each protein is
+                                 // involved in (if it's greater than
+                                 // objects.first[i], then no dimers is formed
+        mapa_met number_mets;    // will hold how many complexes each protein is
+                                 // involved in (if it's greater than
+                                 // objects.first[i], then no dimers is formed
+        mapa_owm number_dm;      // because std::map doesn't work well with
                              // boost::tuple, this vector will serve as an index
                              // for the elements in objects_with_mets;
         for (mapa_owm::iterator it_tuple = it->second.begin();
@@ -1090,7 +1090,7 @@ std::vector<int> ToyPlugin::vec_phenotype(
 ////////////////////////////////////////////////////////////////////////
 // GENOTYPE_STR_TO_VEC
 std::vector<std::pair<int, int> > ToyPlugin::genotype_str_to_vec(
-    const std::string& genotype) {
+    const std::string& genotype) const {
     int gene_number = genotype.size() / 20;
     std::vector<std::pair<int, int> > vec_genotype(gene_number);
     for (int g = 0; g < gene_number; ++g) {
