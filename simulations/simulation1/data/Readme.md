@@ -38,3 +38,8 @@ food_total_0_25.csv &rarr; The food used in this simulation.Correspond to simula
 food_stats_0_25.csv &rarr; The food statisticsCorrespond to simulation number **0**. **Control = 0.250000****Energy to reproduce = 15**, **Energy to die = 0**, **Age to die = 100**.  
 genotype_info_0_25.csv &rarr; The information of the genotypes at each iteration.Correspond to simulation number **0**. **Control = 0.250000****Energy to reproduce = 15**, **Energy to die = 0**, **Age to die = 100**.  
 population_info_0_25.csv &rarr; The population information of the simulation. Correspond to simulation number **0**. **Control = 0.250000****Energy to reproduce = 15**, **Energy to die = 0**, **Age to die = 100**.  
+total_0_25.csv &rarr; All the info about the simulation. Correspond to simulation number **0**. **Control = 0.250000****Energy to reproduce = 15**, **Energy to die = 0**, **Age to die = 100**.  
+food_total_0_25.csv &rarr; The food used in this simulation.Correspond to simulation number **0**. **Control = 0.250000****Energy to reproduce = 15**, **Energy to die = 0**, **Age to die = 100**.  
+food_stats_0_25.csv &rarr; The food statisticsCorrespond to simulation number **0**. **Control = 0.250000****Energy to reproduce = 15**, **Energy to die = 0**, **Age to die = 100**.  
+genotype_info_0_25.csv &rarr; The information of the genotypes at each iteration.Correspond to simulation number **0**. **Control = 0.250000****Energy to reproduce = 15**, **Energy to die = 0**, **Age to die = 100**.  
+population_info_0_25.csv &rarr; The population information of the simulation. Correspond to simulation number **0**. **Control = 0.250000****Energy to reproduce = 15**, **Energy to die = 0**, **Age to die = 100**.  
