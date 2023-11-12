@@ -1,4 +1,4 @@
-#include "classes.cpp"
+#include "classes.h"
 #include "functions/func.h"
 
 int main() {
