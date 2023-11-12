@@ -1,3 +1,6 @@
+#ifndef GLOBALS_H
+#define GLOBALS_H
+
 // We are going to define here all the global variables of our simulation
 #include <string>
 
@@ -15,3 +18,5 @@ extern int AGE_TO_DIE;
 extern int ID_COUNT;
 extern float TRANSLATION_ENERGY;
 extern float BREAKING_ENERGY;
+
+#endif  // GLOBALS_H
