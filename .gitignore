@@ -8,6 +8,8 @@ patterns/
 graphs/
 globals.cpp
 test.*
+.vs/
+CppProperties.json
 
 
 # Byte-compiled / optimized / DLL files
