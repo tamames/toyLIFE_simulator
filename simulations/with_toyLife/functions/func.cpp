@@ -7,7 +7,7 @@
 
 #include "globals.h"
 
-std::string binaryGenerator(int length = 8) {
+std::string binaryGenerator(int length/*= 8*/) {
     /**
      * Generates a random binary number as a string.
      * @param amount The length of our binary number. Defaults to 8.
@@ -23,7 +23,7 @@ std::string binaryGenerator(int length = 8) {
     return binary_string;
 }
 
-std::vector<float> createRandomArray(int size, int max = 8) {
+std::vector<float> createRandomArray(int size, int max/*= 8*/) {
     /**
      * Creates a vector and fill it with random numbers.
      * @param size The size of the array.
@@ -68,7 +68,7 @@ std::string mutate(std::string binString, float p) {
     return newString;
 }
 
-std::vector<std::string> listOfFood(unsigned int length = FOOD_SIZE) {
+std::vector<std::string> listOfFood(unsigned int length/*= FOOD_SIZE*/) {
     /**
      * Generates a list of random binary strings that represent the
      *  food available for a population.

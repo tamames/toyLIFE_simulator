@@ -4,6 +4,7 @@
 // We are going to define here all the global variables of our simulation
 #include <string>
 
+
 extern std::string DIRECTORY;
 extern int SIZE_GENOTYPE;
 extern int FOOD_SIZE;

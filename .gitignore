@@ -6,7 +6,6 @@ try_cpp/
 tempCodeRunnerFile.cpp
 patterns/
 graphs/
-globals.cpp
 test.*
 .vs/
 CppProperties.json

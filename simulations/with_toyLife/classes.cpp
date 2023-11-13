@@ -12,14 +12,14 @@
 #include "functions/globals.h"
 
 // toyLife code
-#include "toylife/helper_functions.cpp"
-#include "toylife/toy_plugin.cpp"
+#include "toylife/helper_functions.h"
+#include "toylife/toy_plugin.h"
 
 Agent::Agent(float energy, std::string genotype, int parent) {
     if (genotype.empty()) {
-        this->genotype = binaryGenerator(SIZE_GENOTYPE);
+      this->genotype = binaryGenerator(::SIZE_GENOTYPE);
     } else {
-        if (genotype.size() != SIZE_GENOTYPE)  // to prevent errors
+      if (genotype.size() != ::SIZE_GENOTYPE)  // to prevent errors
             throw std::invalid_argument("The genotype must be of size " +
                                         std::to_string(SIZE_GENOTYPE) + ".");
 

@@ -13,8 +13,8 @@
 #include "functions/globals.h"
 
 // toyLife code
-#include "toylife/helper_functions.cpp"
-#include "toylife/toy_plugin.cpp"
+#include "toylife/helper_functions.h"
+#include "toylife/toy_plugin.h"
 
 class Agent {
    public:
