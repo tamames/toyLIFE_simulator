@@ -1,13 +1,14 @@
 #include "func.h"
 
 #include <iostream>
+#include <map>
 #include <random>
 #include <stdexcept>
 #include <string>
 
 #include "globals.h"
 
-std::string binaryGenerator(int length/*= 8*/) {
+std::string binaryGenerator(int length /*= 8*/) {
     /**
      * Generates a random binary number as a string.
      * @param amount The length of our binary number. Defaults to 8.
@@ -23,7 +24,7 @@ std::string binaryGenerator(int length/*= 8*/) {
     return binary_string;
 }
 
-std::vector<float> createRandomArray(int size, int max/*= 8*/) {
+std::vector<float> createRandomArray(int size, int max /*= 8*/) {
     /**
      * Creates a vector and fill it with random numbers.
      * @param size The size of the array.
@@ -68,7 +69,7 @@ std::string mutate(std::string binString, float p) {
     return newString;
 }
 
-std::vector<std::string> listOfFood(unsigned int length/*= FOOD_SIZE*/) {
+std::vector<std::string> listOfFood(unsigned int length /*= FOOD_SIZE*/) {
     /**
      * Generates a list of random binary strings that represent the
      *  food available for a population.
@@ -81,4 +82,22 @@ std::vector<std::string> listOfFood(unsigned int length/*= FOOD_SIZE*/) {
         listOfFood[i] = binaryGenerator();
 
     return listOfFood;
+}
+
+std::map<std::string, int> fromList2Map(std::vector<std::string> list) {
+    /**
+     * Converts a list of binary strings to a map of binary strings and their
+     *  respective counts.
+     * @param list The list of binary strings.
+     * @return The map of binary strings and their respective indexes.
+     */
+
+    std::map<std::string, int> map;
+    for (int i = 0; i < list.size(); ++i)
+        if (map.find(list[i]) == map.end())
+            map[list[i]] = 1;
+        else
+            map[list[i]] += 1;
+
+    return map;
 }

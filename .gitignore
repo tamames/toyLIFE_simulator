@@ -9,6 +9,7 @@ graphs/
 test.*
 .vs/
 CppProperties.json
+*.o
 
 
 # Byte-compiled / optimized / DLL files
