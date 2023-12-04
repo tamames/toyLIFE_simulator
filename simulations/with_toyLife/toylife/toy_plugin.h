@@ -5,6 +5,7 @@
 #include <chrono>
 #include <cmath>
 #include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -136,6 +137,7 @@ class ToyPlugin {
     mapa_dmet dim_met;
     mapa_pmet prot_met;
     mapa_pbreak prot_breaking;
+    std::string cwd = std::filesystem::current_path().generic_string();
 
     // FUNCTIONS
     std::vector<int> regulatory_phenotype(const std::string& genotype);

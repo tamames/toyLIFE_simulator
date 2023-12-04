@@ -8,12 +8,17 @@ int main() {
 
     ToyPlugin toy;
 
+    std::cout << "Se crea el toy" << std::endl;
+
     Agent test(10.0);
+    std::cout << "Se crea el agent" << std::endl;
 
     std::map<std::string, int> food;
     food["01101010"] = 1;
 
+    test.print();
     test.eat(food, toy);
+    test.print();
 
-    std::system("pause");
+    // std::system("pause");
 }

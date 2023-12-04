@@ -1,12 +1,5 @@
 #include "classes.h"
 
-#include <algorithm>  // std::count std::min
-#include <bitset>     // std::bitset
-#include <iostream>
-#include <stdexcept>  // std::invalid_argument
-#include <string>
-#include <vector>
-
 // my functions and variables
 #include "functions/func.h"
 #include "functions/globals.h"

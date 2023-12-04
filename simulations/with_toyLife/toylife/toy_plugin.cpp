@@ -31,6 +31,7 @@ ToyPlugin::ToyPlugin() {
     init_dim_met(dim_met);
     init_prot_met(prot_met);
     init_prot_breaking(prot_breaking);
+    std::string cwd;
 }
 ToyPlugin::~ToyPlugin() {}
 ////////////////////////////////////////////////////////////////////////
@@ -43,7 +44,7 @@ ToyPlugin::~ToyPlugin() {}
 void ToyPlugin::init_gen(
     std::vector<int>&
         prot_gen) {  // reads to table which protein is given by which gene
-    std::string name = "data/protein_gene.txt";
+    std::string name = cwd + "/toylife/data/protein_gene.txt";
     std::ifstream in(name.c_str());
     check_file(in, name);
     int total_genes = 65536;
@@ -93,7 +94,7 @@ void ToyPlugin::init_prot(
                      // each protein
     // NUMBER OF PROTEINS
     int total_proteins = 0;
-    std::string name = "data/proteins_with_perimeter.txt";
+    std::string name = cwd + "/toylife/data/proteins_with_perimeter.txt";
     std::ifstream in(name.c_str());
     check_file(in, name);
     std::string lee;
@@ -103,7 +104,7 @@ void ToyPlugin::init_prot(
     energies.resize(total_proteins);
     in.close();
     // PERIMETERS
-    name = "data/proteins_with_perimeter.txt";
+    name = cwd + "/toylife/data/proteins_with_perimeter.txt";
     in.open(name.c_str());
     check_file(in, name);
     int id, per;
@@ -112,7 +113,7 @@ void ToyPlugin::init_prot(
     in.close();
     perimeters[0] = -1;
     // ENERGIES
-    name = "data/proteins.txt";
+    name = cwd + "/toylife/data/proteins.txt";
     in.open(name.c_str());
     check_file(in, name);
     double dirt, en;
@@ -134,7 +135,8 @@ void ToyPlugin::init_prot(
         std::vector<bool> polim(total_proteins, 0);
         std::stringstream ss;  // create a stringstream
         ss << i;               // add number to the stream
-        std::string name = "promoters/proteins_bind_prom" + ss.str() + ".txt";
+        std::string name =
+            cwd + "/toylife/promoters/proteins_bind_prom" + ss.str() + ".txt";
         std::ifstream in(name.c_str());
         check_file(in, name);
         int ind_prot;
@@ -164,7 +166,7 @@ void ToyPlugin::init_dim(
     std::vector<std::vector<bool> >&
         dim_pol) {  // reads to table the information relating to dimers
     int total_dimers = 0;
-    std::string name = "data/dimers.txt";
+    std::string name = cwd + "/toylife/data/dimers.txt";
     std::ifstream in(name.c_str());
     check_file(in, name);
     int id = 0;
@@ -191,7 +193,8 @@ void ToyPlugin::init_dim(
         std::vector<bool> pol(total_dimers, 0);
         std::stringstream ss;  // create a stringstream
         ss << i;               // add number to the stream
-        std::string name = "promoters/dimers_bind_prom" + ss.str() + ".txt";
+        std::string name =
+            cwd + "/toylife/promoters/dimers_bind_prom" + ss.str() + ".txt";
         std::ifstream in(name.c_str());
         check_file(in, name);
         int ind_dim;
@@ -217,8 +220,8 @@ void ToyPlugin::init_dim(
 void ToyPlugin::simplified_mets(std::vector<std::string>& mets,
                                 std::map<std::string, int>& not_broken,
                                 std::vector<std::string>& env) {
-    std::ifstream in("data/metabolites.txt");
-    check_file(in, "data/metabolites.txt");
+    std::ifstream in(cwd + "/toylife/data/metabolites.txt");
+    check_file(in, cwd + "/toylife/data/metabolites.txt");
     std::string s1;
     int nb;
     while (in >> s1 >> nb) {
@@ -244,8 +247,8 @@ void ToyPlugin::simplified_mets(std::vector<std::string>& mets,
 void ToyPlugin::neighbors(std::vector<std::vector<int> >& neighbors_prom,
                           std::vector<std::vector<int> >& neighbors_coding) {
     neighbors_prom = std::vector<std::vector<int> >(16, std::vector<int>(4));
-    std::ifstream file_prom("data/neighbors_prom.txt");
-    check_file(file_prom, "data/neighbors_prom.txt");
+    std::ifstream file_prom(cwd + "/toylife/data/neighbors_prom.txt");
+    check_file(file_prom, cwd + "/toylife/data/neighbors_prom.txt");
     for (int i = 0; i < 16; ++i)
         for (int g = 0; g < 4; ++g)
             file_prom >> neighbors_prom[i][g];
@@ -253,8 +256,8 @@ void ToyPlugin::neighbors(std::vector<std::vector<int> >& neighbors_prom,
 
     neighbors_coding =
         std::vector<std::vector<int> >(65536, std::vector<int>(16));
-    std::ifstream file_coding("data/neighbors_coding.txt");
-    check_file(file_coding, "data/neighbors_coding.txt");
+    std::ifstream file_coding(cwd + "/toylife/data/neighbors_coding.txt");
+    check_file(file_coding, cwd + "/toylife/data/neighbors_coding.txt");
     for (int i = 0; i < 65536; ++i)
         for (int g = 0; g < 16; ++g)
             file_coding >> neighbors_coding[i][g];
@@ -290,8 +293,8 @@ void ToyPlugin::init_dim_met(
              it != mapa.end(); ++it) {  // Para todas las secuencias
             std::stringstream ss_met;
             ss_met << it->second[0];
-            std::string name =
-                "dim_metabolism/" + ss.str() + "_" + ss_met.str() + ".txt";
+            std::string name = cwd + "/toylife/dim_metabolism/" + ss.str() +
+                               "_" + ss_met.str() + ".txt";
             std::ifstream file_dimeros_mets(name.c_str());
             check_file(file_dimeros_mets, name);
             int index;
@@ -334,8 +337,8 @@ void ToyPlugin::init_prot_met(mapa_pmet& prot_met) {
              it != mapa.end(); ++it) {  // Para todas las secuencias
             std::stringstream ss_prot;
             ss_prot << it->second[0];
-            std::string name =
-                "prot_metabolism/" + ss.str() + "_" + ss_prot.str() + ".txt";
+            std::string name = cwd + "/toylife/prot_metabolism/" + ss.str() +
+                               "_" + ss_prot.str() + ".txt";
             std::ifstream file_dimeros_prots(name.c_str());
             check_file(file_dimeros_prots, name);
             int index;
@@ -358,7 +361,7 @@ void ToyPlugin::init_prot_met(mapa_pmet& prot_met) {
 ////////////////////////////////////////////////////////////////////////
 // PROT_BREAKING
 void ToyPlugin::init_prot_breaking(mapa_pbreak& prot_breaking) {
-    std::ifstream in("prot_metabolism/prot_breaking.txt");
+    std::ifstream in(cwd + "/toylife/prot_metabolism/prot_breaking.txt");
     check_file(in, "prot_breaking.txt");
     int id1;
     std::string s1;
