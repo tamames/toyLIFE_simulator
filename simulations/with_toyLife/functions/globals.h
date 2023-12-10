@@ -2,8 +2,8 @@
 #define GLOBALS_H
 
 // We are going to define here all the global variables of our simulation
+#include <filesystem>
 #include <string>
-
 
 extern std::string DIRECTORY;
 extern int SIZE_GENOTYPE;

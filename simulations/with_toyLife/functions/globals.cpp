@@ -1,9 +1,6 @@
 #include "globals.h"
 
-std::string DIRECTORY =
-    "C:"
-    "\\Users\\arcos\\Documents\\Universidad\\Master\\TFM\\codigos\\simulations"
-    "\\simulation1";
+std::string DIRECTORY = std::filesystem::current_path().generic_string();
 int SIZE_GENOTYPE = 20;
 int FOOD_SIZE = 8;
 float CONTROL =
@@ -17,5 +14,5 @@ int ENERGY_TO_DIE = 0;
 int AGE_TO_DIE =
     100;  // If it's above the number of generations it doesn't matter
 int ID_COUNT = 0;
-float TRANSLATION_ENERGY = 10.0f;
-float BREAKING_ENERGY = 0.1f;
+float TRANSLATION_ENERGY = 0.1f;
+float BREAKING_ENERGY = 5.0f;
