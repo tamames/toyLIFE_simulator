@@ -44,6 +44,8 @@ class Agent {
 
     void eat(std::map<std::string, int>& food, const ToyPlugin& toy);
 
+    bool metabolism(std::map<std::string, int>& food, const ToyPlugin& toy);
+
     std::vector<std::string> getAgentData();
 };
 
