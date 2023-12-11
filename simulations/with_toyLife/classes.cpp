@@ -8,9 +8,9 @@
 #include "toylife/helper_functions.h"
 #include "toylife/toy_plugin.h"
 
-Agent::Agent(float energy, std::string genotype, int parent) {
+Agent::Agent(float energy, std::string genotype, int sizeGenotype, int parent) {
     if (genotype.empty()) {
-        this->genotype = binaryGenerator(SIZE_GENOTYPE);
+        this->genotype = binaryGenerator(sizeGenotype);
     } else {
         if (genotype.size() != SIZE_GENOTYPE)  // to prevent errors
             throw std::invalid_argument("The genotype must be of size " +
@@ -532,20 +532,19 @@ void Agent::eat(std::map<std::string, int>& food, const ToyPlugin& toy) {
     return;
 }
 
-bool Agent::metabolism(std::map<std::string, int>& food, const ToyPlugin& toy){
-    int gene_number=genotype.size()/20;
-    int maxlength=std::pow(2,gene_number);
-    double e0=energy;
-    for (int i=0; i<maxlength; ++i){
-        eat(food,toy);
+bool Agent::metabolism(std::map<std::string, int>& food, const ToyPlugin& toy) {
+    int gene_number = genotype.size() / 20;
+    int maxlength = std::pow(2, gene_number);
+    double e0 = energy;
+    for (int i = 0; i < maxlength; ++i) {
+        eat(food, toy);
         std::cout << energy << std::endl;
     }
-    if (energy>e0)
+    if (energy > e0)
         return 1;
     else
         return 0;
 }
-
 
 std::vector<std::string> Agent::getAgentData() {
     // TODO add here the data of the mets, dims and prots

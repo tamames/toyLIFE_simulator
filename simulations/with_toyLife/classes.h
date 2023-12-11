@@ -30,7 +30,8 @@ class Agent {
     mapa_met mets;
     mapa_owm owns;
 
-    Agent(float energy, std::string genotype = "", int parent = 0);
+    Agent(float energy, std::string genotype = "",
+          int sizeGenotype = SIZE_GENOTYPE, int parent = 0);
 
     void print(bool printAge = false);
 
