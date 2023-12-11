@@ -532,6 +532,21 @@ void Agent::eat(std::map<std::string, int>& food, const ToyPlugin& toy) {
     return;
 }
 
+bool Agent::metabolism(std::map<std::string, int>& food, const ToyPlugin& toy){
+    int gene_number=genotype.size()/20;
+    int maxlength=std::pow(2,gene_number);
+    double e0=energy;
+    for (int i=0; i<maxlength; ++i){
+        eat(food,toy);
+        std::cout << energy << std::endl;
+    }
+    if (energy>e0)
+        return 1;
+    else
+        return 0;
+}
+
+
 std::vector<std::string> Agent::getAgentData() {
     // TODO add here the data of the mets, dims and prots
     std::vector<std::string> data(5);
