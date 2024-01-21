@@ -1,5 +1,6 @@
 #include "func.h"
 
+#include <bitset>
 #include <iostream>
 #include <map>
 #include <random>
@@ -8,7 +9,7 @@
 
 #include "globals.h"
 
-std::string binaryGenerator(int length /*= 8*/) {
+std::string binaryGenerator(int length) {
     /**
      * Generates a random binary number as a string.
      * @param amount The length of our binary number. Defaults to 8.
@@ -100,4 +101,19 @@ std::map<std::string, int> fromList2Map(std::vector<std::string> list) {
             map[list[i]] += 1;
 
     return map;
+}
+
+std::vector<std::string> decimal2Binary(int numbers) {
+    /**
+     * Creates a vector with the binary representation of the numbers from 0 to
+     * max_number - 1.
+     * @param numbers The amount of numbers to be converted.
+     * @return The vector with the binary representation of the numbers.
+     */
+    std::vector<std::string> binary_numbers(numbers);
+    for (int i = 0; i < numbers; ++i) {
+        binary_numbers[i] = std::bitset<8>(i).to_string();
+    }
+
+    return binary_numbers;
 }
