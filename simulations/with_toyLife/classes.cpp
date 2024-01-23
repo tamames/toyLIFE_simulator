@@ -501,9 +501,6 @@ void Agent::reacting(const ToyPlugin& toy) {
 void Agent::eat(std::map<std::string, int>& food, const ToyPlugin& toy) {
     /**
      * Describe the interaction between an Agent and the food.
-     *We make an AND operation between the two binary strings and
-     *the energy gained by the Agent is the number of '1' that the
-     *final string has.
      * @param food The food that the Agent is going to eat.
      */
     // START THE CYCLE: FOOD ENTERS THE CELL
@@ -538,7 +535,7 @@ bool Agent::metabolism(std::map<std::string, int>& food, const ToyPlugin& toy) {
     double e0 = energy;
     for (int i = 0; i < maxlength; ++i) {
         eat(food, toy);
-        std::cout << energy << std::endl;
+        // std::cout << energy << std::endl;
     }
     if (energy > e0)
         return 1;

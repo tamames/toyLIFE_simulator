@@ -1,7 +1,7 @@
 #include "globals.h"
 
 std::string DIRECTORY = std::filesystem::current_path().generic_string();
-int SIZE_GENOTYPE = 20;
+int SIZE_GENOTYPE = 80;
 int FOOD_SIZE = 8;
 float CONTROL =
     0.25f;  // The probability of a 1 appearing in the binary string.
