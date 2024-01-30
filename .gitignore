@@ -10,6 +10,7 @@ test.*
 .vs/
 CppProperties.json
 *.o
+log.txt
 
 
 # Byte-compiled / optimized / DLL files

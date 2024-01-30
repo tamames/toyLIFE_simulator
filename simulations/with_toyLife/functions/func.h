@@ -8,6 +8,7 @@
 #include <string>
 #pragma once
 
+#include "../toylife/toy_plugin.h"
 #include "globals.h"
 
 std::string binaryGenerator(int length = 8);
@@ -22,4 +23,8 @@ std::map<std::string, int> fromList2Map(std::vector<std::string> list);
 
 std::vector<std::string> decimal2Binary(int numbers);
 
+void printMap(mapa_prot& mapa);
+void printMap(mapa_met& mapa);
+void printMap(mapa_dim& mapa);
+void printMap(mapa_owm& mapa);
 #endif  // FUNC_H

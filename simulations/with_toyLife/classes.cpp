@@ -26,12 +26,20 @@ Agent::Agent(float energy, std::string genotype, int sizeGenotype, int parent) {
 }
 
 void Agent::print(bool printAge) {
-    if (printAge)
-        std::cout << "Genotype: " << genotype << ". Energy: " << energy
-                  << ". Age:" << age << std::endl;
-    else
-        std::cout << "Genotype: " << genotype << ". Energy: " << energy
-                  << std::endl;
+    std::cout << "Prots: \n";
+    printMap(prots);
+    std::cout << "Dims: \n";
+    // printMap(dims);
+    std::cout << "Mets: \n";
+    printMap(mets);
+    std::cout << "Owns: \n";
+    printMap(owns);
+    // if (printAge)
+    //     std::cout << "Genotype: " << genotype << ". Energy: " << energy
+    //               << ". Age:" << age << std::endl;
+    // else
+    //     std::cout << "Genotype: " << genotype << ". Energy: " << energy
+    //               << std::endl;
 }
 
 bool Agent::checkEnergyReproduce() { return energy >= ENERGY_TO_REPRODUCE; }
@@ -503,18 +511,26 @@ void Agent::eat(std::map<std::string, int>& food, const ToyPlugin& toy) {
      * Describe the interaction between an Agent and the food.
      * @param food The food that the Agent is going to eat.
      */
+
     // START THE CYCLE: FOOD ENTERS THE CELL
     for (auto it = food.begin(); it != food.end(); ++it) {
         mets[it->first] += it->second;
         food.at(it->first) = 0;  // not sure about this
     }
     // NOW EXISTING PROTS AND METS TRY TO BIND THE METS
+    std::cout << "Antes del primer reacting: \n";
+    print();
     reacting(toy);
     // THEN REGULATION OCCURS
+    std::cout << "Entre reacting y promoter_expression: \n";
+    print();
+
     promoter_expression(toy);
     // NOW THE NEW PROTEINS WILL DIMERIZE IN THE PRESENCE OF THE
     // METABOLITE-COMPOUND IF SOMETHING IS BROKEN, THEN THE CELL GAINS
     // ENERGY
+    std::cout << "Entre promoter_expression y reacting: \n";
+    print();
     reacting(toy);
     // At the end of the cycle, all metabolites that haven't been bound by
     // anything disappear and return to the environment
@@ -536,6 +552,8 @@ bool Agent::metabolism(std::map<std::string, int>& food, const ToyPlugin& toy) {
     for (int i = 0; i < maxlength; ++i) {
         eat(food, toy);
         // std::cout << energy << std::endl;
+        if (energy > e0)
+            return 1;
     }
     if (energy > e0)
         return 1;

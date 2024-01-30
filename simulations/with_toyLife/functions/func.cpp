@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "../toylife/toy_plugin.h"
 #include "globals.h"
 
 std::string binaryGenerator(int length) {
@@ -116,4 +117,49 @@ std::vector<std::string> decimal2Binary(int numbers) {
     }
 
     return binary_numbers;
+}
+
+void printMap(mapa_prot& mapa) {
+    /**
+     * Prints a map.
+     * @param mapa The map to be printed.
+     */
+    for (auto const& pair : mapa) {
+        std::cout << "{" << pair.first << ": " << pair.second << "}\n";
+    }
+}
+
+void printMap(mapa_met& mapa) {
+    /**
+     * Prints a map.
+     * @param mapa The map to be printed.
+     */
+    for (auto const& pair : mapa) {
+        std::cout << "{" << pair.first << ": " << pair.second << "}\n";
+    }
+}
+
+void printMap(mapa_dim& mapa) {
+    /**
+     * Prints a map.
+     * @param mapa The map to be printed.
+     */
+    for (auto const& pair : mapa) {
+        std::cout << "{" << pair.first.id << ": " << pair.second << "}\n";
+    }
+}
+
+void printMap(mapa_owm& mapa) {
+    /**
+     * Prints a map.
+     * @param mapa The map to be printed.
+     */
+    std::cout << "Printing mapa_owm\n";
+
+    for (auto const& pair : mapa) {
+        std::cout << "{Prot: " << pair.first.prot
+                  << ", Dim: " << pair.first.dim.id
+                  << ", Met: " << pair.first.met << ": " << pair.second
+                  << "}\n";
+    }
 }
