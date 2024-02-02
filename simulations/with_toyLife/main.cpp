@@ -12,12 +12,23 @@ int main() {
     std::string gen =
         "111101010001110110101100100100100000101110111010101101011011";
 
-    std::map<std::string, int> foodMap;
-    foodMap["10000001"] = 1;
+    gen="111101010001110110101011101010110101101111001001001000001011";
+    
+    std::cout << bintodec("11000101") << std::endl;
 
-    Agent test(100.0, gen);
-    test.eat(foodMap, toy);
+    std::vector<std::string> food = decimal2Binary(256);
+    for (auto it=food.begin(); it!=food.end(); ++it){
+      std::cout << *it << "\t" << bintodec(*it) << std::endl;
+      Agent test(100.0, gen);
+      std::map<std::string, int> foodMap;
+      foodMap[*it] = 1;
+      bool a = test.metabolism(foodMap, toy);
+      if (a)
+	std::cout << "Breaks " << *it << "\t" << bintodec(*it) << std::endl;
+    }
     std::cout << "End" << std::endl;
+
+    int intFood=47;
 }
 
 // int main() {
