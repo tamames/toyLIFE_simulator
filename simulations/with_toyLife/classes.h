@@ -39,6 +39,8 @@ class Agent {
 
     bool checkDie();
 
+    bool checkPDM();
+
     void reacting(const ToyPlugin& toy);
 
     void promoter_expression(const ToyPlugin& toy);
@@ -68,8 +70,9 @@ class Population {
 
     void print();
 
-    void iteration(std::vector<std::string> food, float cost,
-                   double costVariation = 0.1, bool print = false);
+    void iteration(std::vector<std::string> food, ToyPlugin toy,
+                   float cost = 1.0, double costVariation = 0.1,
+                   bool print = false);
 
     void afterIteration(float p);
 

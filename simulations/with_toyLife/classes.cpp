@@ -34,6 +34,7 @@ void Agent::print(bool printAge) {
     printMap(mets);
     std::cout << "Owns: \n";
     printMap(owns);
+    std::cout << "Energy: " << energy << std::endl;
     // if (printAge)
     //     std::cout << "Genotype: " << genotype << ". Energy: " << energy
     //               << ". Age:" << age << std::endl;
@@ -45,6 +46,10 @@ void Agent::print(bool printAge) {
 bool Agent::checkEnergyReproduce() { return energy >= ENERGY_TO_REPRODUCE; }
 
 bool Agent::checkDie() { return (energy < ENERGY_TO_DIE || age > AGE_TO_DIE); }
+
+bool Agent::checkPDM() {
+    return (prots.empty() && dims.empty() && mets.empty());
+}
 
 // PROMOTER_EXPRESSION
 void Agent::promoter_expression(const ToyPlugin& toy) {
@@ -62,8 +67,9 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
 
     // std::cout << "Genes " << std::endl;
     // for (auto it=vgenotype.begin(); it!=vgenotype.end(); ++it)
-    //   std::cout << (*it).first << "\t" << toy.prot_gen[(*it).second] << std::endl;
-    //std::getchar();
+    //   std::cout << (*it).first << "\t" << toy.prot_gen[(*it).second] <<
+    //   std::endl;
+    // std::getchar();
     std::vector<bool> promoter_active(vgenotype.size(), 0);
 
     // LOOP OVER ALL PROMOTERS
@@ -213,20 +219,19 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
             energy -=
                 TRANSLATION_ENERGY;  // we subtract the energy from translation
         }
-
     }
-    
+
     return;
 }
 
 class DoubleComparator {
-public:
-    bool operator() (const double lhs, const double rhs) const {
+   public:
+    bool operator()(const double lhs, const double rhs) const {
         // Check if the absolute difference is less than the threshold
         // Note: This is the comparison for ordering, not for equality
         // The map still requires a strict weak ordering
-      double thr=0.01;
-      return lhs < rhs && std::abs(lhs - rhs) >= thr;
+        double thr = 0.01;
+        return lhs < rhs && std::abs(lhs - rhs) >= thr;
     }
 };
 
@@ -234,7 +239,7 @@ public:
 void Agent::reacting(const ToyPlugin& toy) {
     // GIVEN A SET OF OBJECTS, IT TELLS US WHAT BINDS WHAT AND WHAT BREAKS
     // WHAT
-  std::map<double, mapa_owm, DoubleComparator>
+    std::map<double, mapa_owm, DoubleComparator>
         binding_energies;  // creates a map of energies, so that complexes
                            // with the same final energy are classified in
                            // the same group. Each energy has a map of OWM,
@@ -275,7 +280,7 @@ void Agent::reacting(const ToyPlugin& toy) {
                         int_min(it1->second, it2->second);
                 }  // if a dimer can be formed
             }      // if it1!=it2
-    
+
     // Then we check if any Protein binds any Met
     for (mapa_prot::const_iterator it_prot = prots.begin();
          it_prot != prots.end(); ++it_prot)
@@ -377,11 +382,12 @@ void Agent::reacting(const ToyPlugin& toy) {
 
     // NOW WE HAVE A MAP OF ENERGIES
     // LOOP OVER EACH ENERGY AND SEE WHAT HAPPENS
-    for (auto it = binding_energies.begin();it != binding_energies.end(); ++it) {
-      //std::cout << it->first << std::endl;
-      //printMap(it->second);// << std::endl;
-      //std::getchar();
-        // std::cout << "Energy! " << it->first << std::endl;
+    for (auto it = binding_energies.begin(); it != binding_energies.end();
+         ++it) {
+        // std::cout << it->first << std::endl;
+        // printMap(it->second);// << std::endl;
+        // std::getchar();
+        //  std::cout << "Energy! " << it->first << std::endl;
         mapa_prot number_prots;  // will hold how many complexes each
                                  // protein is involved in (if it's greater
                                  // than prots[i], then no dimers is formed
@@ -418,108 +424,133 @@ void Agent::reacting(const ToyPlugin& toy) {
 
         // NOW, FOR EVERY POSSIBLE COMPLEX, WE CHECK IF THE UNITS ARE
         // INVOLVED IN TOO MANY COMPLEXES AND DISCARD THOSE
-        for (mapa_owm::iterator it_tuple = it->second.begin(); it_tuple != it->second.end();){  // for each complex
-	  if (it_tuple->first.met.empty()) {  // protein-protein complex
-	    if (prots[it_tuple->first.dim.p1] < number_prots[it_tuple->first.dim.p1] ||  // prot1 more involved
-		prots[it_tuple->first.dim.p2] < number_prots[it_tuple->first.dim.p2]){  // prot2 more involved
-	      it_tuple=it->second.erase(it_tuple);  // this dimer will not form
-	    }
-	    else
-	      ++it_tuple;
-	  }
-	  else if (it_tuple->first.prot !=-1) {  // proteins and mets are involved
-	    if (it_tuple->first.dim.empty()) {  // protein-met complex
-	      if (prots[it_tuple->first.prot] < number_prots[it_tuple->first.prot] ||  // proteins more involved
-		  mets[it_tuple->first.met] < number_mets[it_tuple->first.met])  // met more involved
-		it_tuple=it->second.erase(it_tuple);  // this P+M will not form
-	      else
-		++it_tuple;
-	    }
-	    else{// protein breaking a d+m complex
-	      OWM new_tuple(-1, it_tuple->first.dim, it_tuple->first.met);
-	      if (prots[it_tuple->first.prot] <  number_prots[it_tuple->first.prot] ||  // protein more involved
-		  owns[new_tuple] < number_dm[new_tuple])  // d+m more involved
-		it_tuple=it->second.erase(it_tuple);  // this D+M will not be broken
-	      else
-		++it_tuple;
-	    }
-	  }// proteins and mets are involved
-	  else {  // dimer-met complex
-	    if (dims[it_tuple->first.dim] < number_dims[it_tuple->first.dim] ||  // dimer more involved
-		mets[it_tuple->first.met] < number_mets[it_tuple->first.met])  // met more involved
-	      it_tuple=it->second.erase(it_tuple);  // this D+M will not form
-	    else
-	      ++it_tuple;
-	  }
-	}
-	
+        for (mapa_owm::iterator it_tuple = it->second.begin();
+             it_tuple != it->second.end();) {   // for each complex
+            if (it_tuple->first.met.empty()) {  // protein-protein complex
+                if (prots[it_tuple->first.dim.p1] <
+                        number_prots[it_tuple->first.dim.p1] ||  // prot1 more
+                                                                 // involved
+                    prots[it_tuple->first.dim.p2] <
+                        number_prots[it_tuple->first.dim.p2]) {  // prot2 more
+                                                                 // involved
+                    it_tuple =
+                        it->second.erase(it_tuple);  // this dimer will not form
+                } else
+                    ++it_tuple;
+            } else if (it_tuple->first.prot !=
+                       -1) {  // proteins and mets are involved
+                if (it_tuple->first.dim.empty()) {  // protein-met complex
+                    if (prots[it_tuple->first.prot] <
+                            number_prots[it_tuple->first.prot] ||  // proteins
+                                                                   // more
+                                                                   // involved
+                        mets[it_tuple->first.met] <
+                            number_mets[it_tuple->first.met])  // met more
+                                                               // involved
+                        it_tuple = it->second.erase(
+                            it_tuple);  // this P+M will not form
+                    else
+                        ++it_tuple;
+                } else {  // protein breaking a d+m complex
+                    OWM new_tuple(-1, it_tuple->first.dim, it_tuple->first.met);
+                    if (prots[it_tuple->first.prot] <
+                            number_prots[it_tuple->first
+                                             .prot] ||  // protein more involved
+                        owns[new_tuple] <
+                            number_dm[new_tuple])  // d+m more involved
+                        it_tuple = it->second.erase(
+                            it_tuple);  // this D+M will not be broken
+                    else
+                        ++it_tuple;
+                }
+            }       // proteins and mets are involved
+            else {  // dimer-met complex
+                if (dims[it_tuple->first.dim] <
+                        number_dims[it_tuple->first.dim] ||  // dimer more
+                                                             // involved
+                    mets[it_tuple->first.met] <
+                        number_mets[it_tuple->first.met])  // met more involved
+                    it_tuple =
+                        it->second.erase(it_tuple);  // this D+M will not form
+                else
+                    ++it_tuple;
+            }
+        }
+
         // NOW WE FORM THE COMPLEXES THAT REMAIN
-        for (mapa_owm::const_iterator it_tuple = it->second.begin(); it_tuple != it->second.end(); ++it_tuple){  // for each complex
-	  if (it_tuple->first.met.empty()) {  // protein-protein complex
-	    dims[it_tuple->first.dim] +=it_tuple->second;  // we add as many copies as possible
-	    prots[it_tuple->first.dim.p1] -= it_tuple->second;  // we eliminate the Prot copies
-	    prots[it_tuple->first.dim.p2] -= it_tuple->second;
-	  }
-	  else if (it_tuple->first.prot !=-1) {  // there are proteins and mets
-	    if (it_tuple->first.dim.empty()) {  // protein-met complex
-	      owns[it_tuple->first] += it_tuple->second;
-	      prots[it_tuple->first.prot] -= it_tuple->second;
-	      mets[it_tuple->first.met] -= it_tuple->second;
-	    }
-	    else {  // protein breaking a d+m complex
-	      owns[OWM(-1, it_tuple->first.dim, it_tuple->first.met)] -= it_tuple->second;
-	      prots[it_tuple->first.prot] -= it_tuple->second;
-	      energy += BREAKING_ENERGY;  // it->first?
-	      // Now we add the rests of the mets to Met
-	      pairDM par1 = std::make_pair(it_tuple->first.met,
-					   it_tuple->first.dim.id);
-	      Dmet tupla = toy.dim_met.at(par1);
-	      std::string pmet1 = it_tuple->first.met.substr(0,tupla.pos);  // we split the met in the two parts defined by the Dimer when it binds
-	      std::string pmet2 = it_tuple->first.met.substr(pmet1.size());
-	      mets[pmet1] += it_tuple->second;
-	      mets[pmet2] += it_tuple->second;
-	    }
-	  }       // proteins and mets
-	  else {  // dimer-met complex (it should check this: if
-	    // (boost::get<0>(boost::get<1>(*it_tuple))!=-1)
-	    owns[it_tuple->first] += it_tuple->second;
-	    dims[it_tuple->first.dim] -= it_tuple->second;
-	    mets[it_tuple->first.met] -= it_tuple->second;
-	  }
-	}//for each complex
-    }  // for all energies
-    
+        for (mapa_owm::const_iterator it_tuple = it->second.begin();
+             it_tuple != it->second.end(); ++it_tuple) {  // for each complex
+            if (it_tuple->first.met.empty()) {  // protein-protein complex
+                dims[it_tuple->first.dim] +=
+                    it_tuple->second;  // we add as many copies as possible
+                prots[it_tuple->first.dim.p1] -=
+                    it_tuple->second;  // we eliminate the Prot copies
+                prots[it_tuple->first.dim.p2] -= it_tuple->second;
+            } else if (it_tuple->first.prot !=
+                       -1) {  // there are proteins and mets
+                if (it_tuple->first.dim.empty()) {  // protein-met complex
+                    owns[it_tuple->first] += it_tuple->second;
+                    prots[it_tuple->first.prot] -= it_tuple->second;
+                    mets[it_tuple->first.met] -= it_tuple->second;
+                } else {  // protein breaking a d+m complex
+                    owns[OWM(-1, it_tuple->first.dim, it_tuple->first.met)] -=
+                        it_tuple->second;
+                    prots[it_tuple->first.prot] -= it_tuple->second;
+                    energy += BREAKING_ENERGY;  // it->first?
+                    // Now we add the rests of the mets to Met
+                    pairDM par1 = std::make_pair(it_tuple->first.met,
+                                                 it_tuple->first.dim.id);
+                    Dmet tupla = toy.dim_met.at(par1);
+                    std::string pmet1 = it_tuple->first.met.substr(
+                        0, tupla.pos);  // we split the met in the two parts
+                                        // defined by the Dimer when it binds
+                    std::string pmet2 =
+                        it_tuple->first.met.substr(pmet1.size());
+                    mets[pmet1] += it_tuple->second;
+                    mets[pmet2] += it_tuple->second;
+                }
+            }       // proteins and mets
+            else {  // dimer-met complex (it should check this: if
+                // (boost::get<0>(boost::get<1>(*it_tuple))!=-1)
+                owns[it_tuple->first] += it_tuple->second;
+                dims[it_tuple->first.dim] -= it_tuple->second;
+                mets[it_tuple->first.met] -= it_tuple->second;
+            }
+        }  // for each complex
+    }      // for all energies
+
     // NOW WE ELIMINATE THE ELEMENTS THAT HAVE BEEN USED UP
     for (auto it_prot = prots.begin(); it_prot != prots.end();)
-      if (it_prot->second == 0)
-	it_prot=prots.erase(it_prot);// eliminate the proteins that have 0 copies
-      else
-	++it_prot;
-    
-    for (auto it_dim = dims.begin(); it_dim != dims.end();){
-      if (it_dim->second == 0)
-	it_dim=dims.erase(it_dim);  // eliminate dimers that have 0 copies
-      else
-	++it_dim;
+        if (it_prot->second == 0)
+            it_prot = prots.erase(
+                it_prot);  // eliminate the proteins that have 0 copies
+        else
+            ++it_prot;
+
+    for (auto it_dim = dims.begin(); it_dim != dims.end();) {
+        if (it_dim->second == 0)
+            it_dim = dims.erase(it_dim);  // eliminate dimers that have 0 copies
+        else
+            ++it_dim;
     }
-    
+
     for (auto it_met = mets.begin(); it_met != mets.end();)
-      if (it_met->second == 0)
-	it_met=mets.erase(it_met);  // eliminate mets that have 0 copies
-      else
-	++it_met;
-    
+        if (it_met->second == 0)
+            it_met = mets.erase(it_met);  // eliminate mets that have 0 copies
+        else
+            ++it_met;
+
     for (auto it_owm = owns.begin(); it_owm != owns.end();)
-      if (it_owm->second == 0)
-	it_owm=owns.erase(it_owm);
-      else
-	++it_owm;
-    
+        if (it_owm->second == 0)
+            it_owm = owns.erase(it_owm);
+        else
+            ++it_owm;
+
     return;
 }
 
 void Agent::eat(std::map<std::string, int>& food, const ToyPlugin& toy) {
-  /**
+    /**
      * Describe the interaction between an Agent and the food.
      * @param food The food that the Agent is going to eat.
      */
@@ -629,8 +660,8 @@ void Population::print() {
     }
 }
 
-void Population::iteration(std::vector<std::string> food, float cost,
-                           double costVariation, bool print) {
+void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
+                           float cost, double costVariation, bool print) {
     /**
      * Here we do the iteration of the population. First we
      *make the agents search for food. Then we generate a random
@@ -667,8 +698,9 @@ void Population::iteration(std::vector<std::string> food, float cost,
     std::iota(order.begin(), order.end(), 0);
     std::shuffle(order.begin(), order.end(), g);
 
-    std::vector<float>
-        gainedEnergies;  // store the energies gained by each agent
+    //* for data
+    // std::vector<float>
+    //     gainedEnergies;  // store the energies gained by each agent
 
     for (int i = 0; i < smaller; ++i) {
         Agent& agent = agents[order[i]];
@@ -676,20 +708,26 @@ void Population::iteration(std::vector<std::string> food, float cost,
         if (agent.checkDie())  // When searching for food the agent
                                // died.
             continue;
-        // gainedEnergies.push_back(agent.eat(food[i]));
+
+        // this resets the map every iteration
+        std::map<std::string, int> foodMap;
+        foodMap[food[i]] = 1;
+
+        agent.eat(foodMap, toy);
     }
 
-    // Fill the vectors for statistics.
-    int sum = std::accumulate(gainedEnergies.begin(), gainedEnergies.end(), 0);
-    averageEnergyGain.push_back(static_cast<double>(sum) / (float)smaller);
+    //* Fill the vectors for statistics.
+    // int sum = std::accumulate(gainedEnergies.begin(), gainedEnergies.end(),
+    // 0); averageEnergyGain.push_back(static_cast<double>(sum) /
+    // (float)smaller);
 
-    auto maxGain =
-        std::max_element(gainedEnergies.begin(), gainedEnergies.end());
-    maxEnergyGain.push_back(*maxGain);
+    // auto maxGain =
+    //     std::max_element(gainedEnergies.begin(), gainedEnergies.end());
+    // maxEnergyGain.push_back(*maxGain);
 
-    auto minGain =
-        std::min_element(gainedEnergies.begin(), gainedEnergies.end());
-    minEnergyGain.push_back(*minGain);
+    // auto minGain =
+    //     std::min_element(gainedEnergies.begin(), gainedEnergies.end());
+    // minEnergyGain.push_back(*minGain);
 
     generation++;
     addAges();
