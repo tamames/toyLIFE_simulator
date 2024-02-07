@@ -8,7 +8,8 @@
 #include "toylife/helper_functions.h"
 #include "toylife/toy_plugin.h"
 
-Agent::Agent(float energy, std::string genotype, int sizeGenotype, int parent) {
+Agent::Agent(float energy, std::string genotype, int sizeGenotype, int parent,
+             mapa_prot prots, mapa_dim dims, mapa_met mets) {
     if (genotype.empty()) {
         this->genotype = binaryGenerator(sizeGenotype);
     } else {
@@ -22,6 +23,9 @@ Agent::Agent(float energy, std::string genotype, int sizeGenotype, int parent) {
     this->age = 0;
     this->id = ID_COUNT;
     this->parent = parent;
+    this->prots = prots;
+    this->dims = dims;
+    this->mets = mets;
     ID_COUNT++;
 }
 
@@ -634,6 +638,13 @@ std::pair<Agent, Agent> divide(Agent parent, float p) {
     float energyC = parent.energy / 2;
     std::string genotype1 = mutate(parent.genotype, p);
     std::string genotype2 = mutate(parent.genotype, p);
+
+    if (parent.checkPDM()) {
+        // It doesn't have ane Prots, Mets or Dims
+        Agent child1(energyC, genotype1, parent.id);
+        Agent child2(energyC, genotype2, parent.id);
+        return std::make_pair(child1, child2);
+    }
 
     Agent child1(energyC, genotype1, parent.id);
     Agent child2(energyC, genotype2, parent.id);
