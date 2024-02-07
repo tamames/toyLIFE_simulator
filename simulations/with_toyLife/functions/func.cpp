@@ -71,11 +71,13 @@ std::string mutate(std::string binString, float p) {
     return newString;
 }
 
-std::vector<std::string> listOfFood(unsigned int length /*= FOOD_SIZE*/) {
+std::vector<std::string> listOfFood(unsigned int length,
+                                    unsigned int food_size /*= FOOD_SIZE*/) {
     /**
      * Generates a list of random binary strings that represent the
      *  food available for a population.
      * @param length The length of the list.
+     * @param food_size The size of the binary strings. Defaults to FOOD_SIZE=8.
      * @return The list of random binary strings.
      */
 
