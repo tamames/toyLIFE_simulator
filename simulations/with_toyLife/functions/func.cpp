@@ -3,7 +3,6 @@
 #include <bitset>
 #include <iostream>
 #include <map>
-#include <random>
 #include <stdexcept>
 #include <string>
 
@@ -16,12 +15,10 @@ std::string binaryGenerator(int length) {
      * @param amount The length of our binary number. Defaults to 8.
      * @return The binary number as a string.
      */
-    std::random_device rd;
-    std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distrib(0, 1);
     std::string binary_string = "";
     for (int i = 0; i < length; i++) {
-        binary_string += std::to_string(distrib(gen));
+        binary_string += std::to_string(distrib(GEN));
     }
     return binary_string;
 }
@@ -36,12 +33,11 @@ std::vector<float> createRandomArray(int size, int max /*= 8*/) {
     // std::mt19937 gen(rd());
     // std::uniform_int_distribution<> dis(1, max);
 
-    std::default_random_engine gen;
     std::uniform_real_distribution<double> distribution(0.0, max);
 
     std::vector<float> energies(size);
     for (int i = 0; i < size; ++i) {
-        energies[i] = distribution(gen);
+        energies[i] = distribution(GEN);
     }
     return energies;
 }
@@ -60,10 +56,8 @@ std::string mutate(std::string binString, float p) {
     }
 
     std::string newString(binString.size(), ' ');
-    std::random_device rd;
-    std::mt19937 gen(rd());
     for (int i = 0; i < binString.size(); ++i) {
-        if (std::generate_canonical<double, 5>(gen) < p)
+        if (std::generate_canonical<double, 5>(GEN) < p)
             newString[i] = binString[i] == '0' ? '1' : '0';
         else
             newString[i] = binString[i];

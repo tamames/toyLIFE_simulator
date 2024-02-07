@@ -3,6 +3,7 @@
 
 // We are going to define here all the global variables of our simulation
 #include <filesystem>
+#include <random>
 #include <string>
 
 extern std::string DIRECTORY;
@@ -19,5 +20,8 @@ extern int AGE_TO_DIE;
 extern int ID_COUNT;
 extern float TRANSLATION_ENERGY;
 extern float BREAKING_ENERGY;
+
+extern std::random_device rd;
+extern std::mt19937 GEN(rd());
 
 #endif  // GLOBALS_H
