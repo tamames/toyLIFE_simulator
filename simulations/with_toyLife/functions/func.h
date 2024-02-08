@@ -29,8 +29,14 @@ void printMap(mapa_met& mapa);
 void printMap(mapa_dim& mapa);
 void printMap(mapa_owm& mapa);
 
-std::pair<mapa_met, mapa_met> mapShuffle(mapa_met mapa);
-std::pair<mapa_prot, mapa_prot> mapShuffle(mapa_prot mapa);
-std::pair<mapa_dim, mapa_dim> mapShuffle(mapa_dim mapa);
+std::pair<mapa_met, mapa_met> mapDistribution(mapa_met mapa,
+                                              bool method_1 = true,
+                                              float p = 0.5f);
+std::pair<mapa_prot, mapa_prot> mapDistribution(mapa_prot mapa,
+                                                bool method_1 = true,
+                                                float p = 0.5f);
+std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa,
+                                              bool method_1 = true,
+                                              float p = 0.5f);
 
 #endif  // FUNC_H

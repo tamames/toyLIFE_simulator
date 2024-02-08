@@ -652,20 +652,21 @@ std::pair<Agent, Agent> divide(Agent parent, float p) {
     // parent might have. We shuffle the prots, mets and dims like a deck of
     // cards and deal them to the childs.
     if (!parent.prots.empty()) {
-        std::pair<mapa_prot, mapa_prot> child_prots = mapShuffle(parent.prots);
+        std::pair<mapa_prot, mapa_prot> child_prots =
+            mapDistribution(parent.prots);
         child1.prots = child_prots.first;
         child2.prots = child_prots.second;
     }
 
     if (!parent.mets.empty()) {
-        std::pair<mapa_met, mapa_met> child_mets = mapShuffle(parent.mets);
+        std::pair<mapa_met, mapa_met> child_mets = mapDistribution(parent.mets);
         // we change the dealing order
         child1.mets = child_mets.second;
         child2.mets = child_mets.first;
     }
 
     if (!parent.dims.empty()) {
-        std::pair<mapa_dim, mapa_dim> child_dims = mapShuffle(parent.dims);
+        std::pair<mapa_dim, mapa_dim> child_dims = mapDistribution(parent.dims);
         child1.dims = child_dims.first;
         child2.dims = child_dims.second;
     }

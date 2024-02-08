@@ -160,10 +160,15 @@ void printMap(mapa_owm& mapa) {
     }
 }
 
-std::pair<mapa_met, mapa_met> mapShuffle(mapa_met mapa) {
+std::pair<mapa_met, mapa_met> mapDistribution(mapa_met mapa, bool method_1,
+                                              float p) {
     /**
-     * Shuffles a map.
+     * Shuffles a map. We can choose between two methods of dealing the map. One
+     * where we give a component to each child map in an orderly fashion
+     * (method_1) and the other where we throw a coin for each component to
+     * decide which child map it goes to (method_2).
      * @param mapa The map to be shuffled.
+     * @param method_1 If true, we use method_1. If false, we use method_2.
      * @return The shuffled map.
      */
     mapa_met map1;
@@ -174,7 +179,9 @@ std::pair<mapa_met, mapa_met> mapShuffle(mapa_met mapa) {
 
     int i = 0;
     for (auto const& pair : mapa) {
-        if (i % 2 == 0) {
+        if (((i % 2 == 0) && method_1) ||
+            ((std::generate_canonical<double, 5>(GENERATOR) < p) &&
+             !method_1)) {
             map1[pair.first] = pair.second;
         } else {
             map2[pair.first] = pair.second;
@@ -184,10 +191,15 @@ std::pair<mapa_met, mapa_met> mapShuffle(mapa_met mapa) {
     return std::make_pair(map1, map2);
 }
 
-std::pair<mapa_prot, mapa_prot> mapShuffle(mapa_prot mapa) {
+std::pair<mapa_prot, mapa_prot> mapDistribution(mapa_prot mapa, bool method_1,
+                                                float p) {
     /**
-     * Shuffles a map.
+     * Shuffles a map. We can choose between two methods of dealing the map. One
+     * where we give a component to each child map in an orderly fashion
+     * (method_1) and the other where we throw a coin for each component to
+     * decide which child map it goes to (method_2).
      * @param mapa The map to be shuffled.
+     * @param method_1 If true, we use method_1. If false, we use method_2.
      * @return The shuffled map.
      */
     mapa_prot map1;
@@ -197,7 +209,9 @@ std::pair<mapa_prot, mapa_prot> mapShuffle(mapa_prot mapa) {
     }
     int i = 0;
     for (auto const& pair : mapa) {
-        if (i % 2 == 0) {
+        if (((i % 2 == 0) && method_1) ||
+            ((std::generate_canonical<double, 5>(GENERATOR) < p) &&
+             !method_1)) {
             map1[pair.first] = pair.second;
         } else {
             map2[pair.first] = pair.second;
@@ -207,10 +221,15 @@ std::pair<mapa_prot, mapa_prot> mapShuffle(mapa_prot mapa) {
     return std::make_pair(map1, map2);
 }
 
-std::pair<mapa_dim, mapa_dim> mapShuffle(mapa_dim mapa) {
+std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa, bool method_1,
+                                              float p) {
     /**
-     * Shuffles a map.
+     * Shuffles a map. We can choose between two methods of dealing the map. One
+     * where we give a component to each child map in an orderly fashion
+     * (method_1) and the other where we throw a coin for each component to
+     * decide which child map it goes to (method_2).
      * @param mapa The map to be shuffled.
+     * @param method_1 If true, we use method_1. If false, we use method_2.
      * @return The shuffled map.
      */
     mapa_dim map1;
@@ -220,7 +239,9 @@ std::pair<mapa_dim, mapa_dim> mapShuffle(mapa_dim mapa) {
     }
     int i = 0;
     for (auto const& pair : mapa) {
-        if (i % 2 == 0) {
+        if (((i % 2 == 0) && method_1) ||
+            ((std::generate_canonical<double, 5>(GENERATOR) < p) &&
+             !method_1)) {
             map1[pair.first] = pair.second;
         } else {
             map2[pair.first] = pair.second;
