@@ -22,6 +22,6 @@ extern float TRANSLATION_ENERGY;
 extern float BREAKING_ENERGY;
 
 extern std::random_device rd;
-extern std::mt19937 GEN(rd());
+extern std::mt19937 GENERATOR;
 
 #endif  // GLOBALS_H

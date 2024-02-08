@@ -17,4 +17,4 @@ float TRANSLATION_ENERGY = 0.0f;
 float BREAKING_ENERGY = 5.0f;
 
 std::random_device rd;
-std::mt19937 GEN(rd());
+std::mt19937 GENERATOR(rd());
