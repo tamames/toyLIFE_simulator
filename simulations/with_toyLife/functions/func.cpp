@@ -168,6 +168,10 @@ std::pair<mapa_met, mapa_met> mapShuffle(mapa_met mapa) {
      */
     mapa_met map1;
     mapa_met map2;
+    if (mapa.empty()) {
+        return std::make_pair(map1, map2);
+    }
+
     int i = 0;
     for (auto const& pair : mapa) {
         if (i % 2 == 0) {
@@ -188,6 +192,9 @@ std::pair<mapa_prot, mapa_prot> mapShuffle(mapa_prot mapa) {
      */
     mapa_prot map1;
     mapa_prot map2;
+    if (mapa.empty()) {
+        return std::make_pair(map1, map2);
+    }
     int i = 0;
     for (auto const& pair : mapa) {
         if (i % 2 == 0) {
@@ -208,6 +215,9 @@ std::pair<mapa_dim, mapa_dim> mapShuffle(mapa_dim mapa) {
      */
     mapa_dim map1;
     mapa_dim map2;
+    if (mapa.empty()) {
+        return std::make_pair(map1, map2);
+    }
     int i = 0;
     for (auto const& pair : mapa) {
         if (i % 2 == 0) {
