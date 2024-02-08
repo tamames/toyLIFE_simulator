@@ -18,7 +18,7 @@ std::string binaryGenerator(int length) {
     std::uniform_int_distribution<int> distrib(0, 1);
     std::string binary_string = "";
     for (int i = 0; i < length; i++) {
-        binary_string += std::to_string(distrib(GEN));
+        binary_string += std::to_string(distrib(GENERATOR));
     }
     return binary_string;
 }
@@ -37,7 +37,7 @@ std::vector<float> createRandomArray(int size, int max /*= 8*/) {
 
     std::vector<float> energies(size);
     for (int i = 0; i < size; ++i) {
-        energies[i] = distribution(GEN);
+        energies[i] = distribution(GENERATOR);
     }
     return energies;
 }
@@ -57,7 +57,7 @@ std::string mutate(std::string binString, float p) {
 
     std::string newString(binString.size(), ' ');
     for (int i = 0; i < binString.size(); ++i) {
-        if (std::generate_canonical<double, 5>(GEN) < p)
+        if (std::generate_canonical<double, 5>(GENERATOR) < p)
             newString[i] = binString[i] == '0' ? '1' : '0';
         else
             newString[i] = binString[i];
@@ -158,4 +158,64 @@ void printMap(mapa_owm& mapa) {
                   << ", Met: " << pair.first.met << ": " << pair.second
                   << "}\n";
     }
+}
+
+std::pair<mapa_met, mapa_met> mapShuffle(mapa_met mapa) {
+    /**
+     * Shuffles a map.
+     * @param mapa The map to be shuffled.
+     * @return The shuffled map.
+     */
+    mapa_met map1;
+    mapa_met map2;
+    int i = 0;
+    for (auto const& pair : mapa) {
+        if (i % 2 == 0) {
+            map1[pair.first] = pair.second;
+        } else {
+            map2[pair.first] = pair.second;
+        }
+        i++;
+    }
+    return std::make_pair(map1, map2);
+}
+
+std::pair<mapa_prot, mapa_prot> mapShuffle(mapa_prot mapa) {
+    /**
+     * Shuffles a map.
+     * @param mapa The map to be shuffled.
+     * @return The shuffled map.
+     */
+    mapa_prot map1;
+    mapa_prot map2;
+    int i = 0;
+    for (auto const& pair : mapa) {
+        if (i % 2 == 0) {
+            map1[pair.first] = pair.second;
+        } else {
+            map2[pair.first] = pair.second;
+        }
+        i++;
+    }
+    return std::make_pair(map1, map2);
+}
+
+std::pair<mapa_dim, mapa_dim> mapShuffle(mapa_dim mapa) {
+    /**
+     * Shuffles a map.
+     * @param mapa The map to be shuffled.
+     * @return The shuffled map.
+     */
+    mapa_dim map1;
+    mapa_dim map2;
+    int i = 0;
+    for (auto const& pair : mapa) {
+        if (i % 2 == 0) {
+            map1[pair.first] = pair.second;
+        } else {
+            map2[pair.first] = pair.second;
+        }
+        i++;
+    }
+    return std::make_pair(map1, map2);
 }

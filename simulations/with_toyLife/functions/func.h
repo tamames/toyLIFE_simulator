@@ -28,4 +28,9 @@ void printMap(mapa_prot& mapa);
 void printMap(mapa_met& mapa);
 void printMap(mapa_dim& mapa);
 void printMap(mapa_owm& mapa);
+
+std::pair<mapa_met, mapa_met> mapShuffle(mapa_met mapa);
+std::pair<mapa_prot, mapa_prot> mapShuffle(mapa_prot mapa);
+std::pair<mapa_dim, mapa_dim> mapShuffle(mapa_dim mapa);
+
 #endif  // FUNC_H
