@@ -639,15 +639,36 @@ std::pair<Agent, Agent> divide(Agent parent, float p) {
     std::string genotype1 = mutate(parent.genotype, p);
     std::string genotype2 = mutate(parent.genotype, p);
 
+    Agent child1(energyC, genotype1, parent.id);
+    Agent child2(energyC, genotype2, parent.id);
+
     if (parent.checkPDM()) {
         // It doesn't have ane Prots, Mets or Dims
-        Agent child1(energyC, genotype1, parent.id);
-        Agent child2(energyC, genotype2, parent.id);
+
         return std::make_pair(child1, child2);
     }
 
-    Agent child1(energyC, genotype1, parent.id);
-    Agent child2(energyC, genotype2, parent.id);
+    // Now we star the process of random distribution of the objects that the
+    // parent might have. We shuffle the prots, mets and dims like a deck of
+    // cards and deal them to the childs.
+    if (!parent.prots.empty()) {
+        std::pair<mapa_prot, mapa_prot> child_prots = mapShuffle(parent.prots);
+        child1.prots = child_prots.first;
+        child2.prots = child_prots.second;
+    }
+
+    if (!parent.mets.empty()) {
+        std::pair<mapa_met, mapa_met> child_mets = mapShuffle(parent.mets);
+        // we change the dealing order
+        child1.mets = child_mets.second;
+        child2.mets = child_mets.first;
+    }
+
+    if (!parent.dims.empty()) {
+        std::pair<mapa_dim, mapa_dim> child_dims = mapShuffle(parent.dims);
+        child1.dims = child_dims.first;
+        child2.dims = child_dims.second;
+    }
 
     return std::make_pair(child1, child2);
 }
