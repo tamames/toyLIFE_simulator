@@ -34,7 +34,7 @@ class Agent {
           int sizeGenotype = SIZE_GENOTYPE, int parent = 0,
           mapa_prot prots = {}, mapa_dim dims = {}, mapa_met mets = {});
 
-    void print(bool printAge = false);
+    void print(bool complete = false);
 
     bool checkEnergyReproduce();
 
@@ -69,7 +69,7 @@ class Population {
 
     Population(int sizePopulation);
 
-    void print();
+    void print(bool complete = false);
 
     void iteration(std::vector<std::string> food, ToyPlugin toy,
                    float cost = 1.0, double costVariation = 0.1,

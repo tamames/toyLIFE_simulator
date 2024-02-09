@@ -29,22 +29,21 @@ Agent::Agent(float energy, std::string genotype, int sizeGenotype, int parent,
     ID_COUNT++;
 }
 
-void Agent::print(bool printAge) {
-    std::cout << "Prots: \n";
-    printMap(prots);
-    std::cout << "Dims: \n";
-    printMap(dims);
-    std::cout << "Mets: \n";
-    printMap(mets);
-    std::cout << "Owns: \n";
-    printMap(owns);
-    std::cout << "Energy: " << energy << std::endl;
-    // if (printAge)
-    //     std::cout << "Genotype: " << genotype << ". Energy: " << energy
-    //               << ". Age:" << age << std::endl;
-    // else
-    //     std::cout << "Genotype: " << genotype << ". Energy: " << energy
-    //               << std::endl;
+void Agent::print(bool complete) {
+    std::cout << "ID: " << id << ". Energy: " << energy << ". Age: " << age
+              << ". Genotype: " << genotype << std::endl;
+
+    if (complete) {
+        std::cout << "Genotype: " << genotype << "\n";
+        std::cout << "Prots: \n";
+        printMap(prots);
+        std::cout << "Dims: \n";
+        printMap(dims);
+        std::cout << "Mets: \n";
+        printMap(mets);
+        std::cout << "Owns: \n";
+        printMap(owns);
+    }
 }
 
 bool Agent::checkEnergyReproduce() { return energy >= ENERGY_TO_REPRODUCE; }
@@ -685,10 +684,10 @@ Population::Population(int sizePopulation) {
     }
 }
 
-void Population::print() {
+void Population::print(bool complete) {
     std::cout << "You are printing the whole population: \n";
     for (int i = 0; i < sizePopulation; ++i) {
-        agents[i].print();
+        agents[i].print(complete);
         std::cout << "\n";
     }
 }
