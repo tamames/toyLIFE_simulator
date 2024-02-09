@@ -31,7 +31,7 @@ Agent::Agent(float energy, std::string genotype, int sizeGenotype, int parent,
 
 void Agent::print(bool complete) {
     std::cout << "ID: " << id << ". Energy: " << energy << ". Age: " << age
-              << ". Genotype: " << genotype << std::endl;
+              << std::endl;
 
     if (complete) {
         std::cout << "Genotype: " << genotype << "\n";
