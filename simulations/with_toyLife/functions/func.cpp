@@ -150,7 +150,6 @@ void printMap(mapa_owm& mapa) {
      * Prints a map.
      * @param mapa The map to be printed.
      */
-    std::cout << "Printing mapa_owm\n";
 
     for (auto const& pair : mapa) {
         std::cout << "{Prot: " << pair.first.prot
