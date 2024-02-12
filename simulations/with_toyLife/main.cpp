@@ -4,95 +4,98 @@
 #include "toylife/toy_plugin.h"
 
 int main() {
-    std::cout << "Hello world!" << std::endl;
-
+    std::cout << "Start the simulation\n";
     ToyPlugin toy;
-    std::cout << "Se crea el toyPlugin" << std::endl;
+    std::cout << "We have created the ToyPlugin" << std::endl;
 
-    std::string gen =
-        "111101010001110110101100100100100000101110111010101101011011";
+    int numberOfGenerations = 1000;
+    int tenPercent = numberOfGenerations / 10;
 
-    gen="111101010001110110101011101010110101101111001001001000001011";
-    
-    std::cout << bintodec("11000101") << std::endl;
+    Population population(700);
+    // population.print(true);
 
-    std::vector<std::string> food = decimal2Binary(256);
-    for (auto it=food.begin(); it!=food.end(); ++it){
-      std::cout << *it << "\t" << bintodec(*it) << std::endl;
-      Agent test(100.0, gen);
-      std::map<std::string, int> foodMap;
-      foodMap[*it] = 1;
-      bool a = test.metabolism(foodMap, toy);
-      if (a)
-	std::cout << "Breaks " << *it << "\t" << bintodec(*it) << std::endl;
+    std::cout << "In the beginning we have: " << population.sizePopulation
+              << "\n";
+
+    std::vector<std::string> food = listOfFood(5000);
+
+    for (int i = 1; i <= numberOfGenerations; ++i) {
+        // maybe we can add the functionality of loosing energy due to the
+        // foraging process
+        population.iteration(food, toy);
+        population.afterIteration(0.1);
+
+        if (population.sizePopulation == 0) {
+            std::cout << "\n All the population died in iteration: " << i
+                      << std::endl;
+            break;
+        }
+        if (i % tenPercent == 0) {
+            std::cout << "Iteration: " << i
+                      << ". Size: " << population.sizePopulation << std::endl;
+        }
     }
-    std::cout << "End" << std::endl;
 
-    int intFood=47;
+    // population.print(true);
 }
 
+// int main() {
+//     std::vector<std::string> food = listOfFood(10);
+//     // print the food vector
+//     std::cout << "The vector: \n";
+//     for (auto it = food.begin(); it != food.end(); ++it) {
+//         std::cout << *it << "\n";
+//     }
+
+//     std::vector<std::string> out = sampleFood(food);
+//     // std::sample(food.begin(), food.end(), std::back_inserter(out), 5,
+//     //             GENERATOR);
+
+//     std::cout << "The sample: \n";
+//     for (auto it = out.begin(); it != out.end(); ++it) {
+//         std::cout << *it << "\n";
+//     }
+
+//     // std::vector<std::string> out2;
+//     // std::sample(food.begin(), food.end(), std::back_inserter(out2), 5,
+//     //             GENERATOR);
+
+//     // std::cout << "The sample2: \n";
+//     // for (auto it = out2.begin(); it != out2.end(); ++it) {
+//     //     std::cout << *it << "\n";
+//     // }
+// }
+
+// this is an example with genotypes that breaks food
 // int main() {
 //     std::cout << "Hello world!" << std::endl;
 
 //     ToyPlugin toy;
-
 //     std::cout << "Se crea el toyPlugin" << std::endl;
+
+//     std::string gen =
+//         "111101010001110110101100100100100000101110111010101101011011";
+
+//     gen = "111101010001110110101011101010110101101111001001001000001011";
+
+//     std::cout << bintodec("11000101") << std::endl;
+
 //     std::vector<std::string> food = decimal2Binary(256);
-
-//     // abrimos el archivo para guardar
-//     std::ofstream desFile;
-//     std::string desFileDir =
-//         "C:"
-//         "\\Users\\arcos\\Documents\\Universidad\\Master\\TFM\\codigos\\simulati"
-//         "ons\\with_toyLife\\log.txt";
-//     desFile.open(desFileDir, std::ios::app);
-
-//     if (!desFile) {
-//         std::cout << "Impossible to open the description file.";
-//         exit(EXIT_FAILURE);
+//     for (auto it = food.begin(); it != food.end(); ++it) {
+//         std::cout << *it << "\t" << bintodec(*it) << std::endl;
+//         Agent test(100.0, gen);
+//         std::map<std::string, int> foodMap;
+//         foodMap[*it] = 1;
+//         bool a = test.metabolism(foodMap, toy);
+//         if (a)
+//             std::cout << "Breaks " << *it << "\t" << bintodec(*it) <<
+//             std::endl;
 //     }
 
-//     for (int j = 0; j < 1000000; ++j) {
-//         Agent test(100.0);
-//         for (auto i : food) {
-//             std::map<std::string, int> foodMap;
-//             foodMap[i] = 1;
-//             bool a = test.metabolism(foodMap, toy);
+//     std::cout << "End\n" << std::endl;
 
-//             if (a) {
-//                 desFile << "Ha ganado energía."
-//                         << "\n";
-//                 desFile << "La comida era: " << i << "\n";
-//                 desFile << "El gen era: " << test.genotype << "\n";
-//             }
-//         }
-//         if (j % 1000 == 0) {
-//             desFile << "Iteracion: " << j << "\n";
-//             // std::cout << "Iteracion: " << j << "\n";
-//         }
-//     }
+//     int intFood = 47;
 
-//     desFile << "Termina el programa"
-//             << "\n";
-//     desFile.close();
-//     std::cout << "Termina el programa" << std::endl;
-
-//     // int count_mas = 0;
-//     // int count_menos = 0;
-
-//     // for (int i = 0; i < 2000; i++) {
-//     //     Agent test(10.0);
-//     //     test.eat(food, toy);
-//     //     test.eat(food, toy);
-//     //     if (test.energy == 10.0) {
-//     //         continue;
-//     //     } else if (test.energy < 10.0) {
-//     //         count_menos++;
-//     //     } else {
-//     //         count_mas++;
-//     //     }
-//     // }
-//     // std::cout << "Menos: " << count_menos << "\n";
-//     // std::cout << "Mas: " << count_mas << "\n";
-//     // std::system("pause");
+//     // Examples of food that can be broken by the Agent 00010011,
+//     00010111
 // }

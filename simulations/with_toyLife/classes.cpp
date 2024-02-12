@@ -635,6 +635,7 @@ std::pair<Agent, Agent> divide(Agent parent, float p) {
      */
 
     float energyC = parent.energy / 2;
+    std::cout << "The function divide is being called" << std::endl;
     std::string genotype1 = mutate(parent.genotype, p);
     std::string genotype2 = mutate(parent.genotype, p);
 
@@ -677,7 +678,8 @@ std::pair<Agent, Agent> divide(Agent parent, float p) {
 Population::Population(int sizePopulation) {
     this->sizePopulation = sizePopulation;
     this->agents = std::vector<Agent>();
-    std::vector<float> energies = createRandomArray(sizePopulation, 15);
+    std::vector<float> energies =
+        createRandomArray(sizePopulation, ENERGY_TO_REPRODUCE * 1.25);
     for (int i = 0; i < sizePopulation; ++i) {
         Agent agent(energies[i]);
         agents.push_back(agent);
@@ -685,7 +687,7 @@ Population::Population(int sizePopulation) {
 }
 
 void Population::print(bool complete) {
-    std::cout << "You are printing the whole population: \n";
+    std::cout << "Population of size: " << sizePopulation << "\n";
     for (int i = 0; i < sizePopulation; ++i) {
         agents[i].print(complete);
         std::cout << "\n";
@@ -710,8 +712,6 @@ void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
 
     int sizeFood = food.size();
 
-    std::random_device rd;
-    std::mt19937 g(rd());
     // std::uniform_real_distribution<double> variationDist(
     //     -cost * costVariation, cost * costVariation);
 
@@ -728,7 +728,7 @@ void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
     // generate random order
     std::vector<int> order(smaller);
     std::iota(order.begin(), order.end(), 0);
-    std::shuffle(order.begin(), order.end(), g);
+    std::shuffle(order.begin(), order.end(), GENERATOR);
 
     //* for data
     // std::vector<float>
@@ -742,10 +742,10 @@ void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
             continue;
 
         // this resets the map every iteration
-        std::map<std::string, int> foodMap;
-        foodMap[food[i]] = 1;
+        std::vector<std::string> food2eat = sampleFood(food);
+        std::map<std::string, int> food2eatMap = fromList2Map(food2eat);
 
-        agent.eat(foodMap, toy);
+        agent.eat(food2eatMap, toy);
     }
 
     //* Fill the vectors for statistics.
