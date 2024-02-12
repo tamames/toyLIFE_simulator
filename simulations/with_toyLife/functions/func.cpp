@@ -1,8 +1,11 @@
 #include "func.h"
 
+#include <algorithm>
 #include <bitset>
 #include <iostream>
+#include <iterator>
 #include <map>
+#include <random>
 #include <stdexcept>
 #include <string>
 
@@ -248,4 +251,19 @@ std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa, bool method_1,
         i++;
     }
     return std::make_pair(map1, map2);
+}
+
+std::vector<std::string> sampleFood(std::vector<std::string>& food,
+                                    unsigned int sample_size) {
+    /**
+     * Get a sample of size SAMPLE_SIZE from a vector, specifically from the
+     * food vector.
+     * @param food The vector from which we want to get the sample.
+     * @param sample_size The size of the sample. Defaults to SAMPLE_SIZE.
+     * @return The sample.
+     */
+    std::vector<std::string> out;
+    std::sample(food.begin(), food.end(), std::back_inserter(out), sample_size,
+                GENERATOR);
+    return out;
 }

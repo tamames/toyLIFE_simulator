@@ -13,8 +13,10 @@ int ENERGY_TO_DIE = 0;
 int AGE_TO_DIE =
     100;  // If it's above the number of generations it doesn't matter
 int ID_COUNT = 0;
-float TRANSLATION_ENERGY = 0.0f;
+float TRANSLATION_ENERGY = 0.1f;
 float BREAKING_ENERGY = 5.0f;
 
 std::random_device rd;
 std::mt19937 GENERATOR(rd());
+
+int SAMPLE_SIZE = 5;  // the amount of food each individual is going to eat

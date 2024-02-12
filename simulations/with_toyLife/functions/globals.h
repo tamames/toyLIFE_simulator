@@ -24,4 +24,6 @@ extern float BREAKING_ENERGY;
 extern std::random_device rd;
 extern std::mt19937 GENERATOR;
 
+extern int SAMPLE_SIZE;
+
 #endif  // GLOBALS_H

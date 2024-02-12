@@ -1,7 +1,10 @@
 #ifndef FUNC_H
 #define FUNC_H
 
+#include <algorithm>
+#include <bitset>
 #include <iostream>
+#include <iterator>
 #include <map>
 #include <random>
 #include <stdexcept>
@@ -38,5 +41,8 @@ std::pair<mapa_prot, mapa_prot> mapDistribution(mapa_prot mapa,
 std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa,
                                               bool method_1 = true,
                                               float p = 0.5f);
+
+std::vector<std::string> sampleFood(std::vector<std::string>& food,
+                                    unsigned int sample_size = SAMPLE_SIZE);
 
 #endif  // FUNC_H
