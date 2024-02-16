@@ -45,4 +45,8 @@ std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa,
 std::vector<std::string> sampleFood(std::vector<std::string>& food,
                                     unsigned int sample_size = SAMPLE_SIZE);
 
+void writeResults(std::string fileName, std::string description,
+                  std::vector<std::string> headers,
+                  std::vector<std::vector<std::string>> results);
+
 #endif  // FUNC_H

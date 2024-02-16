@@ -46,7 +46,7 @@ class Agent {
 
     void promoter_expression(const ToyPlugin& toy);
 
-    void eat(std::map<std::string, int>& food, const ToyPlugin& toy);
+    float eat(std::map<std::string, int>& food, const ToyPlugin& toy);
 
     bool metabolism(std::map<std::string, int>& food, const ToyPlugin& toy);
 
@@ -63,7 +63,7 @@ class Population {
 
     // For statistics
     std::vector<float> averageEnergyGain;
-    std::vector<float> averageEnergyLoss;
+    // std::vector<float> averageEnergyLoss;
     std::vector<int> maxEnergyGain;
     std::vector<int> minEnergyGain;
 
@@ -84,6 +84,8 @@ class Population {
     std::vector<std::string> getGenotypes();
 
     std::vector<std::vector<std::string>> getPopulationData();
+
+    std::vector<std::string> getPopulationEnergy();
 };
 
 #endif  // CLASSES_H

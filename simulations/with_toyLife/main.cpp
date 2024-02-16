@@ -8,14 +8,18 @@ int main() {
     ToyPlugin toy;
     std::cout << "We have created the ToyPlugin" << std::endl;
 
-    int numberOfGenerations = 1000;
+    int numberOfGenerations = 500;
     int tenPercent = numberOfGenerations / 10;
 
-    Population population(700);
+    Population population(100);
     // population.print(true);
 
     std::cout << "In the beginning we have: " << population.sizePopulation
               << "\n";
+
+    std::vector<std::vector<std::string>> energyInfo;
+    std::vector<std::vector<std::string>> sizes = {
+        {std::to_string(population.sizePopulation)}};
 
     std::vector<std::string> food = listOfFood(5000);
 
@@ -23,7 +27,15 @@ int main() {
         // maybe we can add the functionality of loosing energy due to the
         // foraging process
         population.iteration(food, toy);
+
+        // we call the getEnergy function to see if someone gain energy
+        // before it has a chance to devide itself
+        std::vector<std::string> energies = population.getPopulationEnergy();
+        energyInfo.push_back(energies);
+
         population.afterIteration(0.1);
+
+        sizes.push_back({std::to_string(population.sizePopulation)});
 
         if (population.sizePopulation == 0) {
             std::cout << "\n All the population died in iteration: " << i
@@ -36,8 +48,44 @@ int main() {
         }
     }
 
+    writeResults("energies",
+                 "The max, average and min energy of each generation.",
+                 {"Max", "Average", "Min"}, {energyInfo});
+
+    writeResults("sizes", "The size of the population in each generation.",
+                 {"Size"}, {sizes});
+
     // population.print(true);
 }
+
+// int main() {
+//     std::vector<std::vector<std::string>> randomNumbers;
+
+//     // Set up random number generator
+
+//     std::uniform_int_distribution<int> dis(0, 100);
+
+//     // Generate random numbers and store them in the 2D vector
+//     for (int i = 0; i < 10; ++i) {
+//         std::vector<std::string> row;
+//         for (int j = 0; j < 3; ++j) {
+//             int randomNumber = dis(GENERATOR);
+//             row.push_back(std::to_string(randomNumber));
+//         }
+//         randomNumbers.push_back(row);
+//     }
+//     writeResults("randomNumbers", "randomNumbers.csv", {"Column1",
+//     "Column2"},
+//                  {randomNumbers});
+
+//     // print the random numbers
+//     for (auto it = randomNumbers.begin(); it != randomNumbers.end(); ++it) {
+//         for (auto it2 = it->begin(); it2 != it->end(); ++it2) {
+//             std::cout << *it2 << "\t";
+//         }
+//         std::cout << "\n";
+//     }
+// }
 
 // int main() {
 //     std::vector<std::string> food = listOfFood(10);

@@ -552,12 +552,13 @@ void Agent::reacting(const ToyPlugin& toy) {
     return;
 }
 
-void Agent::eat(std::map<std::string, int>& food, const ToyPlugin& toy) {
+float Agent::eat(std::map<std::string, int>& food, const ToyPlugin& toy) {
     /**
      * Describe the interaction between an Agent and the food.
      * @param food The food that the Agent is going to eat.
      */
 
+    float previous_energy = energy;
     // START THE CYCLE: FOOD ENTERS THE CELL
     for (auto it = food.begin(); it != food.end(); ++it) {
         mets[it->first] += it->second;
@@ -596,7 +597,7 @@ void Agent::eat(std::map<std::string, int>& food, const ToyPlugin& toy) {
     for (auto it = owns.begin(); it != owns.end(); ++it)
         mets[it->first.met] += it->second;
     owns.clear();  // and all objects with mets will disappear of course
-    return;
+    return energy - previous_energy;
 }
 
 bool Agent::metabolism(std::map<std::string, int>& food, const ToyPlugin& toy) {
@@ -731,8 +732,8 @@ void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
     std::shuffle(order.begin(), order.end(), GENERATOR);
 
     //* for data
-    // std::vector<float>
-    //     gainedEnergies;  // store the energies gained by each agent
+    std::vector<float> gainedEnergies(
+        smaller);  // store the energies gained by each agent
 
     for (int i = 0; i < smaller; ++i) {
         Agent& agent = agents[order[i]];
@@ -745,21 +746,20 @@ void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
         std::vector<std::string> food2eat = sampleFood(food);
         std::map<std::string, int> food2eatMap = fromList2Map(food2eat);
 
-        agent.eat(food2eatMap, toy);
+        gainedEnergies[i] = agent.eat(food2eatMap, toy);
     }
 
     //* Fill the vectors for statistics.
-    // int sum = std::accumulate(gainedEnergies.begin(), gainedEnergies.end(),
-    // 0); averageEnergyGain.push_back(static_cast<double>(sum) /
-    // (float)smaller);
+    int sum = std::accumulate(gainedEnergies.begin(), gainedEnergies.end(), 0);
+    averageEnergyGain.push_back(static_cast<double>(sum) / (float)smaller);
 
-    // auto maxGain =
-    //     std::max_element(gainedEnergies.begin(), gainedEnergies.end());
-    // maxEnergyGain.push_back(*maxGain);
+    auto maxGain =
+        std::max_element(gainedEnergies.begin(), gainedEnergies.end());
+    maxEnergyGain.push_back(*maxGain);
 
-    // auto minGain =
-    //     std::min_element(gainedEnergies.begin(), gainedEnergies.end());
-    // minEnergyGain.push_back(*minGain);
+    auto minGain =
+        std::min_element(gainedEnergies.begin(), gainedEnergies.end());
+    minEnergyGain.push_back(*minGain);
 
     generation++;
     addAges();
@@ -829,4 +829,29 @@ std::vector<std::vector<std::string>> Population::getPopulationData() {
         data[i] = agents[i].getAgentData();
 
     return data;
+}
+
+std::vector<std::string> Population::getPopulationEnergy() {
+    /**
+     * This returns the maximum, average and minimun energy of the population at
+     * that time.
+     */
+    std::vector<float> energies(sizePopulation);
+
+    std::vector<std::string> results(3);
+
+    for (int i = 0; i < sizePopulation; ++i)
+        energies[i] = agents[i].energy;
+
+    auto maxEnergy = std::max_element(energies.begin(), energies.end());
+    results[0] = std::to_string(*maxEnergy);
+
+    int sum = std::accumulate(energies.begin(), energies.end(), 0);
+    results[1] =
+        std::to_string(static_cast<double>(sum) / (float)sizePopulation);
+
+    auto minEnergy = std::min_element(energies.begin(), energies.end());
+    results[2] = std::to_string(*minEnergy);
+
+    return results;
 }
