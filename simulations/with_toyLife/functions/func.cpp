@@ -286,6 +286,13 @@ void writeResults(std::string fileName, std::string description,
 
     // First we open the description file to write what is going to have the
     // file.
+    int headers_size = headers.size();
+    int results_size = results[0].size();
+    if (headers_size != results_size) {
+        std::cout << "The headers and the results don't have the same size.\n";
+        exit(EXIT_FAILURE);
+    }
+
     std::ofstream desFile;
     std::string desFileDir = DIRECTORY + "\\data\\" + "Readme.md";
     desFile.open(desFileDir, std::ios::app);
@@ -293,6 +300,12 @@ void writeResults(std::string fileName, std::string description,
     if (!desFile) {
         std::cout << "Impossible to open the description file.";
         exit(EXIT_FAILURE);
+    }
+
+    if (fileName.rfind("energies", 0) == 0) {
+        // the file contains energies so we add the ENERGY_TO_REPRODUCE
+        // parameter to the name
+        fileName = fileName + "_" + std::to_string(ENERGY_TO_REPRODUCE);
     }
 
     fileName = fileName + "_" + std::to_string(NUMBER_OF_SIMULATION) + "_" +
