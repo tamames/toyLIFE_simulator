@@ -1,0 +1,2 @@
+energies_0_5.csv &rarr; The max, average and min energy of each generation. Correspond to simulation number **0**. **Sample size = 5****Energy to reproduce = 15**, **Energy to die = 0**, **Age to die = 10000****Translation energy = 0.100000**, **Breaking energy = 5.000000**  
+sizes_0_5.csv &rarr; The size of the population in each generation. Correspond to simulation number **0**. **Sample size = 5****Energy to reproduce = 15**, **Energy to die = 0**, **Age to die = 10000****Translation energy = 0.100000**, **Breaking energy = 5.000000**  
