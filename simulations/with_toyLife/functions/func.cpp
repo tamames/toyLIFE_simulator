@@ -403,3 +403,48 @@ void increaseNumberOfSimulation() {
     file << NUMBER_OF_SIMULATION + 1;
     file.close();
 }
+
+void createDataDirectory() {
+    /**
+     * Creates a directory to store the data of the corresponding simulation.
+     * In this directory we have to have a Readme.md file that store the
+     * information of that simulation.
+     * @param name The name of the directory.
+     */
+
+    std::string path = DIRECTORY + "\\data\\" + "simulation_" +
+                       std::to_string(NUMBER_OF_SIMULATION);
+    if (!std::filesystem::exists(path)) {
+        std::filesystem::create_directory(path);
+    }
+}
+
+void createReadMe() {
+    /**
+     * Creates and fill the ReadMe file inside the data directory
+     */
+    std::string path = DIRECTORY + "\\data\\" + "simulation_" +
+                       std::to_string(NUMBER_OF_SIMULATION);
+
+    if (!std::filesystem::exists(path)) {
+        std::cout << "The directory doesn't exist.\n";
+        exit(EXIT_FAILURE);
+    }
+
+    std::ofstream file;
+    file.open(path + "\\Readme.md");
+    if (!file) {
+        std::cout << "There was an error while opening the file.\n";
+        exit(EXIT_FAILURE);
+    }
+    file << "## Params of the simulation: \n";
+    file << "\tEnergy to reproduce &rarr " << ENERGY_TO_REPRODUCE << "\n"
+         << "\tEnergy to die &rarr " << ENERGY_TO_DIE << "\n"
+         << "\tAge to die &rarr " << AGE_TO_DIE << "\n"
+         << "\tTranslation energy &rarr " << TRANSLATION_ENERGY << "\n"
+         << "\tBreaking energy &rarr " << BREAKING_ENERGY << "\n"
+         << "\tSample size &rarr " << SAMPLE_SIZE << "\n"
+         << "\tSize of the genotype &rarr " << SIZE_GENOTYPE << "\n"
+         << "\tFood size &rarr " << FOOD_SIZE << "\n"
+         << "\tControl &rarr " << CONTROL << "\n";
+}
