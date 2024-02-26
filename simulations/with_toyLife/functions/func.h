@@ -49,4 +49,7 @@ void writeResults(std::string fileName, std::string description,
                   std::vector<std::string> headers,
                   std::vector<std::vector<std::string>> results);
 
+int getNumberOfSimulation();
+void increaseNumberOfSimulation();
+
 #endif  // FUNC_H

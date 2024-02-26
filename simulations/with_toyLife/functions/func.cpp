@@ -371,3 +371,35 @@ void writeResults(std::string fileName, std::string description,
     myFile.close();
     std::cout << "Finished writing the results.\n";
 }
+
+int getNumberOfSimulation() {
+    /**
+     * Read the simulations\with_toyLife\functions\number_of_simulation.txt file
+     * and return the number in it.
+     * @return The number of the simulation.
+     */
+    std::ifstream file;
+    file.open(DIRECTORY + "\\functions\\number_of_simulation.txt");
+    if (!file) {
+        std::cout << "There was an error while opening the file.\n";
+        exit(EXIT_FAILURE);
+    }
+    int number;
+    file >> number;
+    file.close();
+    return number;
+}
+
+void increaseNumberOfSimulation() {
+    /**
+     * Increases the number of the simulation by one.
+     */
+    std::ofstream file;
+    file.open(DIRECTORY + "\\functions\\number_of_simulation.txt");
+    if (!file) {
+        std::cout << "There was an error while opening the file.\n";
+        exit(EXIT_FAILURE);
+    }
+    file << NUMBER_OF_SIMULATION + 1;
+    file.close();
+}
