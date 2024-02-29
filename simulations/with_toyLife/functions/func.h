@@ -53,6 +53,6 @@ int getNumberOfSimulation();
 void increaseNumberOfSimulation();
 
 std::string createDataDirectory();
-void createReadMe();
+void createReadMe(int numberOfGenerations, int initialPopulationSize);
 
 #endif  // FUNC_H
