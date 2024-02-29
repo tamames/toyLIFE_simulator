@@ -268,7 +268,7 @@ std::vector<std::string> sampleFood(std::vector<std::string>& food,
     return out;
 }
 
-void writeResults(std::string fileName, std::string description,
+void writeResults(std::string fileName, std::string folder_path,
                   std::vector<std::string> headers,
                   std::vector<std::vector<std::string>> results) {
     /**
@@ -279,13 +279,13 @@ void writeResults(std::string fileName, std::string description,
      * In the next lines we are going to write the data.
      *
      * @param fileName The name of the file.
-     * @param description A description of the file.
+     * @param folder_path The folder where we write the file.
      * @param headers The headers of the file.
      * @param results The data that we want to write into the file.
      */
 
-    // First we open the description file to write what is going to have the
-    // file.
+    // First we check that we have the same amount of headers as columns in
+    // results
     int headers_size = headers.size();
     int results_size = results[0].size();
     if (headers_size != results_size) {
@@ -293,41 +293,12 @@ void writeResults(std::string fileName, std::string description,
         exit(EXIT_FAILURE);
     }
 
-    std::ofstream desFile;
-    std::string desFileDir = DIRECTORY + "\\data\\" + "Readme.md";
-    desFile.open(desFileDir, std::ios::app);
-
-    if (!desFile) {
-        std::cout << "Impossible to open the description file.";
-        exit(EXIT_FAILURE);
-    }
-
-    if (fileName.rfind("energies", 0) == 0) {
-        // the file contains energies so we add the ENERGY_TO_REPRODUCE
-        // parameter to the name
-        fileName = fileName + "_" + std::to_string(ENERGY_TO_REPRODUCE);
-    }
-
-    fileName = fileName + "_" + std::to_string(NUMBER_OF_SIMULATION) + "_" +
-               std::to_string(SAMPLE_SIZE) + ".csv";
-    description =
-        description + " Correspond to simulation number **" +
-        std::to_string(NUMBER_OF_SIMULATION) +
-        "**. **Sample size = " + std::to_string(SAMPLE_SIZE) + "**" +
-        "**Energy to reproduce = " + std::to_string(ENERGY_TO_REPRODUCE) +
-        "**, **Energy to die = " + std::to_string(ENERGY_TO_DIE) +
-        "**, **Age to die = " + std::to_string(AGE_TO_DIE) + "**" +
-        "**Translation energy = " + std::to_string(TRANSLATION_ENERGY) +
-        "**, **Breaking energy = " + std::to_string(BREAKING_ENERGY) + "**";
-
-    desFile << fileName << " &rarr; " << description << "  \n";
-    desFile.close();
-
     // Now we deal with the results file.
     // We check if the file already exists, so we don't lose any data.
-    std::string path = DIRECTORY + "\\data\\" + fileName;
-    if (std::filesystem::exists(path)) {
-        std::cout << "The file " << fileName << " already exists.\n";
+    std::string total_path = folder_path + fileName;
+    if (std::filesystem::exists(total_path)) {
+        std::cout << "The file " << fileName
+                  << " already exists in the designated folder.\n";
         std::cout << "Do you want to overwrite it? (y/n)\n";
         char answer;
         std::cin >> answer;
@@ -342,7 +313,7 @@ void writeResults(std::string fileName, std::string description,
 
     std::cout << "Writing the results in " << fileName << "...\n";
     std::ofstream myFile;
-    myFile.open(path, std::ios::out);
+    myFile.open(total_path, std::ios::out);
 
     if (!myFile) {
         std::cout << "There was an error while opening your file.\n";
@@ -370,6 +341,57 @@ void writeResults(std::string fileName, std::string description,
 
     myFile.close();
     std::cout << "Finished writing the results.\n";
+}
+
+void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
+                       int iteration, std::string folder_path) {
+    /**This is a modification of the writeResults function.
+     * Basically I want to write all the information about the population in
+     * each generation. We call this function each time for storage purposes and
+     * to prevent that if the simulation crashes we lose all the data. The csv
+     * contains one row for each agent in each generation. And the data
+     * displayed is the one we obtain from the getAgentData function.
+     */
+
+    std::string fileName = "total.csv";
+
+    std::string total_path = folder_path + fileName;
+    std::ofstream myFile;
+
+    myFile.open(total_path, std::ios::app);
+
+    if (!myFile) {
+        std::cout << "There was an error while opening your file.\n";
+        exit(EXIT_FAILURE);
+    }
+
+    if (iteration == 0) {
+        // If we are in the first iteration we write the headers.
+
+        std::vector<std::string> headers = {"ID",   "Genotype", "Energy",
+                                            "Age",  "Parent",   "Prots",
+                                            "Mets", "Dims",     "Iteration"};
+        // First we write the headers
+        for (std::size_t i = 0; i < headers.size(); ++i) {
+            myFile << headers[i];
+            if (i < headers.size() - 1)
+                myFile << ",";
+        }
+        myFile << "\n";
+    }
+
+    // Then we write the data of the population
+
+    for (std::size_t i = 0; i < dataOfPopulation.size(); ++i) {
+        for (std::size_t j = 0; j < dataOfPopulation[i].size(); ++j) {
+            myFile << dataOfPopulation[i][j];
+            if (j < dataOfPopulation[i].size())
+                myFile << ",";
+        }
+        myFile << std::to_string(iteration);
+        myFile << "\n";
+    }
+    myFile.close();
 }
 
 int getNumberOfSimulation() {

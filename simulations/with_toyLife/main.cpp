@@ -2,16 +2,27 @@
 #include "functions/func.h"
 #include "functions/globals.h"
 #include "toylife/toy_plugin.h"
-
+// TODO: Add the new functionality to the main execution. Add one to the
+// TODO Simulation Number, create the directory to store the information, store
+// the
+// TODO information in that directory, add the total table of the simulation to
+// the
+// TODO directory.
 int main() {
     std::cout << "Start the simulation\n";
     ToyPlugin toy;
     std::cout << "We have created the ToyPlugin" << std::endl;
 
+    std::cout << "Creating the data directory\n";
+    std::string dataDirectory = createDataDirectory();
+
     int numberOfGenerations = 500;
     int tenPercent = numberOfGenerations / 10;
+    int initialPopulationSize = 100;
 
-    Population population(100);
+    createReadMe(numberOfGenerations, initialPopulationSize);
+
+    Population population(initialPopulationSize);
     // population.print(true);
 
     std::cout << "In the beginning we have: " << population.sizePopulation
@@ -42,6 +53,12 @@ int main() {
                       << std::endl;
             break;
         }
+
+        // we write only if the population is not dead
+        std::vector<std::vector<std::string>> dataOfSimulation =
+            population.getPopulationData();
+        populationWriting(dataOfSimulation, i, dataDirectory);
+
         if (i % tenPercent == 0) {
             std::cout << "Iteration: " << i
                       << ". Size: " << population.sizePopulation << std::endl;
@@ -55,7 +72,7 @@ int main() {
     writeResults("sizes", "The size of the population in each generation.",
                  {"Size"}, {sizes});
 
-    // population.print(true);
+    increaseNumberOfSimulation();
 }
 
 // int main() {
