@@ -404,7 +404,7 @@ void increaseNumberOfSimulation() {
     file.close();
 }
 
-void createDataDirectory() {
+std::string createDataDirectory() {
     /**
      * Creates a directory to store the data of the corresponding simulation.
      * In this directory we have to have a Readme.md file that store the
@@ -417,6 +417,8 @@ void createDataDirectory() {
     if (!std::filesystem::exists(path)) {
         std::filesystem::create_directory(path);
     }
+
+    return path;
 }
 
 void createReadMe() {

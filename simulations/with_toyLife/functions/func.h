@@ -52,7 +52,7 @@ void writeResults(std::string fileName, std::string description,
 int getNumberOfSimulation();
 void increaseNumberOfSimulation();
 
-void createDataDirectory();
+std::string createDataDirectory();
 void createReadMe();
 
 #endif  // FUNC_H
