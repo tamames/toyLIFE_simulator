@@ -618,12 +618,15 @@ bool Agent::metabolism(std::map<std::string, int>& food, const ToyPlugin& toy) {
 
 std::vector<std::string> Agent::getAgentData() {
     // TODO add here the data of the mets, dims and prots
-    std::vector<std::string> data(5);
+    std::vector<std::string> data(8);
     data[0] = std::to_string(id);
     data[1] = genotype;
     data[2] = std::to_string(energy);
     data[3] = std::to_string(age);
     data[4] = std::to_string(parent);
+    data[5] = fromMapToString(prots);
+    data[6] = fromMapToString(mets);
+    data[7] = fromMapToString(dims);
 
     return data;
 }
