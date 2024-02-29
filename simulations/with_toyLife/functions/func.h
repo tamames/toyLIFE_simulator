@@ -55,4 +55,8 @@ void increaseNumberOfSimulation();
 std::string createDataDirectory();
 void createReadMe(int numberOfGenerations, int initialPopulationSize);
 
+std::string fromMapToString(mapa_prot& mapa);
+std::string fromMapToString(mapa_met& mapa);
+std::string fromMapToString(mapa_dim& mapa);
+
 #endif  // FUNC_H

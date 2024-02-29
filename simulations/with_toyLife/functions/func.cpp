@@ -452,3 +452,51 @@ void createReadMe(int numberOfGenerations, int initialPopulationSize) {
          << "\tFood size &rarr " << FOOD_SIZE << "\n"
          << "\tControl &rarr " << CONTROL << "\n";
 }
+
+std::string fromMapToString(mapa_prot& mapa) {
+    /**
+     * Converts a map to a string. The prot is an integer.
+     * @param mapa The map to be converted.
+     * @return The string.
+     */
+    std::string out = "{";
+    for (auto const& pair : mapa) {
+        out += std::to_string(pair.first) + ": " + std::to_string(pair.second) +
+               ", ";
+    }
+    out.pop_back();
+    out += "}";
+    return out;
+}
+
+std::string fromMapToString(mapa_met& mapa) {
+    /**
+     * Converts a map to a string. In this case the met is already a string.
+     * @param mapa The map to be converted.
+     * @return The string.
+     */
+    std::string out = "{";
+    for (auto const& pair : mapa) {
+        out += pair.first + ": " + std::to_string(pair.second) + ", ";
+    }
+    out.pop_back();
+    out += "}";
+    return out;
+}
+
+std::string fromMapToString(mapa_dim& mapa) {
+    /**
+     * Converts a map to a string. In this case the dim is an object so we take
+     * the id.
+     * @param mapa The map to be converted.
+     * @return The string.
+     */
+    std::string out = "{";
+    for (auto const& pair : mapa) {
+        out += std::to_string(pair.first.id) + ": " +
+               std::to_string(pair.second) + ", ";
+    }
+    out.pop_back();
+    out += "}";
+    return out;
+}
