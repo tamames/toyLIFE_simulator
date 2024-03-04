@@ -295,7 +295,8 @@ void writeResults(std::string fileName, std::string folder_path,
 
     // Now we deal with the results file.
     // We check if the file already exists, so we don't lose any data.
-    std::string total_path = folder_path + fileName;
+    std::string total_path = folder_path + "\\" + fileName;
+    std::cout << "The path is: " << total_path << "\n";
     if (std::filesystem::exists(total_path)) {
         std::cout << "The file " << fileName
                   << " already exists in the designated folder.\n";
@@ -355,7 +356,7 @@ void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
 
     std::string fileName = "total.csv";
 
-    std::string total_path = folder_path + fileName;
+    std::string total_path = folder_path + "\\" + fileName;
     std::ofstream myFile;
 
     myFile.open(total_path, std::ios::app);
@@ -375,7 +376,7 @@ void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
         for (std::size_t i = 0; i < headers.size(); ++i) {
             myFile << headers[i];
             if (i < headers.size() - 1)
-                myFile << ",";
+                myFile << ";";
         }
         myFile << "\n";
     }
@@ -386,7 +387,7 @@ void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
         for (std::size_t j = 0; j < dataOfPopulation[i].size(); ++j) {
             myFile << dataOfPopulation[i][j];
             if (j < dataOfPopulation[i].size())
-                myFile << ",";
+                myFile << ";";
         }
         myFile << std::to_string(iteration);
         myFile << "\n";
@@ -481,12 +482,18 @@ std::string fromMapToString(mapa_prot& mapa) {
      * @param mapa The map to be converted.
      * @return The string.
      */
+
+    if (mapa.empty())
+        return "";
     std::string out = "{";
     for (auto const& pair : mapa) {
         out += std::to_string(pair.first) + ": " + std::to_string(pair.second) +
                ", ";
     }
+    // to remove the last comma and space
     out.pop_back();
+    out.pop_back();
+
     out += "}";
     return out;
 }
@@ -497,6 +504,9 @@ std::string fromMapToString(mapa_met& mapa) {
      * @param mapa The map to be converted.
      * @return The string.
      */
+
+    if (mapa.empty())
+        return "";
     std::string out = "{";
     for (auto const& pair : mapa) {
         out += pair.first + ": " + std::to_string(pair.second) + ", ";
@@ -513,6 +523,9 @@ std::string fromMapToString(mapa_dim& mapa) {
      * @param mapa The map to be converted.
      * @return The string.
      */
+
+    if (mapa.empty())
+        return "";
     std::string out = "{";
     for (auto const& pair : mapa) {
         out += std::to_string(pair.first.id) + ": " +
