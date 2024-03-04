@@ -2,12 +2,7 @@
 #include "functions/func.h"
 #include "functions/globals.h"
 #include "toylife/toy_plugin.h"
-// TODO: Add the new functionality to the main execution. Add one to the
-// TODO Simulation Number, create the directory to store the information, store
-// the
-// TODO information in that directory, add the total table of the simulation to
-// the
-// TODO directory.
+
 int main() {
     std::cout << "Start the simulation\n";
     ToyPlugin toy;
@@ -16,9 +11,9 @@ int main() {
     std::cout << "Creating the data directory\n";
     std::string dataDirectory = createDataDirectory();
 
-    int numberOfGenerations = 500;
+    int numberOfGenerations = 50;
     int tenPercent = numberOfGenerations / 10;
-    int initialPopulationSize = 100;
+    int initialPopulationSize = 10;
 
     createReadMe(numberOfGenerations, initialPopulationSize);
 
@@ -32,6 +27,11 @@ int main() {
     std::vector<std::vector<std::string>> sizes = {
         {std::to_string(population.sizePopulation)}};
 
+    // we write the first step of the simulation
+    std::vector<std::vector<std::string>> dataOfSimulation =
+        population.getPopulationData();
+    populationWriting(dataOfSimulation, 0, dataDirectory);
+
     std::vector<std::string> food = listOfFood(5000);
 
     for (int i = 1; i <= numberOfGenerations; ++i) {
@@ -40,7 +40,7 @@ int main() {
         population.iteration(food, toy);
 
         // we call the getEnergy function to see if someone gain energy
-        // before it has a chance to devide itself
+        // before it has a chance to divide itself
         std::vector<std::string> energies = population.getPopulationEnergy();
         energyInfo.push_back(energies);
 
@@ -65,44 +65,13 @@ int main() {
         }
     }
 
-    writeResults("energies",
-                 "The max, average and min energy of each generation.",
-                 {"Max", "Average", "Min"}, {energyInfo});
+    writeResults("energies", dataDirectory, {"Max", "Average", "Min"},
+                 {energyInfo});
 
-    writeResults("sizes", "The size of the population in each generation.",
-                 {"Size"}, {sizes});
+    writeResults("sizes", dataDirectory, {"Size"}, {sizes});
 
     increaseNumberOfSimulation();
 }
-
-// int main() {
-//     std::vector<std::vector<std::string>> randomNumbers;
-
-//     // Set up random number generator
-
-//     std::uniform_int_distribution<int> dis(0, 100);
-
-//     // Generate random numbers and store them in the 2D vector
-//     for (int i = 0; i < 10; ++i) {
-//         std::vector<std::string> row;
-//         for (int j = 0; j < 3; ++j) {
-//             int randomNumber = dis(GENERATOR);
-//             row.push_back(std::to_string(randomNumber));
-//         }
-//         randomNumbers.push_back(row);
-//     }
-//     writeResults("randomNumbers", "randomNumbers.csv", {"Column1",
-//     "Column2"},
-//                  {randomNumbers});
-
-//     // print the random numbers
-//     for (auto it = randomNumbers.begin(); it != randomNumbers.end(); ++it) {
-//         for (auto it2 = it->begin(); it2 != it->end(); ++it2) {
-//             std::cout << *it2 << "\t";
-//         }
-//         std::cout << "\n";
-//     }
-// }
 
 // int main() {
 //     std::vector<std::string> food = listOfFood(10);

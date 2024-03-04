@@ -510,6 +510,7 @@ std::string fromMapToString(mapa_met& mapa) {
         out += pair.first + ": " + std::to_string(pair.second) + ", ";
     }
     out.pop_back();
+    out.pop_back();
     out += "}";
     return out;
 }
@@ -529,6 +530,7 @@ std::string fromMapToString(mapa_dim& mapa) {
         out += std::to_string(pair.first.id) + ": " +
                std::to_string(pair.second) + ", ";
     }
+    out.pop_back();
     out.pop_back();
     out += "}";
     return out;

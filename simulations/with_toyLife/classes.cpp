@@ -639,9 +639,10 @@ std::pair<Agent, Agent> divide(Agent parent, float p) {
      */
 
     float energyC = parent.energy / 2;
-    std::cout << "The function divide is being called" << std::endl;
     std::string genotype1 = mutate(parent.genotype, p);
     std::string genotype2 = mutate(parent.genotype, p);
+
+    std::cout << "The parent id: " << parent.id << std::endl;
 
     Agent child1(energyC, genotype1, parent.id);
     Agent child2(energyC, genotype2, parent.id);

@@ -223,30 +223,38 @@ def energy_plot(df: pd.DataFrame, file_name: str) -> mplf.Figure:
     return fig
 
 
+def sizes_plot(df: pd.DataFrame) -> mplf.Figure:
+    """This function creates a simple line plot with the size of the population at each generation.
+
+    Args:
+        df (pd.DataFrame): It's only one column with the size of each generation.
+
+    Returns:
+        mplf.Figure:
+    """
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Create the line plot
+    ax.plot(df["Size"], color="b", label="Population Size")
+
+    ax.set_xlabel("Generation")
+    ax.set_ylabel("Size")
+    ax.set_title("Size of the Population")
+    return fig
+
+
 def main() -> None:
-    file_name = "energies_15_0_5.csv"
-    # the last two characters of the file name are the control parameter of the population
-    #  that number gives us the way the foodList is distributed.
+    file_name = "sizes_0_5.csv"
 
     df = get_df(file_name)
-    fig1 = energy_plot(df, file_name)
+    # fig1 = energy_plot(df, file_name)
+    fig1 = sizes_plot(df)
     # fig1.show()
     # a = input("Press Enter to continue...")
     # print(df.head())
-    plot_name = "energyPlot_15_0_5"
-    description = "Max, average and min energy of the population. We feed each agent with 5 units of food."
+    plot_name = "sizes_0_5"
+    description = "Sizes of the population of the plot energyPlot_15_0_5."
     save_and_write(fig1, plot_name, description)
-
-
-def do_all(file_name: str) -> None:
-    """This function does everything given a file name
-    The idea is that given a file name the program generates all the valuable plots for that type
-    of data.
-
-    Args:
-        file_name (str): the data source
-    """
-    pass
 
 
 if __name__ == "__main__":
