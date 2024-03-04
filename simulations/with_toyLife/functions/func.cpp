@@ -283,7 +283,6 @@ void writeResults(std::string fileName, std::string folder_path,
      * @param headers The headers of the file.
      * @param results The data that we want to write into the file.
      */
-
     // First we check that we have the same amount of headers as columns in
     // results
     int headers_size = headers.size();
@@ -295,8 +294,7 @@ void writeResults(std::string fileName, std::string folder_path,
 
     // Now we deal with the results file.
     // We check if the file already exists, so we don't lose any data.
-    std::string total_path = folder_path + "\\" + fileName;
-    std::cout << "The path is: " << total_path << "\n";
+    std::string total_path = folder_path + "\\" + fileName + ".csv";
     if (std::filesystem::exists(total_path)) {
         std::cout << "The file " << fileName
                   << " already exists in the designated folder.\n";
