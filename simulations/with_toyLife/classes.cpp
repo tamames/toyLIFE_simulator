@@ -19,6 +19,8 @@ Agent::Agent(float energy, std::string genotype, int sizeGenotype, int parent,
 
         this->genotype = genotype;
     }
+    std::cout << "Llamamos al constructor de Agent\n";
+    std::cout << "El padre es: " << parent << "\n";
     this->energy = energy;
     this->age = 0;
     this->id = ID_COUNT;
@@ -715,6 +717,7 @@ void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
      * @param print If true it logs extra information.
      */
 
+    std::cout << "we call iteration " << generation << "\n";
     int sizeFood = food.size();
 
     // std::uniform_real_distribution<double> variationDist(
@@ -725,7 +728,7 @@ void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
     //     i.energy -= randomCost;
     // }
 
-    if ((sizePopulation > sizeFood) && print)
+    if ((sizePopulation > sizeFood))
         std::cout << "There is not enough food for everybody.\n";
 
     int smaller = std::min(sizePopulation, sizeFood);
@@ -776,15 +779,17 @@ void Population::afterIteration(float p) {
      *Then we check the ones that can reproduce and we reproduce them.
      * @param p The probability of mutation.
      */
-
+    std::cout << "we call afterIteration\n";
     std::vector<int> deadsPositions;  // store the indexes of the deads
 
     for (int i = 0; i < sizePopulation; ++i) {
         if (agents[i].checkDie())
             deadsPositions.push_back(i);
     }
+    std::cout << "hemos llamado a check die\n";
 
     deleteElements(agents, deadsPositions);
+    std::cout << "los matamos\n";
 
     std::vector<int>
         reproducePositions;  // store the indexes of the ones to reproduce
@@ -792,6 +797,7 @@ void Population::afterIteration(float p) {
         if (agents[i].checkEnergyReproduce())
             reproducePositions.push_back(i);
     }
+    std::cout << "hemos llamado a check reproduce\n";
 
     std::vector<Agent> newElements(reproducePositions.size() * 2, Agent(0));
     for (int i = 0; i < reproducePositions.size(); ++i) {
@@ -828,6 +834,7 @@ std::vector<std::string> Population::getGenotypes() {
 }
 
 std::vector<std::vector<std::string>> Population::getPopulationData() {
+    std::cout << "We call getPopulationData\n";
     std::vector<std::vector<std::string>> data(sizePopulation);
     for (int i = 0; i < sizePopulation; ++i)
         data[i] = agents[i].getAgentData();
@@ -840,6 +847,7 @@ std::vector<std::string> Population::getPopulationEnergy() {
      * This returns the maximum, average and minimun energy of the population at
      * that time.
      */
+    std::cout << "We call getPopulationEnergy\n";
     std::vector<float> energies(sizePopulation);
 
     std::vector<std::string> results(3);
