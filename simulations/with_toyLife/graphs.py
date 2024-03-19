@@ -1,6 +1,7 @@
 """In this file we define some python functions to study the data generated with the C++ code."""
 
 from pathlib import Path
+import os
 
 import matplotlib.pyplot as plt
 import matplotlib.figure as mplf  # just for type hints
@@ -241,6 +242,17 @@ def sizes_plot(df: pd.DataFrame) -> mplf.Figure:
     ax.set_ylabel("Size")
     ax.set_title("Size of the Population")
     return fig
+
+
+def check_for_plots():
+    """This function checks every simulation_ folder to see if we have already create the graphs for the data of that simulation."""
+
+    data_folder = Path("simulations\\with_toyLife\\data")
+    for sim_folder in os.listdir(data_folder):
+        sim_folder_path = data_folder / sim_folder
+        graph_folder_path = data_folder / sim_folder / "graphs"
+        if not graph_folder_path.is_dir():
+            yield sim_folder_path
 
 
 def main() -> None:
