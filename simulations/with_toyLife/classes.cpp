@@ -19,8 +19,6 @@ Agent::Agent(float energy, std::string genotype, int sizeGenotype, int parent,
 
         this->genotype = genotype;
     }
-    std::cout << "Llamamos al constructor de Agent\n";
-    std::cout << "El padre es: " << parent << "\n";
     this->energy = energy;
     this->age = 0;
     this->id = ID_COUNT;
@@ -644,8 +642,6 @@ std::pair<Agent, Agent> divide(Agent parent, float p) {
     std::string genotype1 = mutate(parent.genotype, p);
     std::string genotype2 = mutate(parent.genotype, p);
 
-    std::cout << "The parent id: " << parent.id << std::endl;
-
     Agent child1(energyC, genotype1, parent.id);
     Agent child2(energyC, genotype2, parent.id);
 
@@ -717,7 +713,6 @@ void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
      * @param print If true it logs extra information.
      */
 
-    std::cout << "we call iteration " << generation << "\n";
     int sizeFood = food.size();
 
     // std::uniform_real_distribution<double> variationDist(
@@ -779,17 +774,14 @@ void Population::afterIteration(float p) {
      *Then we check the ones that can reproduce and we reproduce them.
      * @param p The probability of mutation.
      */
-    std::cout << "we call afterIteration\n";
     std::vector<int> deadsPositions;  // store the indexes of the deads
 
     for (int i = 0; i < sizePopulation; ++i) {
         if (agents[i].checkDie())
             deadsPositions.push_back(i);
     }
-    std::cout << "hemos llamado a check die\n";
 
     deleteElements(agents, deadsPositions);
-    std::cout << "los matamos\n";
 
     std::vector<int>
         reproducePositions;  // store the indexes of the ones to reproduce
@@ -797,18 +789,19 @@ void Population::afterIteration(float p) {
         if (agents[i].checkEnergyReproduce())
             reproducePositions.push_back(i);
     }
-    std::cout << "hemos llamado a check reproduce\n";
-
-    std::vector<Agent> newElements(reproducePositions.size() * 2, Agent(0));
-    for (int i = 0; i < reproducePositions.size(); ++i) {
-        std::pair<Agent, Agent> children =
-            divide(agents[reproducePositions[i]], p);
-        newElements[i * 2] = children.first;
-        newElements[i * 2 + 1] = children.second;
+    if (!reproducePositions.empty()) {
+        // if not empty
+        std::vector<Agent> newElements(reproducePositions.size() * 2, Agent(0));
+        for (int i = 0; i < reproducePositions.size(); ++i) {
+            std::pair<Agent, Agent> children =
+                divide(agents[reproducePositions[i]], p);
+            newElements[i * 2] = children.first;
+            newElements[i * 2 + 1] = children.second;
+        }
+        deleteElements(agents, reproducePositions);
+        agents.insert(agents.end(), newElements.begin(), newElements.end());
     }
 
-    deleteElements(agents, reproducePositions);
-    agents.insert(agents.end(), newElements.begin(), newElements.end());
     this->sizePopulation = agents.size();  // update the size of the population
 }
 
@@ -834,7 +827,6 @@ std::vector<std::string> Population::getGenotypes() {
 }
 
 std::vector<std::vector<std::string>> Population::getPopulationData() {
-    std::cout << "We call getPopulationData\n";
     std::vector<std::vector<std::string>> data(sizePopulation);
     for (int i = 0; i < sizePopulation; ++i)
         data[i] = agents[i].getAgentData();
@@ -847,7 +839,6 @@ std::vector<std::string> Population::getPopulationEnergy() {
      * This returns the maximum, average and minimun energy of the population at
      * that time.
      */
-    std::cout << "We call getPopulationEnergy\n";
     std::vector<float> energies(sizePopulation);
 
     std::vector<std::string> results(3);
