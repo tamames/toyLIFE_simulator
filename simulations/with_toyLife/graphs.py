@@ -247,14 +247,123 @@ def sizes_plot(df: pd.DataFrame) -> mplf.Figure:
 
 
 def check_for_plots():
-    """This function checks every simulation_ folder to see if we have already create the graphs for the data of that simulation."""
+    """This function checks every simulation_ folder to see if we have
+    already create the graphs for the data of that simulation."""
 
     data_folder = Path("simulations\\with_toyLife\\data")
     for sim_folder in os.listdir(data_folder):
+
         sim_folder_path = data_folder / sim_folder
         graph_folder_path = data_folder / sim_folder / "graphs"
+
         if not graph_folder_path.is_dir():
             yield sim_folder_path
+
+
+def get_energy_to_reproduce(data_path: Path) -> str:
+    """Reads the Readme.md inside the folder_path and extracts the
+    energy to reproduce parameter.
+
+    Args:
+        data_path (Path): the data folder we are looking at.
+
+    Returns:
+        str: the energy to reproduce
+    """
+    if not (data_path / "Readme.md").exists():
+        raise FileNotFoundError(f"The Readme file doesn't exists in {data_path=}.")
+
+    with open(data_path / "Readme.md", "r") as readme:
+        for line in readme:
+            if "Energy to reproduce" in line:
+                return line.split(" ")[-1].strip()
+
+    raise ValueError(f"The energy to reproduce parameter wasn't found in {data_path=}")
+
+
+#### DF FUNCTIONS ####
+
+
+def get_total_df(data_path: Path) -> pd.DataFrame:
+    """Returns the total DataFrame from the data_path.
+
+    Args:
+        data_path (Path): the path to the data folder we are looking at.
+
+    Raises:
+        FileNotFoundError: in case the total file doesn't exists.
+
+    Returns:
+        pd.DataFrame: a pandas DataFrame with the total data.
+    """
+    if not (data_path / "total.csv").exists():
+        raise FileNotFoundError(f"The total file doesn't exists in {data_path=}")
+
+    return pd.read_csv(
+        data_path / "total.csv",
+        sep=";",
+        header=0,
+        index_col=False,
+        dtype={
+            "ID": int,
+            "Genotype": str,
+            "Energy": float,
+            "Age": int,
+            "Parent": int,
+            "Prots": str,
+            "Mets": str,
+            "Dims": str,
+            "Iteration": str,
+        },
+    )
+
+
+def get_energy_df(data_path: Path) -> pd.DataFrame:
+    """Returns the energies DataFrame from the data_path.
+
+    Args:
+        data_path (Path): the path to the data folder we are looking at.
+
+    Raises:
+        FileNotFoundError: in case the energies file doesn't exists.
+
+    Returns:
+        pd.DataFrame: a pandas DataFrame with the energies data.
+    """
+    if not (data_path / "energies.csv").exists():
+        raise FileNotFoundError(f"The energies file doesn't exists in {data_path=}")
+
+    return pd.read_csv(
+        data_path / "energies.csv",
+        sep=",",
+        header=0,
+        index_col=False,
+        dtype={"Max": float, "Average": float, "Min": float},
+    )
+
+
+def get_sizes_df(data_path: Path) -> pd.DataFrame:
+    """Returns the energies DataFrame from the data_path.
+
+    Args:
+        data_path (Path): the path to the data folder we are looking at.
+
+    Raises:
+        FileNotFoundError: in case the sizes file doesn't exists.
+
+    Returns:
+        pd.DataFrame: a pandas DataFrame with the sizes data.
+    """
+    if not (data_path / "sizes.csv").exists():
+        raise FileNotFoundError(f"The sizes file doesn't exists in {data_path=}")
+
+    return pd.read_csv(
+        data_path / "sizes.csv",
+        sep=",",
+        header=0,
+        index_col=False,
+        dtype={"Size": float},
+    )
 
 
 def main() -> None:
