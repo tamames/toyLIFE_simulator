@@ -442,7 +442,7 @@ std::string createDataDirectory() {
     return path;
 }
 
-void createReadMe(int numberOfGenerations, int initialPopulationSize) {
+void createReadMe(int numberOfGenerations, int initPopulationSize) {
     /**
      * Creates and fill the ReadMe file inside the data directory
      */
@@ -461,17 +461,18 @@ void createReadMe(int numberOfGenerations, int initialPopulationSize) {
         exit(EXIT_FAILURE);
     }
     file << "## Params of the simulation: \n";
-    file << "\tNumber of generations &rarr " << numberOfGenerations << "\n"
-         << "\tInitial population size &rarr " << initialPopulationSize << "\n"
-         << "\tEnergy to reproduce &rarr " << ENERGY_TO_REPRODUCE << "\n"
-         << "\tEnergy to die &rarr " << ENERGY_TO_DIE << "\n"
-         << "\tAge to die &rarr " << AGE_TO_DIE << "\n"
-         << "\tTranslation energy &rarr " << TRANSLATION_ENERGY << "\n"
-         << "\tBreaking energy &rarr " << BREAKING_ENERGY << "\n"
-         << "\tSample size &rarr " << SAMPLE_SIZE << "\n"
-         << "\tSize of the genotype &rarr " << SIZE_GENOTYPE << "\n"
-         << "\tFood size &rarr " << FOOD_SIZE << "\n"
-         << "\tControl &rarr " << CONTROL << "\n";
+    file << "* **Number of generations** &rarr; " << numberOfGenerations << "\n"
+         << "* **Initial population size** &rarr; " << initPopulationSize
+         << "\n"
+         << "* **Energy to reproduce** &rarr; " << ENERGY_TO_REPRODUCE << "\n"
+         << "* **Energy to die** &rarr; " << ENERGY_TO_DIE << "\n"
+         << "* **Age to die** &rarr; " << AGE_TO_DIE << "\n"
+         << "* **Translation energy** &rarr; " << TRANSLATION_ENERGY << "\n"
+         << "* **Breaking energy** &rarr; " << BREAKING_ENERGY << "\n"
+         << "* **Sample size** &rarr; " << SAMPLE_SIZE << "\n"
+         << "* **Size of the genotype** &rarr; " << SIZE_GENOTYPE << "\n"
+         << "* **Food size** &rarr; " << FOOD_SIZE << "\n"
+         << "* **Control** &rarr; " << CONTROL << "\n";
 }
 
 std::string fromMapToString(mapa_prot& mapa) {
