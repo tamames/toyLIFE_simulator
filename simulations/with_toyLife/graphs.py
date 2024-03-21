@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.figure as mplf  # just for type hints
 import pandas as pd
 
-DIR_PATH = Path("simulations/with_toyLife/graphs")
+FIG_SIZE = (10, 6)
 
 
 def get_df(file: str) -> pd.DataFrame:
@@ -99,7 +99,7 @@ def bar_only_1(df: pd.DataFrame) -> mplf.Figure:
     df["1s Ratio"] = df["Total 1s"] / df["Total Elements"]
 
     # Create a new figure
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
 
     # Create the bar plot
     ax.bar(df["Generation"], df["1s Ratio"], color="b", alpha=0.7)
@@ -118,7 +118,7 @@ def stackplot_1_0(df: pd.DataFrame) -> tuple[mplf.Figure, str]:
     df["0s Ratio"] = 1 - df["1s Ratio"]
 
     # Create a new figure
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
 
     # Create the stacked area plot
     ax.stackplot(
@@ -156,7 +156,7 @@ def food_histogram(df: pd.DataFrame) -> tuple[mplf.Figure, str]:
     df["0s Count"] = size - df["1s Count"]
 
     # Create a histogram for 0s count
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
 
     # Create a histogram for the count of 1s
     bins = range(size + 1)  # Create bins from 0 to size
@@ -191,35 +191,37 @@ def get_fig_name(source_name: str, plot_type: str) -> str:
     return f"{plot_type}_{source_name[:4]}_{control}"
 
 
-def energy_plot(df: pd.DataFrame, file_name: str) -> mplf.Figure:
-    """Creates a line plot with the maximum, average an minimum energy of the population.
-    It also plots a constant line representing the energy to reproduce parameter.
+def energy_plot(data_path: Path, plot_reproduce: bool = False) -> mplf.Figure:
+    """This plot correspond to the max, min and average energy of the population at each generation.
 
     Args:
-        df (pd.DataFrame): the energy dataframe
-        file_name (str): the name of the file to obtain the energy to reproduce. The pattern is energy_ENERGY2REPRODUCE_X_X.csv
+        data_path (Path): the data path where the data is stored.
+        plot_reproduce (bool, optional): whether to plot the energy to reproduce or not. Defaults to False.
 
     Returns:
-        mplf.Figure: plot
-
+        mplf.Figure: the plot with the energy data.
     """
-    energy_to_reproduce = file_name.split("_")[1]
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
+
+    if plot_reproduce:
+        energy_to_reproduce = get_energy_to_reproduce(data_path)
+        ax.axhline(
+            y=int(energy_to_reproduce),
+            color="k",
+            linestyle="--",
+            label="Energy to Reproduce",
+        )
+
+    df = get_energy_df(data_path)
 
     # Create the line plot
     ax.plot(df["Max"], color="r", label="Max Energy")
     ax.plot(df["Average"], color="g", label="Average Energy")
     ax.plot(df["Min"], color="b", label="Min Energy")
-    ax.axhline(
-        y=int(energy_to_reproduce),
-        color="k",
-        linestyle="--",
-        label="Energy to Reproduce",
-    )
 
     ax.set_xlabel("Generation")
     ax.set_ylabel("Energy")
-    ax.set_title("Energy of the Population")
+    ax.set_title("Energy of the population across each generation.")
     ax.legend()
     return fig
 
@@ -233,7 +235,7 @@ def sizes_plot(df: pd.DataFrame) -> mplf.Figure:
     Returns:
         mplf.Figure:
     """
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
 
     # Create the line plot
     ax.plot(df["Size"], color="b", label="Population Size")
