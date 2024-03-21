@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.figure as mplf  # just for type hints
 import pandas as pd
 
+DIR_PATH = Path("simulations/with_toyLife/graphs")
 FIG_SIZE = (10, 6)
 
 
@@ -226,15 +227,19 @@ def energy_plot(data_path: Path, plot_reproduce: bool = False) -> mplf.Figure:
     return fig
 
 
-def sizes_plot(df: pd.DataFrame) -> mplf.Figure:
+def sizes_plot(data_path: Path) -> mplf.Figure:
     """This function creates a simple line plot with the size of the population at each generation.
 
     Args:
-        df (pd.DataFrame): It's only one column with the size of each generation.
+        data_path (Path): It's only one column with the size of each generation.
 
     Returns:
         mplf.Figure:
     """
+    check_file_exists(data_path / "sizes.csv")
+
+    df = get_sizes_df(data_path)
+
     fig, ax = plt.subplots(figsize=FIG_SIZE)
 
     # Create the line plot
@@ -244,6 +249,16 @@ def sizes_plot(df: pd.DataFrame) -> mplf.Figure:
     ax.set_ylabel("Size")
     ax.set_title("Size of the Population")
     return fig
+
+
+#### UTILS FUNCTIONS ####
+
+
+def check_file_exists(file_path: Path) -> None:
+    if not file_path.exists():
+        raise FileNotFoundError(
+            f"The file {file_path.name} doesn't exists in {file_path.parent}."
+        )
 
 
 def check_for_plots():
@@ -270,8 +285,7 @@ def get_energy_to_reproduce(data_path: Path) -> str:
     Returns:
         str: the energy to reproduce
     """
-    if not (data_path / "Readme.md").exists():
-        raise FileNotFoundError(f"The Readme file doesn't exists in {data_path=}.")
+    check_file_exists(data_path / "Readme.md")
 
     with open(data_path / "Readme.md", "r") as readme:
         for line in readme:
@@ -296,8 +310,7 @@ def get_total_df(data_path: Path) -> pd.DataFrame:
     Returns:
         pd.DataFrame: a pandas DataFrame with the total data.
     """
-    if not (data_path / "total.csv").exists():
-        raise FileNotFoundError(f"The total file doesn't exists in {data_path=}")
+    check_file_exists(data_path / "total.csv")
 
     return pd.read_csv(
         data_path / "total.csv",
@@ -330,8 +343,7 @@ def get_energy_df(data_path: Path) -> pd.DataFrame:
     Returns:
         pd.DataFrame: a pandas DataFrame with the energies data.
     """
-    if not (data_path / "energies.csv").exists():
-        raise FileNotFoundError(f"The energies file doesn't exists in {data_path=}")
+    check_file_exists(data_path / "energies.csv")
 
     return pd.read_csv(
         data_path / "energies.csv",
@@ -354,8 +366,7 @@ def get_sizes_df(data_path: Path) -> pd.DataFrame:
     Returns:
         pd.DataFrame: a pandas DataFrame with the sizes data.
     """
-    if not (data_path / "sizes.csv").exists():
-        raise FileNotFoundError(f"The sizes file doesn't exists in {data_path=}")
+    check_file_exists(data_path / "sizes.csv")
 
     return pd.read_csv(
         data_path / "sizes.csv",
@@ -366,18 +377,11 @@ def get_sizes_df(data_path: Path) -> pd.DataFrame:
     )
 
 
-def main() -> None:
-    file_name = "sizes_0_5.csv"
+#### MAIN FUNCTION ####
 
-    df = get_df(file_name)
-    # fig1 = energy_plot(df, file_name)
-    fig1 = sizes_plot(df)
-    # fig1.show()
-    # a = input("Press Enter to continue...")
-    # print(df.head())
-    plot_name = "sizes_0_5"
-    description = "Sizes of the population of the plot energyPlot_15_0_5."
-    save_and_write(fig1, plot_name, description)
+
+def main() -> None:
+    pass
 
 
 if __name__ == "__main__":
