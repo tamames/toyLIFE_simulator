@@ -1,8 +1,8 @@
 """In this file we put the functions related with getting the data frames for statistics and graphs"""
 
-import pandas as pd
 from pathlib import Path
 
+import pandas as pd
 from general_functions import check_file_exists
 
 

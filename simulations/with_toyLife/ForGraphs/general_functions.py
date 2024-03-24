@@ -1,4 +1,5 @@
 from pathlib import Path
+import operations as op
 
 
 def check_file_exists(file_path: Path) -> None:
@@ -26,3 +27,16 @@ def get_energy_to_reproduce(data_path: Path) -> str:
                 return line.split(" ")[-1].strip()
 
     raise ValueError(f"The energy to reproduce parameter wasn't found in {data_path=}")
+
+
+def write_food_data(data_path: Path, food_data: op.FoodData) -> None:
+    """Writes the food data into the Readme.md file.
+
+    Args:
+        data_path (Path): the data folder we are looking at.
+        food (int): the food parameter.
+    """
+
+    with open(data_path / "Readme.md", "a") as readme:
+        readme.write("---\r\n")
+        readme.write("## Food Data\r\n")

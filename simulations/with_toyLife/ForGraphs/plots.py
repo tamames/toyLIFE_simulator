@@ -1,10 +1,10 @@
-import matplotlib.pyplot as plt
-import matplotlib.figure as mplf  # just for type hints
 from pathlib import Path
 
-from general_functions import get_energy_to_reproduce
 import data_frames as fdf
+import matplotlib.figure as mplf  # just for type hints
+import matplotlib.pyplot as plt
 from config import FIG_SIZE
+from general_functions import get_energy_to_reproduce
 
 
 def energy_plot(data_path: Path, plot_reproduce: bool = False) -> mplf.Figure:
