@@ -14,8 +14,9 @@ int main() {
     int numberOfGenerations = 50;
     int tenPercent = numberOfGenerations / 10;
     int initialPopulationSize = 10;
+    int foodSize = 5000;
 
-    createReadMe(numberOfGenerations, initialPopulationSize);
+    createReadMe(numberOfGenerations, initialPopulationSize, foodSize);
 
     Population population(initialPopulationSize);
     // population.print(true);
@@ -32,7 +33,9 @@ int main() {
         population.getPopulationData();
     populationWriting(dataOfSimulation, 0, dataDirectory);
 
-    std::vector<std::string> food = listOfFood(5000);
+    std::vector<std::string> food = listOfFood(foodSize);
+
+    foodWriting(food, dataDirectory);
 
     for (int i = 1; i <= numberOfGenerations; ++i) {
         // maybe we can add the functionality of loosing energy due to the

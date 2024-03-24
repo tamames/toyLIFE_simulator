@@ -52,11 +52,14 @@ void writeResults(std::string fileName, std::string folder_path,
 void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
                        int iteration, std::string folder_path);
 
+void foodWriting(std::vector<std::string> foodList, std::string folderPath);
+
 int getNumberOfSimulation();
 void increaseNumberOfSimulation();
 
 std::string createDataDirectory();
-void createReadMe(int numberOfGenerations, int initialPopulationSize);
+void createReadMe(int numberOfGenerations, int initialPopulationSize,
+                  int foodSize);
 
 std::string fromMapToString(mapa_prot& mapa);
 std::string fromMapToString(mapa_met& mapa);

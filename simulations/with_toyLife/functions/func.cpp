@@ -268,7 +268,7 @@ std::vector<std::string> sampleFood(std::vector<std::string>& food,
     return out;
 }
 
-void writeResults(std::string fileName, std::string folder_path,
+void writeResults(std::string fileName, std::string folderPath,
                   std::vector<std::string> headers,
                   std::vector<std::vector<std::string>> results) {
     /**
@@ -294,7 +294,7 @@ void writeResults(std::string fileName, std::string folder_path,
 
     // Now we deal with the results file.
     // We check if the file already exists, so we don't lose any data.
-    std::string total_path = folder_path + "\\" + fileName + ".csv";
+    std::string total_path = folderPath + "\\" + fileName + ".csv";
     if (std::filesystem::exists(total_path)) {
         std::cout << "The file " << fileName
                   << " already exists in the designated folder.\n";
@@ -393,6 +393,27 @@ void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
     myFile.close();
 }
 
+void foodWriting(std::vector<std::string> foodList, std::string folderPath) {
+    /** Writes all the food into a file just to plot a histogram of the
+     * distribution I had an idea about plotting the food but I am realizing
+     * that this can also be used to plot the genotypes
+     *
+     * @param foodList The list of food or genotypes that we want to write.
+     */
+
+    // First we have to past from a vector of strings to a vector of vectors of
+    // strings
+    std::vector<std::vector<std::string>> foodList2D;
+    foodList2D.reserve(foodList.size());
+    for (const std::string& food : foodList) {
+        std::vector<std::string> food2D = {food};
+        foodList2D.push_back(food2D);
+    }
+
+    // Now we write the results
+    writeResults("food_total", folderPath, {"Binary"}, foodList2D);
+}
+
 int getNumberOfSimulation() {
     /**
      * Read the simulations\with_toyLife\functions\number_of_simulation.txt file
@@ -442,7 +463,8 @@ std::string createDataDirectory() {
     return path;
 }
 
-void createReadMe(int numberOfGenerations, int initPopulationSize) {
+void createReadMe(int numberOfGenerations, int initPopulationSize,
+                  int foodSize) {
     /**
      * Creates and fill the ReadMe file inside the data directory
      */
@@ -472,7 +494,8 @@ void createReadMe(int numberOfGenerations, int initPopulationSize) {
          << "* **Sample size** &rarr; " << SAMPLE_SIZE << "\n"
          << "* **Size of the genotype** &rarr; " << SIZE_GENOTYPE << "\n"
          << "* **Food size** &rarr; " << FOOD_SIZE << "\n"
-         << "* **Control** &rarr; " << CONTROL << "\n";
+         << "* **Control** &rarr; " << CONTROL << "\n"
+         << "* **Food Size** &rarr; " << foodSize << "\n";
 }
 
 std::string fromMapToString(mapa_prot& mapa) {
