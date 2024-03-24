@@ -83,3 +83,26 @@ def get_sizes_df(data_path: Path) -> pd.DataFrame:
         index_col=False,
         dtype={"Size": float},
     )
+
+
+def get_food_df(data_path: Path) -> pd.DataFrame:
+    """Returns the food DataFrame from the data_path.
+
+    Args:
+        data_path (Path): the path to the data folder we are looking at.
+
+    Raises:
+        FileNotFoundError: in case the food file doesn't exists.
+
+    Returns:
+        pd.DataFrame: a pandas DataFrame with the food data.
+    """
+    check_file_exists(data_path / "food_total.csv")
+
+    return pd.read_csv(
+        data_path / "food_total.csv",
+        sep=",",
+        header=0,
+        index_col=False,
+        dtype={"Binary": float},
+    )
