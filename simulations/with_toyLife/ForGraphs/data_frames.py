@@ -12,9 +12,6 @@ def get_total_df(data_path: Path) -> pd.DataFrame:
     Args:
         data_path (Path): the path to the data folder we are looking at.
 
-    Raises:
-        FileNotFoundError: in case the total file doesn't exists.
-
     Returns:
         pd.DataFrame: a pandas DataFrame with the total data.
     """
@@ -45,9 +42,6 @@ def get_energy_df(data_path: Path) -> pd.DataFrame:
     Args:
         data_path (Path): the path to the data folder we are looking at.
 
-    Raises:
-        FileNotFoundError: in case the energies file doesn't exists.
-
     Returns:
         pd.DataFrame: a pandas DataFrame with the energies data.
     """
@@ -68,9 +62,6 @@ def get_sizes_df(data_path: Path) -> pd.DataFrame:
     Args:
         data_path (Path): the path to the data folder we are looking at.
 
-    Raises:
-        FileNotFoundError: in case the sizes file doesn't exists.
-
     Returns:
         pd.DataFrame: a pandas DataFrame with the sizes data.
     """
@@ -90,9 +81,6 @@ def get_food_df(data_path: Path) -> pd.DataFrame:
 
     Args:
         data_path (Path): the path to the data folder we are looking at.
-
-    Raises:
-        FileNotFoundError: in case the food file doesn't exists.
 
     Returns:
         pd.DataFrame: a pandas DataFrame with the food data.
