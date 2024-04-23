@@ -92,5 +92,5 @@ def get_food_df(data_path: Path) -> pd.DataFrame:
         sep=",",
         header=0,
         index_col=False,
-        dtype={"Binary": float},
+        dtype={"Binary": str},
     )

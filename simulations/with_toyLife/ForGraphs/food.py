@@ -38,8 +38,7 @@ def food_statistics(dir_path: Path) -> FoodData:
         FoodData: a dataclass with the food data.
     """
     df = get_food_df(dir_path)
-
-    food_len = len(df[0].iloc[0])
+    food_len = len(df.iloc[0]["Binary"])
     amount_of_food = len(df)
 
     total_slots = food_len * amount_of_food
@@ -59,3 +58,9 @@ def food_statistics(dir_path: Path) -> FoodData:
         mean_of_1=mean_of_1,
         percentage_of_1=percentage_of_1,
     )
+
+
+if __name__ == "__main__":
+    folder_path = Path("simulations\\with_toyLife\\data\\simulation_9")
+    df_food = food_statistics(folder_path)
+    write_food_data(folder_path, df_food)
