@@ -102,8 +102,11 @@ def main(data_path: Path) -> None:
 
     energy_fig = energy_plot(data_path)
     save_fig(energy_fig, PlotType.ENERGY, graph_folder)
+    plt.close(energy_fig)
     energy_fig = energy_plot(data_path, plot_reproduce=True)
     save_fig(energy_fig, PlotType.ENERGY, graph_folder, extra_name="reproduce")
+    plt.close(energy_fig)
 
     sizes_fig = sizes_plot(data_path)
     save_fig(sizes_fig, PlotType.SIZES, graph_folder)
+    plt.close(energy_fig)

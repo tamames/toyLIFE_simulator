@@ -61,5 +61,9 @@ def food_statistics(folder_path: Path) -> _FoodData:
 
 
 def main(folder_path: Path) -> None:
-    food_object = food_statistics(folder_path)
+    try:
+        food_object = food_statistics(folder_path)
+    except FileNotFoundError:
+        # this simulation didn't have a food.csv file yet
+        return
     write_food_data(folder_path, food_object)

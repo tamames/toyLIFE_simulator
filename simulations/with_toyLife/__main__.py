@@ -60,7 +60,6 @@ def main() -> None:
     for folder_to_process in check_folders():
         create_graph_folder(folder_to_process)
         food.main(folder_to_process)
-        create_graph_folder(folder_to_process)
         plots.main(folder_to_process)
 
 
