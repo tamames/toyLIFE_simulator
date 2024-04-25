@@ -1,6 +1,6 @@
 from pathlib import Path
 
-DIR_PATH = Path("simulations/with_toyLife/graphs")
+DATA_PATH = Path("simulations/with_toyLife/data")
 
 
 FIG_SIZE = (10, 6)

@@ -3,7 +3,7 @@
 from pathlib import Path
 
 import pandas as pd
-from general_functions import check_file_exists
+from ForGraphs.general_functions import check_file_exists
 
 
 def get_total_df(data_path: Path) -> pd.DataFrame:

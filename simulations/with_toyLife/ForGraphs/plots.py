@@ -1,10 +1,18 @@
 from pathlib import Path
+from enum import Enum
 
-import data_frames as fdf
+import ForGraphs.data_frames as fdf
 import matplotlib.figure as mplf  # just for type hints
 import matplotlib.pyplot as plt
-from config import FIG_SIZE
-from general_functions import get_energy_to_reproduce
+from ForGraphs.config import FIG_SIZE
+from ForGraphs.general_functions import get_energy_to_reproduce
+
+
+class PlotType(Enum):
+    """This enum is used to define the different types of plots that can be created."""
+
+    ENERGY = "energy"
+    SIZES = "sizes"
 
 
 def energy_plot(data_path: Path, plot_reproduce: bool = False) -> mplf.Figure:
@@ -63,3 +71,39 @@ def sizes_plot(data_path: Path) -> mplf.Figure:
     ax.set_ylabel("Size")
     ax.set_title("Size of the Population")
     return fig
+
+
+def save_fig(
+    fig: mplf.Figure, plot_type: PlotType, graph_folder: Path, extra_name: str = ""
+) -> None:
+    """This function saves the figure in the corresponding folder.
+
+    Args:
+        fig (mplf.Figure): the figure to save.
+        plot_type (PlotType): the type of plot we are saving.
+        graph_folder (Path): the path to the data folder.
+    """
+    fig_name = (
+        f"{plot_type.value}_{extra_name}.pdf"
+        if extra_name
+        else f"{plot_type.value}.pdf"
+    )
+    fig_path = graph_folder / fig_name
+    fig.savefig(str(fig_path), format="pdf", bbox_inches="tight")
+
+
+def main(data_path: Path) -> None:
+    """This is the main function that generates the plots for the data in the data_path.
+
+    Args:
+        data_path (Path): the path to the data folder.
+    """
+    graph_folder = data_path / "graphs"
+
+    energy_fig = energy_plot(data_path)
+    save_fig(energy_fig, PlotType.ENERGY, graph_folder)
+    energy_fig = energy_plot(data_path, plot_reproduce=True)
+    save_fig(energy_fig, PlotType.ENERGY, graph_folder, extra_name="reproduce")
+
+    sizes_fig = sizes_plot(data_path)
+    save_fig(sizes_fig, PlotType.SIZES, graph_folder)
