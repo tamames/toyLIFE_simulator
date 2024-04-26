@@ -6,19 +6,19 @@ import pandas as pd
 from ForGraphs.general_functions import check_file_exists
 
 
-def get_total_df(data_path: Path) -> pd.DataFrame:
-    """Returns the total DataFrame from the data_path.
+def get_total_df(data_folder_path: Path) -> pd.DataFrame:
+    """Returns the total DataFrame from the data_folder_path.
 
     Args:
-        data_path (Path): the path to the data folder we are looking at.
+        data_folder_path (Path): the path to the data folder we are looking at.
 
     Returns:
         pd.DataFrame: a pandas DataFrame with the total data.
     """
-    check_file_exists(data_path / "total.csv")
+    check_file_exists(data_folder_path / "total.csv")
 
     return pd.read_csv(
-        data_path / "total.csv",
+        data_folder_path / "total.csv",
         sep=";",
         header=0,
         index_col=False,
@@ -36,19 +36,19 @@ def get_total_df(data_path: Path) -> pd.DataFrame:
     )
 
 
-def get_energy_df(data_path: Path) -> pd.DataFrame:
-    """Returns the energies DataFrame from the data_path.
+def get_energy_df(data_folder_path: Path) -> pd.DataFrame:
+    """Returns the energies DataFrame from the data_folder_path.
 
     Args:
-        data_path (Path): the path to the data folder we are looking at.
+        data_folder_path (Path): the path to the data folder we are looking at.
 
     Returns:
         pd.DataFrame: a pandas DataFrame with the energies data.
     """
-    check_file_exists(data_path / "energies.csv")
+    check_file_exists(data_folder_path / "energies.csv")
 
     return pd.read_csv(
-        data_path / "energies.csv",
+        data_folder_path / "energies.csv",
         sep=",",
         header=0,
         index_col=False,
@@ -56,19 +56,19 @@ def get_energy_df(data_path: Path) -> pd.DataFrame:
     )
 
 
-def get_sizes_df(data_path: Path) -> pd.DataFrame:
-    """Returns the energies DataFrame from the data_path.
+def get_sizes_df(data_folder_path: Path) -> pd.DataFrame:
+    """Returns the energies DataFrame from the data_folder_path.
 
     Args:
-        data_path (Path): the path to the data folder we are looking at.
+        data_folder_path (Path): the path to the data folder we are looking at.
 
     Returns:
         pd.DataFrame: a pandas DataFrame with the sizes data.
     """
-    check_file_exists(data_path / "sizes.csv")
+    check_file_exists(data_folder_path / "sizes.csv")
 
     return pd.read_csv(
-        data_path / "sizes.csv",
+        data_folder_path / "sizes.csv",
         sep=",",
         header=0,
         index_col=False,
@@ -76,19 +76,19 @@ def get_sizes_df(data_path: Path) -> pd.DataFrame:
     )
 
 
-def get_food_df(data_path: Path) -> pd.DataFrame:
-    """Returns the food DataFrame from the data_path.
+def get_food_df(data_folder_path: Path) -> pd.DataFrame:
+    """Returns the food DataFrame from the data_folder_path.
 
     Args:
-        data_path (Path): the path to the data folder we are looking at.
+        data_folder_path (Path): the path to the data folder we are looking at.
 
     Returns:
         pd.DataFrame: a pandas DataFrame with the food data.
     """
-    check_file_exists(data_path / "food_total.csv")
+    check_file_exists(data_folder_path / "food_total.csv")
 
     return pd.read_csv(
-        data_path / "food_total.csv",
+        data_folder_path / "food_total.csv",
         sep=",",
         header=0,
         index_col=False,

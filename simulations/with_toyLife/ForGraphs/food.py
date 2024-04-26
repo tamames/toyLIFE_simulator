@@ -13,22 +13,22 @@ class _FoodData:
     percentage_of_1: float
 
 
-def write_food_data(folder_path: Path, food_data: _FoodData) -> None:
+def _write_food_data(data_folder_path: Path, food_data: _FoodData) -> None:
     """Writes the food data into the Readme.md file.
 
     Args:
-        folder_path (Path): the data folder we are looking at.
+        data_folder_path (Path): the data folder we are looking at.
         food (int): the food parameter.
     """
 
-    with open(folder_path / "Readme.md", "a") as readme:
+    with open(data_folder_path / "Readme.md", "a") as readme:
         readme.write("---  \n")
         readme.write("## Food Data  \n")
         for key, value in food_data.__dict__.items():
             readme.write(f"{key} = {value}  \n")
 
 
-def food_statistics(folder_path: Path) -> _FoodData:
+def _food_statistics(data_folder_path: Path) -> _FoodData:
     """This function reads the food.csv file and returns the data in a _FoodData object.
 
     Args:
@@ -37,7 +37,7 @@ def food_statistics(folder_path: Path) -> _FoodData:
     Returns:
         _FoodData: a dataclass with the food data.
     """
-    df = get_food_df(folder_path)
+    df = get_food_df(data_folder_path)
     food_len = len(df.iloc[0]["Binary"])
     amount_of_food = len(df)
 
@@ -60,10 +60,10 @@ def food_statistics(folder_path: Path) -> _FoodData:
     )
 
 
-def main(folder_path: Path) -> None:
+def main(data_folder_path: Path) -> None:
     try:
-        food_object = food_statistics(folder_path)
+        food_object = _food_statistics(data_folder_path)
     except FileNotFoundError:
         # this simulation didn't have a food.csv file yet
         return
-    write_food_data(folder_path, food_object)
+    _write_food_data(data_folder_path, food_object)

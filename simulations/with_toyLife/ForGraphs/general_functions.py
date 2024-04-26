@@ -16,21 +16,23 @@ def check_file_exists(file_path: Path) -> None:
         )
 
 
-def get_energy_to_reproduce(data_path: Path) -> str:
-    """Reads the Readme.md inside the folder_path and extracts the
+def get_energy_to_reproduce(data_folder_path: Path) -> str:
+    """Reads the Readme.md inside the data_folder_path and extracts the
     energy to reproduce parameter.
 
     Args:
-        data_path (Path): the data folder we are looking at.
+        data_folder_path (Path): the data folder we are looking at.
 
     Returns:
         str: the energy to reproduce
     """
-    check_file_exists(data_path / "Readme.md")
+    check_file_exists(data_folder_path / "Readme.md")
 
-    with open(data_path / "Readme.md", "r") as readme:
+    with open(data_folder_path / "Readme.md", "r") as readme:
         for line in readme:
             if "Energy to reproduce" in line:
                 return line.split(" ")[-1].strip()
 
-    raise ValueError(f"The energy to reproduce parameter wasn't found in {data_path=}")
+    raise ValueError(
+        f"The energy to reproduce parameter wasn't found in {data_folder_path=}"
+    )

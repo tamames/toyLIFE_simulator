@@ -28,13 +28,13 @@ def check_folders() -> Generator[Path, None, None]:
             yield Path(config.DATA_PATH / folder)
 
 
-def create_graph_folder(folder_path: Path) -> None:
-    """Creates the graphs folder inside the folder_path.
+def create_graph_folder(data_folder_path: Path) -> None:
+    """Creates the graphs folder inside the data_folder_path.
 
     Args:
-        folder_path (Path): the path to the folder where we are going to create the graphs folder.
+        data_folder_path (Path): the path to the folder where we are going to create the graphs folder.
     """
-    graph_folder = folder_path / "graphs"
+    graph_folder = data_folder_path / "graphs"
     os.mkdir(graph_folder)
 
 
