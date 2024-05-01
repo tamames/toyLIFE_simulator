@@ -3,7 +3,11 @@
 from pathlib import Path
 
 import pandas as pd
-from ForGraphs.general_functions import check_file_exists
+
+try:
+    from ForGraphs.general_functions import check_file_exists
+except ModuleNotFoundError:
+    from general_functions import check_file_exists
 
 
 def get_total_df(data_folder_path: Path) -> pd.DataFrame:
@@ -31,7 +35,7 @@ def get_total_df(data_folder_path: Path) -> pd.DataFrame:
             "Prots": str,
             "Mets": str,
             "Dims": str,
-            "Iteration": str,
+            "Iteration": int,
         },
     )
 

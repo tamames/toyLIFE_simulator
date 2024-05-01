@@ -1,5 +1,5 @@
-from pathlib import Path
 from enum import Enum
+from pathlib import Path
 
 import ForGraphs.data_frames as fdf
 import matplotlib.figure as mplf  # just for type hints

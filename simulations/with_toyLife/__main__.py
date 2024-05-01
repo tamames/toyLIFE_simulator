@@ -6,10 +6,9 @@ from pathlib import Path
 from typing import Generator
 
 import ForGraphs.config as config
-
 import ForGraphs.food as food
+import ForGraphs.total as total
 import ForGraphs.plots as plots
-
 
 #### FUNCTIONS ####
 
@@ -60,6 +59,7 @@ def main() -> None:
     for folder_to_process in check_folders():
         create_graph_folder(folder_to_process)
         food.main(folder_to_process)
+        total.main(folder_to_process)
         plots.main(folder_to_process)
 
 
