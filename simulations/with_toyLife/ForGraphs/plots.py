@@ -4,6 +4,7 @@ from pathlib import Path
 import ForGraphs.data_frames as fdf
 import matplotlib.figure as mplf  # just for type hints
 import matplotlib.pyplot as plt
+import pandas as pd
 from ForGraphs.config import FIG_SIZE
 from ForGraphs.general_functions import get_energy_to_reproduce
 
@@ -13,6 +14,7 @@ class PlotType(Enum):
 
     ENERGY = "energy"
     SIZES = "sizes"
+    TOTAL = "total"
 
 
 def energy_plot(data_folder_path: Path, plot_reproduce: bool = False) -> mplf.Figure:
@@ -73,6 +75,48 @@ def sizes_plot(data_folder_path: Path) -> mplf.Figure:
     return fig
 
 
+def stackplot_1_0(data_folder_path: Path) -> mplf.Figure:
+
+    df = fdf.get_total_df(data_folder_path)
+    df = df[["Iteration", "Genotype"]]
+
+    df["1_count"] = df["Genotype"].str.count("1")
+
+    genotype_size = len(df["Genotype"].iloc[0])
+
+    df["0_count"] = genotype_size - df["1_count"]
+
+    by_iteration = df.groupby(by="Iteration", as_index=False).agg(
+        {"1_count": "sum", "0_count": "sum"}
+    )
+
+    by_iteration["total_slots"] = by_iteration["1_count"] + by_iteration["0_count"]
+    by_iteration["1s_ratio"] = by_iteration["1_count"] / by_iteration["total_slots"]
+    by_iteration["0s_ratio"] = 1 - by_iteration["1s_ratio"]
+
+    # Create a new figure
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
+
+    # Create the stacked area plot
+    ax.stackplot(
+        by_iteration["Iteration"],
+        by_iteration["1s_ratio"],
+        by_iteration["0s_ratio"],
+        labels=["1s Ratio", "0s Ratio"],
+        colors=["#157F1F", "#07020D"],
+        alpha=1.0,
+    )
+
+    # Customize the plot
+    ax.set_xlabel("Generation")
+    ax.set_ylabel("Ratio")
+    ax.set_title("Distribution of 1s and 0s in Population")
+    ax.legend()
+    ax.grid(axis="y", linestyle="--", alpha=0.7)
+
+    return fig
+
+
 def save_fig(
     fig: mplf.Figure, plot_type: PlotType, graph_folder: Path, extra_name: str = ""
 ) -> None:
@@ -110,3 +154,7 @@ def main(data_folder_path: Path) -> None:
     sizes_fig = sizes_plot(data_folder_path)
     save_fig(sizes_fig, PlotType.SIZES, graph_folder)
     plt.close(energy_fig)
+
+    total_fig = stackplot_1_0(data_folder_path)
+    save_fig(total_fig, PlotType.TOTAL, graph_folder)
+    plt.close(total_fig)
