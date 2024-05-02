@@ -8,14 +8,14 @@
 #include "toylife/helper_functions.h"
 #include "toylife/toy_plugin.h"
 
-Agent::Agent(float energy, std::string genotype, int sizeGenotype, int parent,
+Agent::Agent(float energy, std::string genotype, int parent, int sizeGenotype,
              mapa_prot prots, mapa_dim dims, mapa_met mets) {
     if (genotype.empty()) {
         this->genotype = binaryGenerator(sizeGenotype);
     } else {
-        if (genotype.size() != SIZE_GENOTYPE)  // to prevent errors
+        if (genotype.size() != sizeGenotype)  // to prevent errors
             throw std::invalid_argument("The genotype must be of size " +
-                                        std::to_string(SIZE_GENOTYPE) + ".");
+                                        std::to_string(sizeGenotype) + ".");
 
         this->genotype = genotype;
     }
@@ -31,7 +31,7 @@ Agent::Agent(float energy, std::string genotype, int sizeGenotype, int parent,
 
 void Agent::print(bool complete) {
     std::cout << "ID: " << id << ". Energy: " << energy << ". Age: " << age
-              << std::endl;
+              << ". Parent: " << parent << std::endl;
 
     if (complete) {
         std::cout << "Genotype: " << genotype << "\n";

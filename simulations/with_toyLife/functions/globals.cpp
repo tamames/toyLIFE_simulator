@@ -15,7 +15,7 @@ int ENERGY_TO_REPRODUCE = 15;
 int ENERGY_TO_DIE = 0;
 int AGE_TO_DIE =
     10000;  // If it's above the number of generations it doesn't matter
-int ID_COUNT = 0;
+int ID_COUNT = 1;
 float TRANSLATION_ENERGY = 0.1f;
 float BREAKING_ENERGY = 5.0f;
 

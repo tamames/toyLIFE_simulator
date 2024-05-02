@@ -74,6 +74,7 @@ int main() {
     writeResults("sizes", dataDirectory, {"Size"}, {sizes});
 
     increaseNumberOfSimulation();
+    return 0;
 }
 
 // int main() {
