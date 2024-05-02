@@ -22,8 +22,7 @@ def _write_food_data(data_folder_path: Path, food_data: _FoodData) -> None:
     """
 
     with open(data_folder_path / "Readme.md", "a") as readme:
-        readme.write("---  \n")
-        readme.write("## Food Data  \n")
+        readme.write("\n## Food Data  \n")
         for key, value in food_data.__dict__.items():
             if key == "percentage_of_1":
                 readme.write(f"{key} = {value:.1%}  \n")

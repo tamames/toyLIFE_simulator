@@ -206,8 +206,6 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
             f"percentage_of_1 = {total_data.genotype_data.percentage_of_1:.1%}  \n"
         )
 
-        # TODO hacer un gráfico de los genotypos por iteracion, para ver cómo evolucionan los datos.
-
 
 def main(data_folder_path: Path) -> None:
     df = get_total_df(data_folder_path)
