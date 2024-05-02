@@ -34,9 +34,9 @@ class _TotalData:
     number_of_children: int
     number_of_total_individuals: int
     number_of_total_genotypes: int
-    data_prots: _DataMolecules
-    data_mets: _DataMolecules
-    data_dims: _DataMolecules
+    data_prots: _DataMolecules | None
+    data_mets: _DataMolecules | None
+    data_dims: _DataMolecules | None
     genotype_data: _GenotypeData
 
 
@@ -100,8 +100,10 @@ def _process_genotype_data(genotype_column: pd.Series) -> _GenotypeData:
     )
 
 
-def _process_molecules(molecule_column: pd.Series) -> _DataMolecules:
+def _process_molecules(molecule_column: pd.Series) -> _DataMolecules | None:
     not_empty = molecule_column.dropna()
+    if not_empty.empty:
+        return None
     not_empty = not_empty.str.replace("{", "").str.replace("}", "").str.replace(" ", "")
     molecules = not_empty.str.split(",")
 
@@ -168,31 +170,43 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
         )
 
         readme.write("### Prots  \n")
-        readme.write(
-            f"maximum_prots_at_once = {total_data.data_prots.maximum_molecules}  \n"
-        )
-        readme.write(
-            f"number_unique_prots = {total_data.data_prots.number_unique_molecules}  \n\n"
-        )
-        readme.write(total_data.data_prots.table_molecules)
+        if total_data.data_prots:
+            # the prots column wasn't empty
+            readme.write(
+                f"maximum_prots_at_once = {total_data.data_prots.maximum_molecules}  \n"
+            )
+            readme.write(
+                f"number_unique_prots = {total_data.data_prots.number_unique_molecules}  \n\n"
+            )
+            readme.write(total_data.data_prots.table_molecules)
+        else:
+            readme.write("This simulation didn't produce any prots.  \n")
 
         readme.write("\n\n### Mets  \n")
-        readme.write(
-            f"maximum_mets_at_once = {total_data.data_mets.maximum_molecules}  \n"
-        )
-        readme.write(
-            f"number_unique_mets = {total_data.data_mets.number_unique_molecules}  \n\n"
-        )
-        readme.write(total_data.data_mets.table_molecules)
+        if total_data.data_mets:
+            # the mets column wasn't empty
+            readme.write(
+                f"maximum_mets_at_once = {total_data.data_mets.maximum_molecules}  \n"
+            )
+            readme.write(
+                f"number_unique_mets = {total_data.data_mets.number_unique_molecules}  \n\n"
+            )
+            readme.write(total_data.data_mets.table_molecules)
+        else:
+            readme.write("This simulation didn't produce any mets.  \n")
 
         readme.write("\n\n### Dims  \n")
-        readme.write(
-            f"maximum_dims_at_once = {total_data.data_dims.maximum_molecules}  \n"
-        )
-        readme.write(
-            f"number_unique_dims = {total_data.data_dims.number_unique_molecules}  \n\n"
-        )
-        readme.write(total_data.data_dims.table_molecules)
+        if total_data.data_dims:
+            # the dims column wasn't empty
+            readme.write(
+                f"maximum_dims_at_once = {total_data.data_dims.maximum_molecules}  \n"
+            )
+            readme.write(
+                f"number_unique_dims = {total_data.data_dims.number_unique_molecules}  \n\n"
+            )
+            readme.write(total_data.data_dims.table_molecules)
+        else:
+            readme.write("This simulation didn't produce any dims.  \n")
 
         readme.write("\n\n### Genotypes  \n")
         readme.write(f"genotype_len = {total_data.genotype_data.genotype_len}  \n")
