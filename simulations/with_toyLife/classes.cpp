@@ -767,6 +767,7 @@ void Population::afterIteration() {
             deadsPositions.push_back(i);
     }
 
+    numberOfDeads.push_back(deadsPositions.size());
     deleteElements(agents, deadsPositions);
 
     std::vector<int>
@@ -775,6 +776,9 @@ void Population::afterIteration() {
         if (agents[i].checkEnergyReproduce())
             reproducePositions.push_back(i);
     }
+
+    numberOfReproductions.push_back(reproducePositions.size());
+
     if (!reproducePositions.empty()) {
         // if not empty
         std::vector<Agent> newElements(reproducePositions.size() * 2, Agent(0));
@@ -858,4 +862,18 @@ std::vector<std::vector<std::string>> Population::getPopulationGains() {
                            std::to_string(minEnergyGain[i])};
     }
     return gainedEnergy;
+}
+
+std::vector<std::vector<std::string>> Population::getDeadsAndReproduces() {
+    /**
+     * This joins the numberOfDeads and numberOfReproductions vectors into a
+     * writable table.
+     */
+    std::vector<std::vector<std::string>> deadsReproduce(numberOfDeads.size());
+
+    for (size_t i = 0; i < numberOfDeads.size(); ++i) {
+        deadsReproduce[i] = {std::to_string(numberOfDeads[i]),
+                             std::to_string(numberOfReproductions[i])};
+    }
+    return deadsReproduce;
 }

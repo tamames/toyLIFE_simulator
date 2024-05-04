@@ -61,12 +61,6 @@ class Population {
     int sizePopulation;
     std::vector<Agent> agents;
 
-    // For statistics
-    std::vector<float> averageEnergyGain;
-    std::vector<float> totalEnergyGain;
-    std::vector<float> maxEnergyGain;
-    std::vector<float> minEnergyGain;
-
     Population(int sizePopulation);
 
     void print(bool complete = false);
@@ -77,10 +71,6 @@ class Population {
 
     void afterIteration();
 
-    void deleteElements(std::vector<Agent>& agents, std::vector<int> indexes);
-
-    void addAges();
-
     std::vector<std::string> getGenotypes();
 
     std::vector<std::vector<std::string>> getPopulationData();
@@ -88,6 +78,22 @@ class Population {
     std::vector<std::string> getPopulationEnergy();
 
     std::vector<std::vector<std::string>> getPopulationGains();
+
+    std::vector<std::vector<std::string>> getDeadsAndReproduces();
+
+   private:
+    // For statistics
+    std::vector<float> averageEnergyGain;
+    std::vector<float> totalEnergyGain;
+    std::vector<float> maxEnergyGain;
+    std::vector<float> minEnergyGain;
+
+    std::vector<size_t> numberOfDeads;
+    std::vector<size_t> numberOfReproductions;
+
+    void deleteElements(std::vector<Agent>& agents, std::vector<int> indexes);
+
+    void addAges();
 };
 
 #endif  // CLASSES_H

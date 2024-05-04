@@ -16,6 +16,7 @@ class PlotType(Enum):
     GAIN = "energy_gain"
     SIZES = "sizes"
     TOTAL = "total"
+    DEAD_REPRODUCE = "dead_reproduce"
 
 
 def energy_plot(data_folder_path: Path, plot_reproduce: bool = False) -> mplf.Figure:
@@ -144,6 +145,30 @@ def stackplot_1_0(data_folder_path: Path) -> mplf.Figure:
     return fig
 
 
+def dead_reproduce_plot(data_folder_path: Path) -> mplf.Figure:
+    """This function creates a simple line plot with the size of the population at each generation.
+
+    Args:
+        data_folder_path (Path): It's only one column with the size of each generation.
+
+    Returns:
+        mplf.Figure:
+    """
+
+    df = fdf.get_dead_reproduce_df(data_folder_path)
+
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
+
+    # Create the line plot
+    ax.plot(df["Deads"], color="#141414", label="Deceased Agents")
+    ax.plot(df["Reproduce"], color="#EEC643", label="Reproduced Agents")
+
+    ax.set_xlabel("Generation")
+    ax.set_ylabel("Number of Agents")
+    ax.set_title("Agents that Died and Reproduced in each Generation")
+    return fig
+
+
 def save_fig(
     fig: mplf.Figure, plot_type: PlotType, graph_folder: Path, extra_name: str = ""
 ) -> None:
@@ -189,3 +214,7 @@ def main(data_folder_path: Path) -> None:
     total_fig = stackplot_1_0(data_folder_path)
     save_fig(total_fig, PlotType.TOTAL, graph_folder)
     plt.close(total_fig)
+
+    dead_fig = dead_reproduce_plot(data_folder_path)
+    save_fig(dead_fig, PlotType.DEAD_REPRODUCE, graph_folder)
+    plt.close(dead_fig)

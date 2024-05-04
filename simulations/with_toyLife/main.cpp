@@ -76,6 +76,12 @@ int main() {
                  {"Max_Gain", "Average_Gain", "Total_Gain", "Min_Gain"},
                  gainedEnergies);
 
+    std::vector<std::vector<std::string>> deadsReproduce =
+        population.getDeadsAndReproduces();
+
+    writeResults("deads_reproduce", dataDirectory, {"Deads", "Reproduce"},
+                 deadsReproduce);
+
     writeResults("energies", dataDirectory, {"Max", "Average", "Min"},
                  {energyInfo});
 

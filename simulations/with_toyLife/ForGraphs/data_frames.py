@@ -69,7 +69,7 @@ def get_energy_gains_df(data_folder_path: Path) -> pd.DataFrame:
     Returns:
         pd.DataFrame: a pandas DataFrame with the energy gain data.
     """
-    check_file_exists(data_folder_path / "energies.csv")
+    check_file_exists(data_folder_path / "energy_gains.csv")
 
     return pd.read_csv(
         data_folder_path / "energy_gains.csv",
@@ -122,4 +122,25 @@ def get_food_df(data_folder_path: Path) -> pd.DataFrame:
         header=0,
         index_col=False,
         dtype={"Binary": str},
+    )
+
+
+def get_dead_reproduce_df(data_folder_path: Path) -> pd.DataFrame:
+    """Returns the dead_reproduce table that tells us how much agents
+    died and reproduce in each iteration.
+
+    Args:
+        data_folder_path (Path): the path to the data folder we are looking at.
+
+    Returns:
+        pd.DataFrame: a pandas DataFrame with the dead_reproduce data.
+    """
+    check_file_exists(data_folder_path / "deads_reproduce.csv")
+
+    return pd.read_csv(
+        data_folder_path / "deads_reproduce.csv",
+        sep=",",
+        header=0,
+        index_col=False,
+        dtype={"Deads": int, "Reproduce": int},
     )
