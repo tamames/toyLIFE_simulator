@@ -60,6 +60,31 @@ def get_energy_df(data_folder_path: Path) -> pd.DataFrame:
     )
 
 
+def get_energy_gains_df(data_folder_path: Path) -> pd.DataFrame:
+    """Returns the energy gain DataFrame from the data_folder_path.
+
+    Args:
+        data_folder_path (Path): the path to the data folder we are looking at.
+
+    Returns:
+        pd.DataFrame: a pandas DataFrame with the energy gain data.
+    """
+    check_file_exists(data_folder_path / "energies.csv")
+
+    return pd.read_csv(
+        data_folder_path / "energy_gains.csv",
+        sep=",",
+        header=0,
+        index_col=False,
+        dtype={
+            "Max_Gain": float,
+            "Average_Gain": float,
+            "Total_Gain": float,
+            "Min_Gain": float,
+        },
+    )
+
+
 def get_sizes_df(data_folder_path: Path) -> pd.DataFrame:
     """Returns the energies DataFrame from the data_folder_path.
 

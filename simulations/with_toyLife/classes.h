@@ -63,9 +63,9 @@ class Population {
 
     // For statistics
     std::vector<float> averageEnergyGain;
-    // std::vector<float> averageEnergyLoss;
-    std::vector<int> maxEnergyGain;
-    std::vector<int> minEnergyGain;
+    std::vector<float> totalEnergyGain;
+    std::vector<float> maxEnergyGain;
+    std::vector<float> minEnergyGain;
 
     Population(int sizePopulation);
 
@@ -86,6 +86,8 @@ class Population {
     std::vector<std::vector<std::string>> getPopulationData();
 
     std::vector<std::string> getPopulationEnergy();
+
+    std::vector<std::vector<std::string>> getPopulationGains();
 };
 
 #endif  // CLASSES_H

@@ -737,8 +737,10 @@ void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
     }
 
     //* Fill the vectors for statistics.
-    int sum = std::accumulate(gainedEnergies.begin(), gainedEnergies.end(), 0);
+    float sum =
+        std::accumulate(gainedEnergies.begin(), gainedEnergies.end(), 0.0f);
     averageEnergyGain.push_back(static_cast<double>(sum) / (float)smaller);
+    totalEnergyGain.push_back(sum);
 
     auto maxGain =
         std::max_element(gainedEnergies.begin(), gainedEnergies.end());
@@ -842,4 +844,19 @@ std::vector<std::string> Population::getPopulationEnergy() {
     results[2] = std::to_string(*minEnergy);
 
     return results;
+}
+
+std::vector<std::vector<std::string>> Population::getPopulationGains() {
+    /**
+     * This transforms the vectors of gains into a matrix of strings.
+     */
+    std::vector<std::vector<std::string>> gainedEnergy(maxEnergyGain.size());
+
+    for (size_t i = 0; i < maxEnergyGain.size(); ++i) {
+        gainedEnergy[i] = {std::to_string(maxEnergyGain[i]),
+                           std::to_string(averageEnergyGain[i]),
+                           std::to_string(totalEnergyGain[i]),
+                           std::to_string(minEnergyGain[i])};
+    }
+    return gainedEnergy;
 }

@@ -25,6 +25,7 @@ int main() {
               << "\n";
 
     std::vector<std::vector<std::string>> energyInfo;
+    std::vector<std::vector<std::string>> energyGains;
     std::vector<std::vector<std::string>> sizes = {
         {std::to_string(population.sizePopulation)}};
 
@@ -67,6 +68,13 @@ int main() {
                       << ". Size: " << population.sizePopulation << std::endl;
         }
     }
+
+    std::vector<std::vector<std::string>> gainedEnergies =
+        population.getPopulationGains();
+
+    writeResults("energy_gains", dataDirectory,
+                 {"Max_Gain", "Average_Gain", "Total_Gain", "Min_Gain"},
+                 gainedEnergies);
 
     writeResults("energies", dataDirectory, {"Max", "Average", "Min"},
                  {energyInfo});

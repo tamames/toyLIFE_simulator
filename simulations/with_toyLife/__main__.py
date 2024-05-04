@@ -57,6 +57,7 @@ def del_graphs_folder(*args: int) -> None:
 
 def main() -> None:
     for folder_to_process in check_folders():
+        print(f"Processing folder {folder_to_process}")
         create_graph_folder(folder_to_process)
         food.main(folder_to_process)
         total.main(folder_to_process)
