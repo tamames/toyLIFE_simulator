@@ -43,7 +43,7 @@ class _TotalData:
 def _total_statistics(df: pd.DataFrame) -> _TotalData:
 
     maximun_age = df["Age"].max()
-    median_age = df["Age"].median()
+    median_age = df[["ID", "Age"]].groupby("ID").max().mean()[0]
 
     maximum_iterations = df["Iteration"].max()
 
@@ -85,7 +85,7 @@ def _process_genotype_data(genotype_column: pd.Series) -> _GenotypeData:
 
     total_slots = genotype_len * amount_of_food
 
-    one_count: pd.Series = genotype_column.apply(lambda x: x.count("1"))
+    one_count: pd.Series = genotype_column.str.count("1")
 
     number_of_1 = one_count.sum()
     mean_of_1 = one_count.mean()
@@ -159,7 +159,7 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
         readme.write("## Total Data  \n")
         readme.write("### General  \n")
         readme.write(f"maximun_age = {total_data.maximun_age}  \n")
-        readme.write(f"median_age = {total_data.median_age}  \n")
+        readme.write(f"median_age = {total_data.median_age:.2f}  \n")
         readme.write(f"maximum_iterations = {total_data.maximum_iterations}  \n")
         readme.write(f"number_of_children = {total_data.number_of_children}  \n")
         readme.write(
