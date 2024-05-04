@@ -45,22 +45,22 @@ std::vector<float> createRandomArray(int size, int max /*= 8*/) {
     return energies;
 }
 
-std::string mutate(std::string binString, float p) {
+std::string mutate(std::string binString) {
     /**
      * Mutates a binary string.
      * @param binString The binary string to be mutated.
-     * @param p The probability of mutation.
      * @return The mutated binary string.
      */
 
-    if (p < 0.0f || p > 1.0f) {
+    if (MUTATION_PROBABILITY < 0.0f || MUTATION_PROBABILITY > 1.0f) {
         std::cout << "The probability must be between 0 and 1\n";
         throw std::invalid_argument("The probability must be between 0 and 1");
     }
 
     std::string newString(binString.size(), ' ');
     for (int i = 0; i < binString.size(); ++i) {
-        if (std::generate_canonical<double, 5>(GENERATOR) < p)
+        if (std::generate_canonical<double, 5>(GENERATOR) <
+            MUTATION_PROBABILITY)
             newString[i] = binString[i] == '0' ? '1' : '0';
         else
             newString[i] = binString[i];
@@ -496,6 +496,7 @@ void createReadMe(int numberOfGenerations, int initPopulationSize,
          << "* **Size of the genotype** &rarr; " << SIZE_GENOTYPE << "\n"
          << "* **Size of each food** &rarr; " << SIZE_EACH_FOOD << "\n"
          << "* **Control** &rarr; " << CONTROL << "\n"
+         << "* **Mutation probability** &rarr; " << MUTATION_PROBABILITY << "\n"
          << "* **Food Size** &rarr; " << foodSize << "\n";
 }
 

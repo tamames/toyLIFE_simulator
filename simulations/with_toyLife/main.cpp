@@ -48,7 +48,7 @@ int main() {
         std::vector<std::string> energies = population.getPopulationEnergy();
         energyInfo.push_back(energies);
 
-        population.afterIteration(0.1);
+        population.afterIteration();
 
         sizes.push_back({std::to_string(population.sizePopulation)});
 

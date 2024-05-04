@@ -616,7 +616,7 @@ std::vector<std::string> Agent::getAgentData() {
     return data;
 }
 
-std::pair<Agent, Agent> divide(Agent parent, float p) {
+std::pair<Agent, Agent> divide(Agent parent) {
     /**
      * Divide an agent into two agents.
      * @param parent The agent that is going to be divided.
@@ -624,8 +624,8 @@ std::pair<Agent, Agent> divide(Agent parent, float p) {
      */
 
     float energyC = parent.energy / 2;
-    std::string genotype1 = mutate(parent.genotype, p);
-    std::string genotype2 = mutate(parent.genotype, p);
+    std::string genotype1 = mutate(parent.genotype);
+    std::string genotype2 = mutate(parent.genotype);
 
     Agent child1(energyC, genotype1, parent.id);
     Agent child2(energyC, genotype2, parent.id);
@@ -754,12 +754,11 @@ void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
     addAges();
 }
 
-void Population::afterIteration(float p) {
+void Population::afterIteration() {
     /**
      * Here we check the energy of each agent and do the
      *corresponding action. First we check the ones that died.
      *Then we check the ones that can reproduce and we reproduce them.
-     * @param p The probability of mutation.
      */
     std::vector<int> deadsPositions;  // store the indexes of the deads
 
@@ -781,7 +780,7 @@ void Population::afterIteration(float p) {
         std::vector<Agent> newElements(reproducePositions.size() * 2, Agent(0));
         for (int i = 0; i < reproducePositions.size(); ++i) {
             std::pair<Agent, Agent> children =
-                divide(agents[reproducePositions[i]], p);
+                divide(agents[reproducePositions[i]]);
             newElements[i * 2] = children.first;
             newElements[i * 2 + 1] = children.second;
         }

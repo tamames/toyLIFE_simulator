@@ -25,6 +25,9 @@ extern std::random_device rd;
 extern std::mt19937 GENERATOR;
 
 extern int SAMPLE_SIZE;
+
+extern float MUTATION_PROBABILITY;
+
 extern int NUMBER_OF_GENERATIONS;
 extern int INITIAL_POPULATION_SIZE;
 extern int FOOD_SIZE;

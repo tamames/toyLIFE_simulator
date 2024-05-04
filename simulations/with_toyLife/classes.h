@@ -53,7 +53,7 @@ class Agent {
     std::vector<std::string> getAgentData();
 };
 
-std::pair<Agent, Agent> divide(Agent parent, float p);
+std::pair<Agent, Agent> divide(Agent parent);
 
 class Population {
    public:
@@ -75,7 +75,7 @@ class Population {
                    float cost = 1.0, double costVariation = 0.1,
                    bool print = false);
 
-    void afterIteration(float p);
+    void afterIteration();
 
     void deleteElements(std::vector<Agent>& agents, std::vector<int> indexes);
 

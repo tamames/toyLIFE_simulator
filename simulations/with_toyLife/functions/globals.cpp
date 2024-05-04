@@ -23,6 +23,9 @@ std::random_device rd;
 std::mt19937 GENERATOR(rd());
 
 int SAMPLE_SIZE = 5;  // the amount of food each individual is going to eat
+
+float MUTATION_PROBABILITY = 0.01f;
+
 int NUMBER_OF_GENERATIONS = 300;
 int INITIAL_POPULATION_SIZE = 150;
 int FOOD_SIZE = 5000;

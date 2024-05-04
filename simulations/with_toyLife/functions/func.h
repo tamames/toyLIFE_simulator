@@ -18,7 +18,7 @@ std::string binaryGenerator(int length = 8);
 
 std::vector<float> createRandomArray(int size, int max = 8);
 
-std::string mutate(std::string binString, float p);
+std::string mutate(std::string binString);
 
 std::vector<std::string> listOfFood(unsigned int length,
                                     unsigned int food_size = SIZE_EACH_FOOD);
