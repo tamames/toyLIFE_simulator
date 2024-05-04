@@ -11,10 +11,10 @@ int main() {
     std::cout << "Creating the data directory\n";
     std::string dataDirectory = createDataDirectory();
 
-    int numberOfGenerations = 50;
+    int numberOfGenerations = NUMBER_OF_GENERATIONS;
     int tenPercent = numberOfGenerations / 10;
-    int initialPopulationSize = 10;
-    int foodSize = 5000;
+    int initialPopulationSize = INITIAL_POPULATION_SIZE;
+    int foodSize = FOOD_SIZE;
 
     createReadMe(numberOfGenerations, initialPopulationSize, foodSize);
 
@@ -76,6 +76,35 @@ int main() {
     increaseNumberOfSimulation();
     return 0;
 }
+
+// int main() {
+//     std::cout << "Start the simulation\n";
+//     ToyPlugin toy;
+//     std::cout << "We have created the ToyPlugin" << std::endl;
+
+//     int initialPopulationSize = INITIAL_POPULATION_SIZE;
+//     int foodSize = FOOD_SIZE;
+//     std::cout << "Nos disponemos a crear la población\n";
+//     Population population(10);
+//     std::cout << "Hemos creado la población\n";
+//     // population.print(true);
+//     std::cout << "Vamos a crear la comida\n";
+//     std::vector<std::string> food = listOfFood(foodSize);
+//     std::cout << "Hemos creado la comida\n";
+
+//     population.iteration(food, toy);
+//     population.afterIteration(0.1);
+
+//     return 0;
+// }
+
+// int main(){
+//     std::cout << "Hello world!" << std::endl;
+
+//     int a = 10;
+//     int b = 20;
+//     std::cout << "a: " << a << "\tb: " << b << std::endl;
+// }
 
 // int main() {
 //     std::vector<std::string> food = listOfFood(10);

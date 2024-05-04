@@ -565,28 +565,13 @@ float Agent::eat(std::map<std::string, int>& food, const ToyPlugin& toy) {
         food.at(it->first) = 0;  // not sure about this
     }
     // NOW EXISTING PROTS AND METS TRY TO BIND THE METS
-    // std::cout << "Imprimiendo dimers " << std::endl;
-    // for (auto it = dims.begin(); it != dims.end(); ++it)
-    //   std::cout << it->first.id << "\t" << it->second << std::endl;
-    // std::cout << "Antes del primer reacting: \n";
-    // print();
-    // std::cout << "Primer reacting!" << std::endl;
     reacting(toy);
     // THEN REGULATION OCCURS
-    // std::cout << "Entre reacting y promoter_expression: \n";
-    // print();
-    // std::cout << "Promoter expression!" << std::endl;
     promoter_expression(toy);
     // NOW THE NEW PROTEINS WILL DIMERIZE IN THE PRESENCE OF THE
     // METABOLITE-COMPOUND IF SOMETHING IS BROKEN, THEN THE CELL GAINS
     // ENERGY
-    // std::cout << "Entre promoter_expression y reacting: \n";
-    // print();
-    // std::cout << "Segundo reacting!" << std::endl;
     reacting(toy);
-    // std::cout << "Imprimiendo dimers " << std::endl;
-    // for (auto it = dims.begin(); it != dims.end(); ++it)
-    //   std::cout << it->first.id << "\t" << it->second << std::endl;
     // At the end of the cycle, all metabolites that haven't been bound by
     // anything disappear and return to the environment
     for (auto it = mets.begin(); it != mets.end(); ++it)

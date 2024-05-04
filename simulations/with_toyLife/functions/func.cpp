@@ -68,13 +68,14 @@ std::string mutate(std::string binString, float p) {
     return newString;
 }
 
-std::vector<std::string> listOfFood(unsigned int length,
-                                    unsigned int food_size /*= FOOD_SIZE*/) {
+std::vector<std::string> listOfFood(
+    unsigned int length, unsigned int food_size /*= SIZE_EACH_FOOD*/) {
     /**
      * Generates a list of random binary strings that represent the
      *  food available for a population.
      * @param length The length of the list.
-     * @param food_size The size of the binary strings. Defaults to FOOD_SIZE=8.
+     * @param food_size The size of the binary strings. Defaults to
+     * SIZE_EACH_FOOD=8.
      * @return The list of random binary strings.
      */
 
@@ -493,7 +494,7 @@ void createReadMe(int numberOfGenerations, int initPopulationSize,
          << "* **Breaking energy** &rarr; " << BREAKING_ENERGY << "\n"
          << "* **Sample size** &rarr; " << SAMPLE_SIZE << "\n"
          << "* **Size of the genotype** &rarr; " << SIZE_GENOTYPE << "\n"
-         << "* **Food size** &rarr; " << FOOD_SIZE << "\n"
+         << "* **Size of each food** &rarr; " << SIZE_EACH_FOOD << "\n"
          << "* **Control** &rarr; " << CONTROL << "\n"
          << "* **Food Size** &rarr; " << foodSize << "\n";
 }
