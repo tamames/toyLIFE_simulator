@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <bitset>
+#include <ctime>
 #include <iostream>
 #include <iterator>
 #include <map>
@@ -96,12 +97,160 @@ std::map<std::string, int> fromList2Map(std::vector<std::string> list) {
 
     std::map<std::string, int> map;
     for (int i = 0; i < list.size(); ++i)
-        if (map.find(list[i]) == map.end())
-            map[list[i]] = 1;
-        else
-            map[list[i]] += 1;
+        map[list[i]] += 1;
 
     return map;
+}
+
+// Function to randomly select N keys from the map
+std::vector<std::string> randomSelectFood(
+    const std::map<std::string, int>& foodMap, int N) {
+    std::vector<std::string> keys;
+    keys.reserve(foodMap.size());
+
+    for (const auto& pair : foodMap) {
+        keys.push_back(pair.first);
+    }
+
+    std::shuffle(keys.begin(), keys.end(), GENERATOR);  // Shuffle keys randomly
+    keys.resize(
+        std::min(N, static_cast<int>(keys.size())));  // Select first N keys
+
+    return keys;
+}
+
+void subtractFromFoodMap(std::map<std::string, int>& foodMap,
+                         const std::vector<std::string>& keys) {
+    /**
+     * Substracts 1 from the value of the keys in the foodMap.
+     * If the value is 0, the key is removed from the map.
+     * @param foodMap The map of food.
+     * @param keys The keys to substract from the map.
+     */
+    for (const auto& key : keys) {
+        foodMap[key]--;  // Decrease value by 1
+        if (foodMap[key] == 0) {
+            foodMap.erase(key);  // Mark key for deletion
+        }
+    }
+}
+
+void addKeysToFoodMap(
+    std::map<std::string, int>& foodMap,
+    const std::vector<std::map<std::string, int>>& returnedFood,
+    const std::vector<std::string>& newFood) {
+    /**
+     * Adds the keys to the foodMap.
+     * @param foodMap The map of food.
+     * @param keys The keys to add to the map.
+     */
+
+    // First we add the new food
+    for (const auto& key : newFood) {
+        foodMap[key]++;
+    }
+
+    // Then we add the returned food
+    for (const auto& map : returnedFood) {
+        for (const auto& pair : map) {
+            foodMap[pair.first] += pair.second;
+        }
+    }
+}
+
+std::map<std::string, int> sampleFood(std::map<std::string, int>& foodMap) {
+    /**
+     * Selects N food from the foodMap, converts them to a map and removes then
+     * from the foodMap.
+     * @param foodMap The map of food.
+     * @return The selected food.
+     */
+    std::map<std::string, int> selectedFood;
+    std::vector<std::string> keys = randomSelectFood(foodMap);
+    for (const auto& key : keys) {
+        selectedFood[key]++;
+    }
+    subtractFromFoodMap(foodMap, keys);
+    return selectedFood;
+}
+
+void foodWriting(std::vector<std::string>& foodContainer,
+                 std::string folderPath, int iteration) {
+    /** Writes all the food into a file just to plot a histogram of the
+     * distribution I had an idea about plotting the food but I am realizing
+     * that this can also be used to plot the genotypes
+     *
+     * @param foodList The list of food or genotypes that we want to write.
+     */
+
+    std::string total_path = folderPath + "\\food.csv";
+
+    std::ofstream myFile;
+
+    if (iteration == 0)
+        // it is the first iteration so we create the file
+        myFile.open(total_path, std::ios::out);
+    else
+        // we call the function
+        myFile.open(total_path, std::ios::app);
+
+    if (!myFile) {
+        std::cout << "There was an error while opening your file.\n";
+        exit(EXIT_FAILURE);
+    }
+
+    if (iteration == 0) {
+        myFile << "Iteration,Binary\n";
+    }
+
+    for (std::size_t i = 0; i < foodContainer.size(); ++i) {
+        myFile << std::to_string(iteration) << "," << foodContainer[i] << "\n";
+    }
+
+    myFile.close();
+}
+
+void foodWriting(std::vector<std::map<std::string, int>>& foodContainer,
+                 std::string folderPath, int iteration) {
+    /** Writes all the food into a file just to plot a histogram of the
+     * distribution I had an idea about plotting the food but I am realizing
+     * that this can also be used to plot the genotypes
+     *
+     * @param foodList The list of food or genotypes that we want to write.
+     */
+
+    std::string total_path = folderPath + "\\food.csv";
+
+    std::ofstream myFile;
+
+    if (iteration == 0)
+        // it is the first iteration so we create the file
+        myFile.open(total_path, std::ios::out);
+    else
+        // we call the function
+        myFile.open(total_path, std::ios::app);
+
+    if (!myFile) {
+        std::cout << "There was an error while opening your file.\n";
+        exit(EXIT_FAILURE);
+    }
+
+    if (iteration == 0) {
+        myFile << "Iteration,Binary\n";
+    }
+
+    for (std::size_t i = 0; i < foodContainer.size(); ++i) {
+        for (auto const& pair : foodContainer[i]) {
+            // we iterate over the map consisting on food: amount
+            for (int j = 0; j < pair.second; ++j) {
+                // we write the food once per amount there is
+                myFile << std::to_string(iteration) << "," << pair.first
+                       << "\n";
+            }
+        }
+    }
+
+    myFile.close();
 }
 
 std::vector<std::string> decimal2Binary(int numbers) {
@@ -254,21 +403,6 @@ std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa, bool method_1,
     return std::make_pair(map1, map2);
 }
 
-std::vector<std::string> sampleFood(std::vector<std::string>& food,
-                                    unsigned int sample_size) {
-    /**
-     * Get a sample of size SAMPLE_SIZE from a vector, specifically from the
-     * food vector.
-     * @param food The vector from which we want to get the sample.
-     * @param sample_size The size of the sample. Defaults to SAMPLE_SIZE.
-     * @return The sample.
-     */
-    std::vector<std::string> out;
-    std::sample(food.begin(), food.end(), std::back_inserter(out), sample_size,
-                GENERATOR);
-    return out;
-}
-
 void writeResults(std::string fileName, std::string folderPath,
                   std::vector<std::string> headers,
                   std::vector<std::vector<std::string>> results) {
@@ -394,27 +528,6 @@ void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
     myFile.close();
 }
 
-void foodWriting(std::vector<std::string> foodList, std::string folderPath) {
-    /** Writes all the food into a file just to plot a histogram of the
-     * distribution I had an idea about plotting the food but I am realizing
-     * that this can also be used to plot the genotypes
-     *
-     * @param foodList The list of food or genotypes that we want to write.
-     */
-
-    // First we have to past from a vector of strings to a vector of vectors of
-    // strings
-    std::vector<std::vector<std::string>> foodList2D;
-    foodList2D.reserve(foodList.size());
-    for (const std::string& food : foodList) {
-        std::vector<std::string> food2D = {food};
-        foodList2D.push_back(food2D);
-    }
-
-    // Now we write the results
-    writeResults("food_total", folderPath, {"Binary"}, foodList2D);
-}
-
 int getNumberOfSimulation() {
     /**
      * Read the simulations\with_toyLife\functions\number_of_simulation.txt file
@@ -492,12 +605,13 @@ void createReadMe(int numberOfGenerations, int initPopulationSize,
          << "* **Age to die** &rarr; " << AGE_TO_DIE << "\n"
          << "* **Translation energy** &rarr; " << TRANSLATION_ENERGY << "\n"
          << "* **Breaking energy** &rarr; " << BREAKING_ENERGY << "\n"
-         << "* **Sample size** &rarr; " << SAMPLE_SIZE << "\n"
          << "* **Size of the genotype** &rarr; " << SIZE_GENOTYPE << "\n"
          << "* **Size of each food** &rarr; " << SIZE_EACH_FOOD << "\n"
          << "* **Control** &rarr; " << CONTROL << "\n"
          << "* **Mutation probability** &rarr; " << MUTATION_PROBABILITY << "\n"
-         << "* **Food Size** &rarr; " << foodSize << "\n";
+         << "* **Original Food Size** &rarr; " << foodSize << "\n"
+         << "* **Sample size** &rarr; " << SAMPLE_SIZE << "\n"
+         << "* **Food to add** &rarr; " << FOOD_TO_ADD << "\n";
 }
 
 std::string fromMapToString(mapa_prot& mapa) {
@@ -560,4 +674,19 @@ std::string fromMapToString(mapa_dim& mapa) {
     out.pop_back();
     out += "}";
     return out;
+}
+
+std::string currentTime() {
+    /**
+     * Returns the current hour, minute and second in a string.
+     * @return The string with the current hour, minute and second.
+     */
+    std::time_t now = time(0);
+    std::tm* ltm = localtime(&now);
+
+    // Format the time as HH:MM:SS
+    std::stringstream ss;
+    ss << std::put_time(ltm, "%H:%M:%S");
+
+    return ss.str();
 }

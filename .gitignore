@@ -12,6 +12,8 @@ test.*
 CppProperties.json
 *.o
 log.txt
+*.csv
+*.zip
 
 
 # Byte-compiled / optimized / DLL files
@@ -143,3 +145,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+simulations/with_toyLife/in_depth_study.ipynb

@@ -65,9 +65,9 @@ class Population {
 
     void print(bool complete = false);
 
-    void iteration(std::vector<std::string> food, ToyPlugin toy,
-                   float cost = 1.0, double costVariation = 0.1,
-                   bool print = false);
+    std::vector<std::map<std::string, int>> iteration(
+        std::map<std::string, int> foodMap, const ToyPlugin& toy, bool print,
+        const int& iterationNumber);
 
     void afterIteration();
 

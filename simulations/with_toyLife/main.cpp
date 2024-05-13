@@ -1,3 +1,5 @@
+#include <ctime>
+
 #include "classes.h"
 #include "functions/func.h"
 #include "functions/globals.h"
@@ -13,8 +15,9 @@ int main() {
 
     int numberOfGenerations = NUMBER_OF_GENERATIONS;
     int tenPercent = numberOfGenerations / 10;
+    int fivePercent = numberOfGenerations / 20;
     int initialPopulationSize = INITIAL_POPULATION_SIZE;
-    int foodSize = FOOD_SIZE;
+    int foodSize = INITIAL_FOOD_SIZE;
 
     createReadMe(numberOfGenerations, initialPopulationSize, foodSize);
 
@@ -25,9 +28,11 @@ int main() {
               << "\n";
 
     std::vector<std::vector<std::string>> energyInfo;
-    std::vector<std::vector<std::string>> energyGains;
-    std::vector<std::vector<std::string>> sizes = {
-        {std::to_string(population.sizePopulation)}};
+    energyInfo.reserve(numberOfGenerations);
+
+    std::vector<std::vector<std::string>> sizes;
+    sizes.reserve(numberOfGenerations);
+    sizes.push_back({std::to_string(population.sizePopulation)});
 
     // we write the first step of the simulation
     std::vector<std::vector<std::string>> dataOfSimulation =
@@ -36,12 +41,17 @@ int main() {
 
     std::vector<std::string> food = listOfFood(foodSize);
 
-    foodWriting(food, dataDirectory);
+    foodWriting(food, dataDirectory, 0);
+
+    std::map<std::string, int> food2eatMap = fromList2Map(food);
+
+    // to free some memory
+    food.clear();
 
     for (int i = 1; i <= numberOfGenerations; ++i) {
-        // maybe we can add the functionality of loosing energy due to the
-        // foraging process
-        population.iteration(food, toy);
+        bool print = ((i % fivePercent == 0) && !(i % tenPercent == 0));
+        std::vector<std::map<std::string, int>> returnedFood =
+            population.iteration(food2eatMap, toy, print, i);
 
         // we call the getEnergy function to see if someone gain energy
         // before it has a chance to divide itself
@@ -63,8 +73,15 @@ int main() {
             population.getPopulationData();
         populationWriting(dataOfSimulation, i, dataDirectory);
 
+        // Now we deal with the new food that we have to add to the population
+        std::vector<std::string> newFood = listOfFood(FOOD_TO_ADD);
+
+        addKeysToFoodMap(food2eatMap, returnedFood, newFood);
+
+        foodWriting(returnedFood, dataDirectory, i);
+
         if (i % tenPercent == 0) {
-            std::cout << "Iteration: " << i
+            std::cout << currentTime() << ":   Iteration: " << i
                       << ". Size: " << population.sizePopulation << std::endl;
         }
     }
@@ -96,18 +113,35 @@ int main() {
 //     ToyPlugin toy;
 //     std::cout << "We have created the ToyPlugin" << std::endl;
 
-//     int initialPopulationSize = INITIAL_POPULATION_SIZE;
-//     int foodSize = FOOD_SIZE;
-//     std::cout << "Nos disponemos a crear la población\n";
-//     Population population(10);
-//     std::cout << "Hemos creado la población\n";
-//     // population.print(true);
-//     std::cout << "Vamos a crear la comida\n";
-//     std::vector<std::string> food = listOfFood(foodSize);
-//     std::cout << "Hemos creado la comida\n";
+//     std::vector<std::string> food = {
+//         "00010000", "00101000", "00101010", "01100101", "10010110",
+//         "10010111", "10100010", "11001110", "11100001", "11101010",
+//     };
 
-//     population.iteration(food, toy);
-//     population.afterIteration(0.1);
+//     std::map<std::string, int> foodMap = fromList2Map(food);
+//     food.clear();
+
+//     // print the food map
+//     std::cout << "The map: \n";
+//     for (auto food : foodMap) {
+//         std::cout << food.first << "\t" << food.second << std::endl;
+//     }
+
+//     Agent a(10);
+
+//     std::map<std::string, int> ja = sampleFood(foodMap);
+
+//     std::cout << "The ja: \n";
+//     for (auto food : ja) {
+//         std::cout << food.first << "\t" << food.second << std::endl;
+//     }
+
+//     a.eat(ja, toy);
+
+//     std::cout << "The ja: \n";
+//     for (auto food : ja) {
+//         std::cout << food.first << "\t" << food.second << std::endl;
+//     }
 
 //     return 0;
 // }

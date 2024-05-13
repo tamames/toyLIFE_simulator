@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <bitset>
+#include <ctime>
 #include <iostream>
 #include <iterator>
 #include <map>
@@ -25,6 +26,25 @@ std::vector<std::string> listOfFood(unsigned int length,
 
 std::map<std::string, int> fromList2Map(std::vector<std::string> list);
 
+std::vector<std::string> randomSelectFood(
+    const std::map<std::string, int>& foodMap, int N = SAMPLE_SIZE);
+
+void subtractFromFoodMap(std::map<std::string, int>& foodMap,
+                         const std::vector<std::string>& keys);
+
+void addKeysToFoodMap(
+    std::map<std::string, int>& foodMap,
+    const std::vector<std::map<std::string, int>>& returnedFood,
+    const std::vector<std::string>& newFood);
+
+std::map<std::string, int> sampleFood(std::map<std::string, int>& foodMap);
+
+void foodWriting(std::vector<std::string>& foodContainer,
+                 std::string folderPath, int iteration);
+
+void foodWriting(std::vector<std::map<std::string, int>>& foodContainer,
+                 std::string folderPath, int iteration);
+
 std::vector<std::string> decimal2Binary(int numbers);
 
 void printMap(mapa_prot& mapa);
@@ -42,17 +62,12 @@ std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa,
                                               bool method_1 = true,
                                               float p = 0.5f);
 
-std::vector<std::string> sampleFood(std::vector<std::string>& food,
-                                    unsigned int sample_size = SAMPLE_SIZE);
-
-void writeResults(std::string fileName, std::string folder_path,
+void writeResults(std::string fileName, std::string folderPath,
                   std::vector<std::string> headers,
                   std::vector<std::vector<std::string>> results);
 
 void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
                        int iteration, std::string folder_path);
-
-void foodWriting(std::vector<std::string> foodList, std::string folderPath);
 
 int getNumberOfSimulation();
 void increaseNumberOfSimulation();
@@ -64,5 +79,7 @@ void createReadMe(int numberOfGenerations, int initialPopulationSize,
 std::string fromMapToString(mapa_prot& mapa);
 std::string fromMapToString(mapa_met& mapa);
 std::string fromMapToString(mapa_dim& mapa);
+
+std::string currentTime();
 
 #endif  // FUNC_H

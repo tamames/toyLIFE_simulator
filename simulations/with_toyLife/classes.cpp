@@ -129,7 +129,7 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
                     min = it1->second;
                     prot_min = it1;
                 }  // if binding<min
-            }      // for i
+            }  // for i
             for (std::map<Dim, double>::const_iterator it2 =
                      binding_energies.second.begin();
                  it2 != binding_energies.second.end();
@@ -140,7 +140,7 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
                     i_min = 1;
                     dim_min = it2;
                 }  // if binding<min
-            }      // for i
+            }  // for i
 
             if (d_equal(min,
                         0.0)) {  // If the minimal is 0, no protein or dimer
@@ -168,7 +168,7 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
                      ++it2)  // we compare the minimum protein with the dimers
                     if (d_equal(it2->second, min))
                         count_mins++;
-            }       // if minimum is a protein
+            }  // if minimum is a protein
             else {  // minimum is a dimer (then we don't need to check
                     // repetitions in proteins, because we examined the proteins
                     // first)
@@ -181,7 +181,7 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
                     if (d_equal(it2->second,
                                 min))  // if the binding energies are the same
                         count_mins++;  // we sum to the counter
-            }                          // minimum is a dimer
+            }  // minimum is a dimer
 
             if (count_mins) {  // if there are repeated energies
                 for (std::map<Prot, double>::iterator it1 =
@@ -209,7 +209,7 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
                 break;                                   // we exit the loop
             }
         }  // while TRUE
-    }      // for promoters
+    }  // for promoters
 
     // EXPRESSION
     prots.clear();  // now we know which promoters are expressed, all objects
@@ -282,7 +282,7 @@ void Agent::reacting(const ToyPlugin& toy) {
                     binding_energies[b_energy][new_complex] =
                         int_min(it1->second, it2->second);
                 }  // if a dimer can be formed
-            }      // if it1!=it2
+            }  // if it1!=it2
 
     // Then we check if any Protein binds any Met
     for (mapa_prot::const_iterator it_prot = prots.begin();
@@ -380,8 +380,8 @@ void Agent::reacting(const ToyPlugin& toy) {
             }  // try
             catch (std::out_of_range) {
             }  // it doesn't bind to this sequence
-        }      // for prots
-    }          // for d+m complexes
+        }  // for prots
+    }  // for d+m complexes
 
     // NOW WE HAVE A MAP OF ENERGIES
     // LOOP OVER EACH ENERGY AND SEE WHAT HAPPENS
@@ -419,7 +419,7 @@ void Agent::reacting(const ToyPlugin& toy) {
                     number_dm[OWM(-1, it_tuple->first.dim,
                                   it_tuple->first.met)] += it_tuple->second;
                 }
-            }       // proteins and mets are involved
+            }  // proteins and mets are involved
             else {  // dimer-met complex
                 number_dims[it_tuple->first.dim] += it_tuple->second;
                 number_mets[it_tuple->first.met] += it_tuple->second;
@@ -466,7 +466,7 @@ void Agent::reacting(const ToyPlugin& toy) {
                     else
                         ++it_tuple;
                 }
-            }       // proteins and mets are involved
+            }  // proteins and mets are involved
             else {  // dimer-met complex
                 if (dims[it_tuple->first.dim] <
                         number_dims[it_tuple->first.dim] ||  // dimer more
@@ -512,7 +512,7 @@ void Agent::reacting(const ToyPlugin& toy) {
                     mets[pmet1] += it_tuple->second;
                     mets[pmet2] += it_tuple->second;
                 }
-            }       // proteins and mets
+            }  // proteins and mets
             else {  // dimer-met complex (it should check this: if
                 // (boost::get<0>(boost::get<1>(*it_tuple))!=-1)
                 owns[it_tuple->first] += it_tuple->second;
@@ -520,7 +520,7 @@ void Agent::reacting(const ToyPlugin& toy) {
                 mets[it_tuple->first.met] -= it_tuple->second;
             }
         }  // for each complex
-    }      // for all energies
+    }  // for all energies
 
     // NOW WE ELIMINATE THE ELEMENTS THAT HAVE BEEN USED UP
     for (auto it_prot = prots.begin(); it_prot != prots.end();)
@@ -672,6 +672,11 @@ Population::Population(int sizePopulation) {
         Agent agent(energies[i]);
         agents.push_back(agent);
     }
+
+    this->averageEnergyGain.reserve(NUMBER_OF_GENERATIONS);
+    this->totalEnergyGain.reserve(NUMBER_OF_GENERATIONS);
+    this->maxEnergyGain.reserve(NUMBER_OF_GENERATIONS);
+    this->minEnergyGain.reserve(NUMBER_OF_GENERATIONS);
 }
 
 void Population::print(bool complete) {
@@ -682,76 +687,75 @@ void Population::print(bool complete) {
     }
 }
 
-void Population::iteration(std::vector<std::string> food, ToyPlugin toy,
-                           float cost, double costVariation, bool print) {
+std::vector<std::map<std::string, int>> Population::iteration(
+    std::map<std::string, int> foodMap, const ToyPlugin& toy, bool print,
+    const int& iterationNumber) {
     /**
-     * Here we do the iteration of the population. First we
-     *make the agents search for food. Then we generate a random
-     *order to eat the food. Then we check the energy of each agent
-     *and do the corresponding action. First we check the ones that died.
-     *Then we check the ones that can reproduce and we reproduce them.
-     * @param food The food that the agents are going to eat.
-     * @param cost The cost of searching for food.
-     * @param costVariation The variation of the cost so every agent
-     *                      doesn't spend the same energy searching for
-     *food.
-     * @param print If true it logs extra information.
+     * Here we do the iteration of the population. First we generate a random
+     * order for the agents to eat so not always the same are eating.
+     * Then we start iterating over all the agents. We take a sample of food
+     * from our foodMap and give it to the agent.
+     * We store the difference in energy between before and after eating. We
+     * also store the food (metabolites) that the agent returned to the
+     * enviroment.
+     * After all the agents have eaten we calculate the statistics of the
+     * iteration, add 1 to the generation counter and also add 1 to all the ages
+     * of the agents.
+
+     * @param foodMap The food that the agents are going to eat.
+     * @param toy The toyLife object.
      */
 
-    int sizeFood = food.size();
-
-    // std::uniform_real_distribution<double> variationDist(
-    //     -cost * costVariation, cost * costVariation);
-
-    // for (Agent& i : agents) {  // every agent search for food
-    //     double randomCost = cost + variationDist(g);
-    //     i.energy -= randomCost;
-    // }
-
-    if ((sizePopulation > sizeFood))
-        std::cout << "There is not enough food for everybody.\n";
-
-    int smaller = std::min(sizePopulation, sizeFood);
-
     // generate random order
-    std::vector<int> order(smaller);
+    std::vector<int> order(sizePopulation);
     std::iota(order.begin(), order.end(), 0);
     std::shuffle(order.begin(), order.end(), GENERATOR);
 
-    //* for data
-    std::vector<float> gainedEnergies(
-        smaller);  // store the energies gained by each agent
+    // store the energies gained by each agent
+    float sum = 0.0f;
+    float max = 0.0f;
+    float min = 0.0f;
 
-    for (int i = 0; i < smaller; ++i) {
+    int tenPercent = sizePopulation / 10;
+
+    std::vector<std::map<std::string, int>> returnedFood(sizePopulation);
+
+    for (int i = 0; i < sizePopulation; ++i) {
         Agent& agent = agents[order[i]];
 
-        if (agent.checkDie())  // When searching for food the agent
-                               // died.
-            continue;
-
         // this resets the map every iteration
-        std::vector<std::string> food2eat = sampleFood(food);
-        std::map<std::string, int> food2eatMap = fromList2Map(food2eat);
+        std::map<std::string, int> food2eat = sampleFood(foodMap);
 
-        gainedEnergies[i] = agent.eat(food2eatMap, toy);
+        float energyGain = agent.eat(food2eat, toy);
+        sum += energyGain;
+        if (energyGain > max)
+            max = energyGain;
+        if (energyGain < min)
+            min = energyGain;
+
+        if (print & (i % tenPercent == 0)) {
+            std::cout << currentTime() << "   In iteration " << iterationNumber
+                      << " . Progress:" << i / tenPercent * 10
+                      << "%  Processed Agents: " << i + 1 << "\n";
+        }
+
+        // store the food that the agent return to the environment
+        returnedFood[i] = food2eat;
     }
 
     //* Fill the vectors for statistics.
-    float sum =
-        std::accumulate(gainedEnergies.begin(), gainedEnergies.end(), 0.0f);
-    averageEnergyGain.push_back(static_cast<double>(sum) / (float)smaller);
+    averageEnergyGain.push_back(static_cast<double>(sum) /
+                                (float)sizePopulation);
     totalEnergyGain.push_back(sum);
 
-    auto maxGain =
-        std::max_element(gainedEnergies.begin(), gainedEnergies.end());
-    maxEnergyGain.push_back(*maxGain);
+    maxEnergyGain.push_back(max);
 
-    auto minGain =
-        std::min_element(gainedEnergies.begin(), gainedEnergies.end());
-    minEnergyGain.push_back(*minGain);
+    minEnergyGain.push_back(min);
 
     generation++;
     addAges();
+
+    return returnedFood;
 }
 
 void Population::afterIteration() {
