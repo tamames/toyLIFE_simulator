@@ -1,12 +1,16 @@
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 
 try:
     from ForGraphs.data_frames import get_total_df
+    from ForGraphs.plots import stackplot_1_0, save_fig, PlotType
 except ModuleNotFoundError:
     from data_frames import get_total_df
+    from plots import stackplot_1_0, save_fig, PlotType
 
 import pandas as pd
+from matplotlib.pyplot import close
 
 
 @dataclass
@@ -42,19 +46,29 @@ class _TotalData:
 
 def _total_statistics(df: pd.DataFrame) -> _TotalData:
 
+    logging.info("Start processing data")
     maximun_age = df["Age"].max()
+    logging.debug("Start grouping by ID, Age max")
     median_age = df[["ID", "Age"]].groupby("ID").max().mean()[0]
+    logging.debug("Finish grouping by ID, Age max")
 
+    logging.debug("Start getting maximum iterations")
     maximum_iterations = df["Iteration"].max()
+    logging.debug("Finish getting maximum iterations")
 
+    logging.debug("Start getting uniques")
     number_of_children = df[df["Parent"] > 0]["Parent"].nunique()
     number_of_total_individuals = df["ID"].nunique()
     number_of_total_genotypes = df["Genotype"].nunique()
+    logging.debug("Finish getting uniques")
+
     genotype_data = _process_genotype_data(df["Genotype"])
 
     data_prots = _process_molecules(df["Prots"])
     data_mets = _process_molecules(df["Mets"])
     data_dims = _process_molecules(df["Dims"])
+
+    logging.info("Finish processing data")
 
     return _TotalData(
         maximun_age=maximun_age,
@@ -80,17 +94,25 @@ def _process_genotype_data(genotype_column: pd.Series) -> _GenotypeData:
     Returns:
         _GenotypeData: a dataclass with the genotype data.
     """
+
+    logging.info("Start processing genotypes")
     genotype_len = len(genotype_column[0])
     amount_of_food = len(genotype_column)
 
     total_slots = genotype_len * amount_of_food
 
-    one_count: pd.Series = genotype_column.str.count("1")
+    logging.debug("Counting 1s in genotypes")
+    one_count: pd.Series = genotype_column.apply(lambda x: x.count("1"))
+    logging.debug("Finish counting 1s in genotypes")
 
+    logging.debug("Adding and averaging 1s in genotypes")
     number_of_1 = one_count.sum()
     mean_of_1 = one_count.mean()
+    logging.debug("Finish adding and averaging 1s in genotypes")
 
     percentage_of_1 = number_of_1 / total_slots
+
+    logging.info("Finish processing genotypes")
 
     return _GenotypeData(
         genotype_len=genotype_len,
@@ -101,48 +123,52 @@ def _process_genotype_data(genotype_column: pd.Series) -> _GenotypeData:
 
 
 def _process_molecules(molecule_column: pd.Series) -> _DataMolecules | None:
+    logging.info(f"Start processing {molecule_column.name}")
     not_empty = molecule_column.dropna()
     if not_empty.empty:
-        return None
-    not_empty = not_empty.str.replace("{", "").str.replace("}", "").str.replace(" ", "")
-    molecules = not_empty.str.split(",")
+        logging.info(f"{molecule_column.name} is empty")
+        return
 
-    df = pd.concat(
-        [
-            pd.DataFrame([agent], index=[idx])
-            for idx, agent in zip(molecules.index, molecules)
-        ],
-        ignore_index=False,
+    logging.debug("Replacing and splitting")
+    not_empty = not_empty.apply(
+        lambda x: x.replace(" ", "").replace("{", "").replace("}", "")
     )
+    df = not_empty.str.split(",", expand=True)
     # now we have a df where each row is an agent.
     # in each column we have the molecule and the amount.
+    logging.debug("Finish replacing and splitting")
 
     maximum_molecules = len(df.columns)
 
-    total_molecules = pd.concat(
-        [
-            pd.DataFrame(
-                [agent],
-                columns=["molecule", "amount"],
-            )
-            for agent in molecules.explode().str.split(":")
-        ]
-    )
+    logging.debug("Stacking")
+    stacked = df.stack()
+    logging.debug("Finish stacking")
+
+    logging.debug("Splitting molecule and amount")
+    total_molecules = stacked.str.split(":", expand=True)
+    logging.debug("Finish splitting molecule and amount")
+    total_molecules.columns = ["molecule", "amount"]
 
     total_molecules = total_molecules.astype(
         dtype={"molecule": "category", "amount": int}
     )
 
+    logging.debug("Grouping by molecule")
     total_molecules = total_molecules.groupby("molecule").sum()
+    logging.debug("Finish grouping by molecule")
 
     number_unique_molecules = total_molecules.shape[0]
 
+    logging.debug("Sorting values and markdown")
     table_molecules = (
         total_molecules[total_molecules["amount"] > 1]
         .sort_values(by="amount", ascending=False)
+        .head(75)
         .to_markdown()
     )
+    logging.debug("Finish sorting values and markdown")
 
+    logging.info(f"Finish processing {molecule_column.name}")
     return _DataMolecules(maximum_molecules, table_molecules, number_unique_molecules)
 
 
@@ -154,6 +180,7 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
         total_data (_TotalData): the total dataclass.
     """
 
+    logging.info("Start writing the total data")
     with open(data_folder_path / "Readme.md", "a") as readme:
         readme.write("---  \n")
         readme.write("## Total Data  \n")
@@ -178,7 +205,9 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
             readme.write(
                 f"number_unique_prots = {total_data.data_prots.number_unique_molecules}  \n\n"
             )
+            logging.debug("Writing prots table")
             readme.write(total_data.data_prots.table_molecules)
+            logging.debug("Finish writing prots table")
         else:
             readme.write("This simulation didn't produce any prots.  \n")
 
@@ -191,7 +220,9 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
             readme.write(
                 f"number_unique_mets = {total_data.data_mets.number_unique_molecules}  \n\n"
             )
+            logging.debug("Writing mets table")
             readme.write(total_data.data_mets.table_molecules)
+            logging.debug("Finish writing mets table")
         else:
             readme.write("This simulation didn't produce any mets.  \n")
 
@@ -204,7 +235,9 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
             readme.write(
                 f"number_unique_dims = {total_data.data_dims.number_unique_molecules}  \n\n"
             )
+            logging.debug("Writing dims table")
             readme.write(total_data.data_dims.table_molecules)
+            logging.debug("Finish writing dims table")
         else:
             readme.write("This simulation didn't produce any dims.  \n")
 
@@ -217,15 +250,54 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
             f"mean 1s in all genotypes = {total_data.genotype_data.mean_of_1}  \n"
         )
         readme.write(
-            f"percentage_of_1 = {total_data.genotype_data.percentage_of_1:.1%}  \n"
+            f"percentage_of_1 = {total_data.genotype_data.percentage_of_1:.2%}  \n"
         )
+    logging.info("Finish writing the total data")
+
+
+def _process_for_stackplot_1_0(df: pd.DataFrame) -> pd.DataFrame:
+
+    logging.info("Start processing the data")
+
+    logging.debug("Start counting ones in Genotypes")
+    df["1_count"] = df["Genotype"].apply(lambda x: x.count("1"))
+    logging.debug("Finish counting ones in Genotypes")
+
+    genotype_size = len(df["Genotype"].iloc[0])
+
+    logging.debug("Subtracting 1s from total slots")
+    df["0_count"] = genotype_size - df["1_count"]
+    logging.debug("Finish subtracting 1s from total slots")
+
+    logging.debug("Grouping by iteration")
+    by_iteration = df.groupby(by=["Iteration"], as_index=False).agg(
+        {"1_count": "sum", "0_count": "sum"}
+    )
+    logging.debug("Finish grouping by iteration")
+
+    logging.debug("Calculating ratios")
+    by_iteration["total_slots"] = by_iteration["1_count"] + by_iteration["0_count"]
+    by_iteration["1s_ratio"] = by_iteration["1_count"] / by_iteration["total_slots"]
+    by_iteration["0s_ratio"] = 1 - by_iteration["1s_ratio"]
+    logging.debug("Finish calculating ratios")
+
+    logging.info("Finish processing the data")
+
+    return by_iteration[["Iteration", "1s_ratio", "0s_ratio"]]
 
 
 def main(data_folder_path: Path) -> None:
+    logging.info("Start reading the total data in total.py")
     df = get_total_df(data_folder_path)
+    logging.info("Finish reading the total data in total.py")
     total_data = _total_statistics(df)
     _write_total_data(data_folder_path, total_data)
 
-
-if __name__ == "__main__":
-    ...
+    by_iteration = _process_for_stackplot_1_0(df)
+    fig = stackplot_1_0(by_iteration, total=True)
+    save_fig(
+        fig,
+        PlotType.TOTAL,
+        data_folder_path / "graphs",
+    )
+    close(fig)

@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 
@@ -28,9 +29,11 @@ def get_energy_to_reproduce(data_folder_path: Path) -> str:
     """
     check_file_exists(data_folder_path / "Readme.md")
 
+    logging.info("Start reading the Readme.md to find the energy reproduce parameter")
     with open(data_folder_path / "Readme.md", "r") as readme:
         for line in readme:
             if "Energy to reproduce" in line:
+                logging.info("Finish reading the Readme.md")
                 return line.split(" ")[-1].strip()
 
     raise ValueError(

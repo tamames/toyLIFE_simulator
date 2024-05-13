@@ -10,11 +10,14 @@ except ModuleNotFoundError:
     from general_functions import check_file_exists
 
 
-def get_total_df(data_folder_path: Path) -> pd.DataFrame:
+def get_total_df(
+    data_folder_path: Path, usecols: None | list[str] = None
+) -> pd.DataFrame:
     """Returns the total DataFrame from the data_folder_path.
 
     Args:
         data_folder_path (Path): the path to the data folder we are looking at.
+        usecols (None | list[str], optional): the columns we want to use. Defaults to None, so we get all columns.
 
     Returns:
         pd.DataFrame: a pandas DataFrame with the total data.
@@ -26,6 +29,7 @@ def get_total_df(data_folder_path: Path) -> pd.DataFrame:
         sep=";",
         header=0,
         index_col=False,
+        usecols=usecols,
         dtype={
             "ID": int,
             "Genotype": str,
@@ -101,7 +105,7 @@ def get_sizes_df(data_folder_path: Path) -> pd.DataFrame:
         sep=",",
         header=0,
         index_col=False,
-        dtype={"Size": float},
+        dtype={"Size": int},
     )
 
 
@@ -114,14 +118,14 @@ def get_food_df(data_folder_path: Path) -> pd.DataFrame:
     Returns:
         pd.DataFrame: a pandas DataFrame with the food data.
     """
-    check_file_exists(data_folder_path / "food_total.csv")
+    check_file_exists(data_folder_path / "food.csv")
 
     return pd.read_csv(
-        data_folder_path / "food_total.csv",
+        data_folder_path / "food.csv",
         sep=",",
         header=0,
         index_col=False,
-        dtype={"Binary": str},
+        dtype={"Iteration": int, "Binary": str},
     )
 
 

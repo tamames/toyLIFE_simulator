@@ -1,5 +1,6 @@
 """In this file we define some python functions to study the data generated with the C++ code."""
 
+import logging
 import os
 import shutil
 from pathlib import Path
@@ -7,8 +8,8 @@ from typing import Generator
 
 import ForGraphs.config as config
 import ForGraphs.food as food
-import ForGraphs.total as total
 import ForGraphs.plots as plots
+import ForGraphs.total as total
 
 #### FUNCTIONS ####
 
@@ -56,12 +57,24 @@ def del_graphs_folder(*args: int) -> None:
 
 
 def main() -> None:
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s.%(msecs)03d -> %(message)s",
+        datefmt="%H:%M:%S",
+        handlers=[
+            logging.FileHandler("simulations\\with_toyLife\\python_log.log"),
+            logging.StreamHandler(),
+        ],
+    )
+
     for folder_to_process in check_folders():
-        print(f"Processing folder {folder_to_process}")
+        logging.info(f"Start processing folder {folder_to_process}")
         create_graph_folder(folder_to_process)
         food.main(folder_to_process)
         total.main(folder_to_process)
         plots.main(folder_to_process)
+        logging.info(f"Finish processing folder {folder_to_process}")
 
 
 if __name__ == "__main__":
