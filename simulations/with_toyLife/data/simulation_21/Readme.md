@@ -8,7 +8,7 @@
 * **Breaking energy** &rarr; 30
 * **Sample size** &rarr; 5
 * **Size of the genotype** &rarr; 80
-* **Size of each food** &rarr; 10
+* **Size of each food** &rarr; 8
 * **Control** &rarr; 0.5
 * **Food Size** &rarr; 5000
 
