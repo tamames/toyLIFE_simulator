@@ -69,7 +69,7 @@ class Population {
         std::map<std::string, int> foodMap, const ToyPlugin& toy, bool print,
         const int& iterationNumber);
 
-    void afterIteration();
+    void afterIteration(bool print);
 
     std::vector<std::string> getGenotypes();
 
@@ -91,7 +91,8 @@ class Population {
     std::vector<size_t> numberOfDeads;
     std::vector<size_t> numberOfReproductions;
 
-    void deleteElements(std::vector<Agent>& agents, std::vector<int> indexes);
+    void deleteElements(std::vector<Agent>& agents,
+                        const std::vector<int>& indexes);
 
     void addAges();
 };

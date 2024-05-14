@@ -758,7 +758,7 @@ std::vector<std::map<std::string, int>> Population::iteration(
     return returnedFood;
 }
 
-void Population::afterIteration() {
+void Population::afterIteration(bool print) {
     /**
      * Here we check the energy of each agent and do the
      *corresponding action. First we check the ones that died.
@@ -766,14 +766,29 @@ void Population::afterIteration() {
      */
     std::vector<int> deadsPositions;  // store the indexes of the deads
 
+    if (print) {
+        std::cout << currentTime() << "   getting deads\n";
+    }
     for (int i = 0; i < sizePopulation; ++i) {
         if (agents[i].checkDie())
             deadsPositions.push_back(i);
     }
+    if (print) {
+        std::cout << currentTime() << "   got deads\n";
+    }
 
     numberOfDeads.push_back(deadsPositions.size());
+    if (print) {
+        std::cout << currentTime() << "   deleting deads\n";
+    }
     deleteElements(agents, deadsPositions);
+    if (print) {
+        std::cout << currentTime() << "   deleted deads\n";
+    }
 
+    if (print) {
+        std::cout << currentTime() << "   getting reproductions\n";
+    }
     std::vector<int>
         reproducePositions;  // store the indexes of the ones to reproduce
     for (int i = 0; i < sizePopulation; ++i) {
@@ -781,8 +796,14 @@ void Population::afterIteration() {
             reproducePositions.push_back(i);
     }
 
-    numberOfReproductions.push_back(reproducePositions.size());
+    if (print) {
+        std::cout << currentTime() << "   got reproductions\n";
+    }
 
+    numberOfReproductions.push_back(reproducePositions.size());
+    if (print) {
+        std::cout << currentTime() << "   reproducing\n";
+    }
     if (!reproducePositions.empty()) {
         // if not empty
         std::vector<Agent> newElements(reproducePositions.size() * 2, Agent(0));
@@ -796,11 +817,15 @@ void Population::afterIteration() {
         agents.insert(agents.end(), newElements.begin(), newElements.end());
     }
 
+    if (print) {
+        std::cout << currentTime() << "   reproduced\n";
+    }
+
     this->sizePopulation = agents.size();  // update the size of the population
 }
 
 void Population::deleteElements(std::vector<Agent>& agents,
-                                std::vector<int> indexes) {
+                                const std::vector<int>& indexes) {
     for (auto it = indexes.rbegin(); it != indexes.rend(); it++)
         agents.erase(agents.begin() + *it);
 

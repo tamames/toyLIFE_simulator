@@ -19,6 +19,10 @@ int main() {
     int initialPopulationSize = INITIAL_POPULATION_SIZE;
     int foodSize = INITIAL_FOOD_SIZE;
 
+    // to prevent errors
+    tenPercent = tenPercent == 0 ? 1 : tenPercent;
+    fivePercent = fivePercent == 0 ? 1 : fivePercent;
+
     createReadMe(numberOfGenerations, initialPopulationSize, foodSize);
 
     Population population(initialPopulationSize);
@@ -34,13 +38,14 @@ int main() {
     sizes.reserve(numberOfGenerations);
     sizes.push_back({std::to_string(population.sizePopulation)});
 
+    std::cout << "Writing the first step of the simulation\n";
     // we write the first step of the simulation
     std::vector<std::vector<std::string>> dataOfSimulation =
         population.getPopulationData();
     populationWriting(dataOfSimulation, 0, dataDirectory);
 
     std::vector<std::string> food = listOfFood(foodSize);
-
+    std::cout << "Writing the first food\n";
     foodWriting(food, dataDirectory, 0);
 
     std::map<std::string, int> food2eatMap = fromList2Map(food);
@@ -50,15 +55,22 @@ int main() {
 
     for (int i = 1; i <= numberOfGenerations; ++i) {
         bool print = ((i % fivePercent == 0) && !(i % tenPercent == 0));
+
         std::vector<std::map<std::string, int>> returnedFood =
             population.iteration(food2eatMap, toy, print, i);
 
+        if (print) {
+            std::cout << currentTime() << "   getting energy" << std::endl;
+        }
         // we call the getEnergy function to see if someone gain energy
         // before it has a chance to divide itself
         std::vector<std::string> energies = population.getPopulationEnergy();
         energyInfo.push_back(energies);
+        if (print) {
+            std::cout << currentTime() << "   after getEnergy" << std::endl;
+        }
 
-        population.afterIteration();
+        population.afterIteration(print);
 
         sizes.push_back({std::to_string(population.sizePopulation)});
 
@@ -68,10 +80,17 @@ int main() {
             break;
         }
 
+        if (print) {
+            std::cout << currentTime() << "   writing data" << std::endl;
+        }
         // we write only if the population is not dead
         std::vector<std::vector<std::string>> dataOfSimulation =
             population.getPopulationData();
         populationWriting(dataOfSimulation, i, dataDirectory);
+
+        if (print) {
+            std::cout << currentTime() << "   writing food" << std::endl;
+        }
 
         // Now we deal with the new food that we have to add to the population
         std::vector<std::string> newFood = listOfFood(FOOD_TO_ADD);
@@ -80,31 +99,43 @@ int main() {
 
         foodWriting(returnedFood, dataDirectory, i);
 
+        if (print) {
+            std::cout << currentTime() << "   after writing food" << std::endl;
+        }
+
         if (i % tenPercent == 0) {
             std::cout << currentTime() << ":   Iteration: " << i
                       << ". Size: " << population.sizePopulation << std::endl;
         }
+
+        if (population.sizePopulation > 800000) {
+            std::cout << "The population has exceeded the limit of 800.000."
+                      << std::endl;
+            break;
+        }
     }
 
-    std::vector<std::vector<std::string>> gainedEnergies =
-        population.getPopulationGains();
+    std::cout << "End of the simulation\n" << std::endl;
 
-    writeResults("energy_gains", dataDirectory,
-                 {"Max_Gain", "Average_Gain", "Total_Gain", "Min_Gain"},
-                 gainedEnergies);
+    // std::vector<std::vector<std::string>> gainedEnergies =
+    //     population.getPopulationGains();
 
-    std::vector<std::vector<std::string>> deadsReproduce =
-        population.getDeadsAndReproduces();
+    // writeResults("energy_gains", dataDirectory,
+    //              {"Max_Gain", "Average_Gain", "Total_Gain", "Min_Gain"},
+    //              gainedEnergies);
 
-    writeResults("deads_reproduce", dataDirectory, {"Deads", "Reproduce"},
-                 deadsReproduce);
+    // std::vector<std::vector<std::string>> deadsReproduce =
+    //     population.getDeadsAndReproduces();
 
-    writeResults("energies", dataDirectory, {"Max", "Average", "Min"},
-                 {energyInfo});
+    // writeResults("deads_reproduce", dataDirectory, {"Deads", "Reproduce"},
+    //              deadsReproduce);
 
-    writeResults("sizes", dataDirectory, {"Size"}, {sizes});
+    // writeResults("energies", dataDirectory, {"Max", "Average", "Min"},
+    //              {energyInfo});
 
-    increaseNumberOfSimulation();
+    // writeResults("sizes", dataDirectory, {"Size"}, {sizes});
+
+    // increaseNumberOfSimulation();
     return 0;
 }
 
