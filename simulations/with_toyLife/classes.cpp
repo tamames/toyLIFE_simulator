@@ -827,9 +827,21 @@ void Population::afterIteration(bool print) {
 void Population::deleteElements(std::vector<Agent>& agents,
                                 const std::vector<int>& indexes) {
     for (auto it = indexes.rbegin(); it != indexes.rend(); it++)
-        agents.erase(agents.begin() + *it);
+        eraseFast(agents, agents.begin() + *it);
+    // agents.erase(agents.begin() + *it);
 
     this->sizePopulation = agents.size();  // update the size of the population
+}
+
+std::vector<Agent>::iterator Population::eraseFast(
+    std::vector<Agent>& c, std::vector<Agent>::iterator it) {
+    if (&(*it) == &(c.back())) {
+        c.pop_back();
+        return std::end(c);
+    }
+    *it = std::move(c.back());
+    c.pop_back();
+    return it;
 }
 
 void Population::addAges() {

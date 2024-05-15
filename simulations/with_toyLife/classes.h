@@ -91,10 +91,13 @@ class Population {
     std::vector<size_t> numberOfDeads;
     std::vector<size_t> numberOfReproductions;
 
+    void addAges();
+
     void deleteElements(std::vector<Agent>& agents,
                         const std::vector<int>& indexes);
 
-    void addAges();
+    std::vector<Agent>::iterator eraseFast(std::vector<Agent>& c,
+                                           std::vector<Agent>::iterator it);
 };
 
 #endif  // CLASSES_H

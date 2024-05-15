@@ -33,5 +33,6 @@ extern float MUTATION_PROBABILITY;
 
 extern int NUMBER_OF_GENERATIONS;
 extern int INITIAL_POPULATION_SIZE;
+extern int MAXIMUM_POPULATION_SIZE;
 
 #endif  // GLOBALS_H

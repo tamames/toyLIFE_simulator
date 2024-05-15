@@ -108,34 +108,35 @@ int main() {
                       << ". Size: " << population.sizePopulation << std::endl;
         }
 
-        if (population.sizePopulation > 800000) {
-            std::cout << "The population has exceeded the limit of 800.000."
+        if (population.sizePopulation > MAXIMUM_POPULATION_SIZE) {
+            std::cout << "The population has exceeded the limit of "
+                      << MAXIMUM_POPULATION_SIZE << " in iteration: " << i
                       << std::endl;
             break;
         }
     }
 
-    std::cout << "End of the simulation\n" << std::endl;
+    std::cout << currentTime() << "    End of the simulation\n" << std::endl;
 
-    // std::vector<std::vector<std::string>> gainedEnergies =
-    //     population.getPopulationGains();
+    std::vector<std::vector<std::string>> gainedEnergies =
+        population.getPopulationGains();
 
-    // writeResults("energy_gains", dataDirectory,
-    //              {"Max_Gain", "Average_Gain", "Total_Gain", "Min_Gain"},
-    //              gainedEnergies);
+    writeResults("energy_gains", dataDirectory,
+                 {"Max_Gain", "Average_Gain", "Total_Gain", "Min_Gain"},
+                 gainedEnergies);
 
-    // std::vector<std::vector<std::string>> deadsReproduce =
-    //     population.getDeadsAndReproduces();
+    std::vector<std::vector<std::string>> deadsReproduce =
+        population.getDeadsAndReproduces();
 
-    // writeResults("deads_reproduce", dataDirectory, {"Deads", "Reproduce"},
-    //              deadsReproduce);
+    writeResults("deads_reproduce", dataDirectory, {"Deads", "Reproduce"},
+                 deadsReproduce);
 
-    // writeResults("energies", dataDirectory, {"Max", "Average", "Min"},
-    //              {energyInfo});
+    writeResults("energies", dataDirectory, {"Max", "Average", "Min"},
+                 {energyInfo});
 
-    // writeResults("sizes", dataDirectory, {"Size"}, {sizes});
+    writeResults("sizes", dataDirectory, {"Size"}, {sizes});
 
-    // increaseNumberOfSimulation();
+    increaseNumberOfSimulation();
     return 0;
 }
 
