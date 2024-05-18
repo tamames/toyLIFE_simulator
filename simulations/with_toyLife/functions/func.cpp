@@ -600,6 +600,8 @@ void createReadMe(int numberOfGenerations, int initPopulationSize,
     file << "* **Number of generations** &rarr; " << numberOfGenerations << "\n"
          << "* **Initial population size** &rarr; " << initPopulationSize
          << "\n"
+         << "* **Maximum population size** &rarr; " << MAXIMUM_POPULATION_SIZE
+         << "\n"
          << "* **Energy to reproduce** &rarr; " << ENERGY_TO_REPRODUCE << "\n"
          << "* **Energy to die** &rarr; " << ENERGY_TO_DIE << "\n"
          << "* **Age to die** &rarr; " << AGE_TO_DIE << "\n"

@@ -1,4 +1,4 @@
-#include <ctime>
+#include <time.h>
 
 #include "classes.h"
 #include "functions/func.h"
@@ -15,13 +15,13 @@ int main() {
 
     int numberOfGenerations = NUMBER_OF_GENERATIONS;
     int tenPercent = numberOfGenerations / 10;
-    int fivePercent = numberOfGenerations / 20;
+    int percentToPrint = numberOfGenerations / 4;
     int initialPopulationSize = INITIAL_POPULATION_SIZE;
     int foodSize = INITIAL_FOOD_SIZE;
 
     // to prevent errors
     tenPercent = tenPercent == 0 ? 1 : tenPercent;
-    fivePercent = fivePercent == 0 ? 1 : fivePercent;
+    percentToPrint = percentToPrint == 0 ? 1 : percentToPrint;
 
     createReadMe(numberOfGenerations, initialPopulationSize, foodSize);
 
@@ -53,8 +53,12 @@ int main() {
     // to free some memory
     food.clear();
 
+    double startTime, finishTime;
+
     for (int i = 1; i <= numberOfGenerations; ++i) {
-        bool print = ((i % fivePercent == 0) && !(i % tenPercent == 0));
+        startTime = (double)clock();
+
+        bool print = ((i % percentToPrint == 0) && !(i % tenPercent == 0));
 
         std::vector<std::map<std::string, int>> returnedFood =
             population.iteration(food2eatMap, toy, print, i);
@@ -114,6 +118,10 @@ int main() {
                       << std::endl;
             break;
         }
+
+        finishTime = (double)clock();
+        std::cout << "Time of iteration " << i << ": "
+                  << (finishTime - startTime) / CLOCKS_PER_SEC << std::endl;
     }
 
     std::cout << currentTime() << "    End of the simulation\n" << std::endl;
