@@ -1,6 +1,7 @@
 import logging
 from dataclasses import dataclass
 from pathlib import Path
+from warnings import simplefilter
 
 try:
     from ForGraphs.data_frames import get_total_df
@@ -11,6 +12,8 @@ except ModuleNotFoundError:
 
 import pandas as pd
 from matplotlib.pyplot import close
+
+simplefilter(action="ignore", category=pd.errors.SettingWithCopyWarning)
 
 
 @dataclass

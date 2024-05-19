@@ -23,7 +23,7 @@ def check_folders() -> Generator[Path, None, None]:
     """
     for folder in os.listdir(config.DATA_PATH):
         graph_path = Path(config.DATA_PATH / folder / "graphs")
-        if not graph_path.exists():
+        if not graph_path.exists() and not os.path.isfile(folder):
             # this folder hasn't been processed yet
             yield Path(config.DATA_PATH / folder)
 
@@ -53,6 +53,27 @@ def del_graphs_folder(*args: int) -> None:
             shutil.rmtree(folder_path, ignore_errors=True)
 
 
+def write_interesting_simulation(data_folder_path: Path) -> None:
+    """This function reads the last line of the sizes.csv file
+    to check the last size of our simulation. If it's grater than 1000 we write it
+    in the Readme.md file. This way we can keep track of the most interesting simulations.
+
+    Args:
+        data_folder_path (Path): the simulation_n folder path.
+    """
+    logging.info(f"Checking if simulation {data_folder_path.name} is interesting.")
+    with open(data_folder_path / "sizes.csv", "r") as f:
+        for line in f:
+            pass
+        last_size = int(line)
+
+    if last_size > 1000:
+        logging.info(f"Simulation {data_folder_path.name} is interesting.")
+        with open(config.DATA_PATH / "Readme.md", "a") as f:
+            last_size = f"{last_size:,}".replace(",", ".")
+            f.write(f"* Simulation {data_folder_path.name}. Last size {last_size}.\n")
+
+
 #### MAIN FUNCTION ####
 
 
@@ -74,6 +95,7 @@ def main() -> None:
         food.main(folder_to_process)
         total.main(folder_to_process)
         plots.main(folder_to_process)
+        write_interesting_simulation(folder_to_process)
         logging.info(f"Finish processing folder {folder_to_process}")
 
 

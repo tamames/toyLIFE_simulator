@@ -1,11 +1,15 @@
 import logging
 from dataclasses import dataclass
 from pathlib import Path
+from warnings import simplefilter
+
 
 from ForGraphs.data_frames import get_food_df
 import ForGraphs.plots as fpl
 import pandas as pd
 from matplotlib.pyplot import close
+
+simplefilter(action="ignore", category=pd.errors.SettingWithCopyWarning)
 
 
 @dataclass(kw_only=True)
