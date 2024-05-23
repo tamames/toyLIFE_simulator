@@ -121,7 +121,8 @@ int main() {
 
         finishTime = (double)clock();
         std::cout << "Time of iteration " << i << ": "
-                  << (finishTime - startTime) / CLOCKS_PER_SEC << std::endl;
+                  << (finishTime - startTime) / CLOCKS_PER_SEC
+                  << ". Size: " << population.sizePopulation << std::endl;
     }
 
     std::cout << currentTime() << "    End of the simulation\n" << std::endl;
