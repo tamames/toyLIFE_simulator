@@ -85,7 +85,7 @@ std::vector<std::string> listOfFood(
 
     std::vector<std::string> listOfFood(length);
     for (int i = 0; i < length; ++i)
-        listOfFood[i] = binaryGenerator();
+        listOfFood[i] = binaryGenerator(food_size);
 
     return listOfFood;
 }
@@ -177,8 +177,8 @@ std::map<std::string, int> sampleFood(std::map<std::string, int>& foodMap) {
     return selectedFood;
 }
 
-void foodWriting(std::vector<std::string>& foodContainer,
-                 std::string folderPath, int iteration) {
+void foodWriting(const std::vector<std::string>& foodVector,
+                 std::string folderPath, int iteration, char mode) {
     /** Writes all the food into a file just to plot a histogram of the
      * distribution I had an idea about plotting the food but I am realizing
      * that this can also be used to plot the genotypes
@@ -203,18 +203,19 @@ void foodWriting(std::vector<std::string>& foodContainer,
     }
 
     if (iteration == 0) {
-        myFile << "Iteration,Binary\n";
+        myFile << "Iteration,Binary,Mode\n";
     }
 
-    for (std::size_t i = 0; i < foodContainer.size(); ++i) {
-        myFile << std::to_string(iteration) << "," << foodContainer[i] << "\n";
+    for (std::size_t i = 0; i < foodVector.size(); ++i) {
+        myFile << std::to_string(iteration) << "," << foodVector[i] << ","
+               << mode << "\n";
     }
 
     myFile.close();
 }
 
-void foodWriting(std::vector<std::map<std::string, int>>& foodContainer,
-                 std::string folderPath, int iteration) {
+void foodWriting(const std::vector<mapa_met>& foodMap, std::string folderPath,
+                 int iteration, char mode) {
     /** Writes all the food into a file just to plot a histogram of the
      * distribution I had an idea about plotting the food but I am realizing
      * that this can also be used to plot the genotypes
@@ -239,16 +240,16 @@ void foodWriting(std::vector<std::map<std::string, int>>& foodContainer,
     }
 
     if (iteration == 0) {
-        myFile << "Iteration,Binary\n";
+        myFile << "Iteration,Binary,Mode\n";
     }
 
-    for (std::size_t i = 0; i < foodContainer.size(); ++i) {
-        for (auto const& pair : foodContainer[i]) {
+    for (std::size_t i = 0; i < foodMap.size(); ++i) {
+        for (auto const& pair : foodMap[i]) {
             // we iterate over the map consisting on food: amount
             for (int j = 0; j < pair.second; ++j) {
                 // we write the food once per amount there is
-                myFile << std::to_string(iteration) << "," << pair.first
-                       << "\n";
+                myFile << std::to_string(iteration) << "," << pair.first << ","
+                       << mode << "\n";
             }
         }
     }

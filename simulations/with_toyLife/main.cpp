@@ -46,7 +46,7 @@ int main() {
 
     std::vector<std::string> food = listOfFood(foodSize);
     std::cout << "Writing the first food\n";
-    foodWriting(food, dataDirectory, 0);
+    foodWriting(food, dataDirectory, 0, 'O');
 
     std::map<std::string, int> food2eatMap = fromList2Map(food);
 
@@ -55,6 +55,7 @@ int main() {
 
     double startTime, finishTime;
 
+    // main loop
     for (int i = 1; i <= numberOfGenerations; ++i) {
         startTime = (double)clock();
 
@@ -99,9 +100,13 @@ int main() {
         // Now we deal with the new food that we have to add to the population
         std::vector<std::string> newFood = listOfFood(FOOD_TO_ADD);
 
-        addKeysToFoodMap(food2eatMap, returnedFood, newFood);
+        // first we write the food. The new one and the returned one.
+        foodWriting(returnedFood, dataDirectory, i, 'R');
+        foodWriting(newFood, dataDirectory, i, 'N');
+        foodWriting({food2eatMap}, dataDirectory, i, 'P');
 
-        foodWriting(returnedFood, dataDirectory, i);
+        // then we add the new food to the food2eatMap
+        addKeysToFoodMap(food2eatMap, returnedFood, newFood);
 
         if (print) {
             std::cout << currentTime() << "   after writing food" << std::endl;

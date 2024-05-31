@@ -39,11 +39,11 @@ void addKeysToFoodMap(
 
 std::map<std::string, int> sampleFood(std::map<std::string, int>& foodMap);
 
-void foodWriting(std::vector<std::string>& foodContainer,
-                 std::string folderPath, int iteration);
+void foodWriting(const std::vector<std::string>& foodVector,
+                 std::string folderPath, int iteration, char mode);
 
-void foodWriting(std::vector<std::map<std::string, int>>& foodContainer,
-                 std::string folderPath, int iteration);
+void foodWriting(const std::vector<std::map<std::string, int>>& foodMap,
+                 std::string folderPath, int iteration, char mode);
 
 std::vector<std::string> decimal2Binary(int numbers);
 
