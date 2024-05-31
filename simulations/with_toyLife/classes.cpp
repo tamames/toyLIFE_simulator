@@ -11,7 +11,7 @@
 Agent::Agent(float energy, std::string genotype, int parent, int sizeGenotype,
              mapa_prot prots, mapa_dim dims, mapa_met mets) {
     if (genotype.empty()) {
-        this->genotype = binaryGenerator(sizeGenotype);
+        this->genotype = binaryGenerator(sizeGenotype, 0.5f);
     } else {
         if (genotype.size() != sizeGenotype)  // to prevent errors
             throw std::invalid_argument("The genotype must be of size " +
@@ -91,7 +91,7 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
                 binding_energies.first[it_prot->first] =
                     toy.prot_prom_energies[prom][it_prot->first] +
                     toy.prot_energies[it_prot->first] -
-                    toy.polymerase[prom];  // we substract the binding energy of
+                    toy.polymerase[prom];  // we subtract the binding energy of
                                            // the polymerase; if it is greater
                                            // than zero, binding energy is zero.
         for (mapa_dim::const_iterator it_dim = dims.begin();
@@ -109,7 +109,7 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
                     toy.dim_bond_energy[it_dim->first.id] +
                     toy.prot_energies[it_dim->first.p1] +
                     toy.prot_energies[it_dim->first.p2] -
-                    toy.polymerase[prom];  // we substract the binding energy of
+                    toy.polymerase[prom];  // we subtract the binding energy of
                                            // the polymerase; if it is greater
                                            // than zero, binding energy is zero
 
@@ -697,7 +697,7 @@ std::vector<std::map<std::string, int>> Population::iteration(
      * from our foodMap and give it to the agent.
      * We store the difference in energy between before and after eating. We
      * also store the food (metabolites) that the agent returned to the
-     * enviroment.
+     * environment.
      * After all the agents have eaten we calculate the statistics of the
      * iteration, add 1 to the generation counter and also add 1 to all the ages
      * of the agents.
@@ -867,7 +867,7 @@ std::vector<std::vector<std::string>> Population::getPopulationData() {
 
 std::vector<std::string> Population::getPopulationEnergy() {
     /**
-     * This returns the maximum, average and minimun energy of the population at
+     * This returns the maximum, average and minimum energy of the population at
      * that time.
      */
     std::vector<float> energies(sizePopulation);

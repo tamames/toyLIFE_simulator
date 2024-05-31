@@ -13,16 +13,19 @@
 #include "../toylife/toy_plugin.h"
 #include "globals.h"
 
-std::string binaryGenerator(int length) {
+std::string binaryGenerator(int length, float control) {
     /**
      * Generates a random binary number as a string.
-     * @param amount The length of our binary number. Defaults to 8.
+     * We can control the distribution of 1s and 0s with the control parameter.
+     * @param amount The length of our binary number. Defaults to 20.
+     * @param control The probability of a 1 appearing in the binary number.
+     * Defaults to 0.5.
      * @return The binary number as a string.
      */
-    std::uniform_int_distribution<int> distrib(0, 1);
     std::string binary_string = "";
     for (int i = 0; i < length; i++) {
-        binary_string += std::to_string(distrib(GENERATOR));
+        float numero = (float)rand() / (float)RAND_MAX;
+        binary_string += numero < control ? '1' : '0';
     }
     return binary_string;
 }
@@ -564,15 +567,29 @@ std::string createDataDirectory() {
     /**
      * Creates a directory to store the data of the corresponding simulation.
      * In this directory we have to have a Readme.md file that store the
-     * information of that simulation.
+     * constants of the simulation. If the directory already exists, the
+     * function asks if we want to overwrite it. This would happened in case the
+     * previous simulation ended abruptly.
      * @param name The name of the directory.
      */
 
     std::string path = DIRECTORY + "\\data\\" + "simulation_" +
                        std::to_string(NUMBER_OF_SIMULATION);
-    if (!std::filesystem::exists(path)) {
-        std::filesystem::create_directory(path);
+    if (std::filesystem::exists(path)) {
+        std::cout << "The directory  " << std::to_string(NUMBER_OF_SIMULATION)
+                  << " already exists.\n";
+        std::cout << "Do you want to overwrite it? (y/n)\n";
+        char answer;
+        std::cin >> answer;
+        if (answer == 'y') {
+            std::cout << "Overwriting the directory...\n";
+            std::filesystem::remove_all(path);
+        } else {
+            std::cout << "The directory was not overwritten.\n";
+            exit(EXIT_FAILURE);
+        }
     }
+    std::filesystem::create_directory(path);
 
     return path;
 }

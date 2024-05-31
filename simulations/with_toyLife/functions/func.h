@@ -15,7 +15,7 @@
 #include "../toylife/toy_plugin.h"
 #include "globals.h"
 
-std::string binaryGenerator(int length = 8);
+std::string binaryGenerator(int length = 8, float control = CONTROL);
 
 std::vector<float> createRandomArray(int size, int max = 8);
 
