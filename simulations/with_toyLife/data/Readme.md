@@ -10,3 +10,6 @@
 * Simulation simulation_47. Last size 1.584.586.
 * Simulation simulation_48. Last size 1.655.416.
 * Simulation simulation_52. Last size 1.604.013.
+* Simulation simulation_53. Last size 2.184.383.
+* Simulation simulation_54. Last size 2.261.563.
+* Simulation simulation_55. Last size 2.325.292.
