@@ -19,6 +19,7 @@ class _FoodData:
     number_of_1: int
     mean_of_1: float
     percentage_of_1: float
+    table_value_counts: pd.Series
 
 
 def _write_food_data(data_folder_path: Path, food_data: _FoodData) -> None:
@@ -35,8 +36,14 @@ def _write_food_data(data_folder_path: Path, food_data: _FoodData) -> None:
         for key, value in food_data.__dict__.items():
             if key == "percentage_of_1":
                 readme.write(f"{key} = {value:.2%}  \n")
+            elif key == "table_value_counts":
+                continue
             else:
                 readme.write(f"{key} = {value}  \n")
+
+        readme.write("\n### Mode Value Counts  \n\n")
+        readme.write(food_data.table_value_counts.to_markdown())
+        readme.write("\n\n")
 
     logging.info("Finish writing food data to Readme.md")
 
@@ -53,18 +60,21 @@ def _food_statistics(df: pd.DataFrame) -> _FoodData:
     """
 
     logging.info("Start calculating food statistics")
-    food_len = len(df.iloc[0]["Binary"])
-    amount_of_food = len(df)
+    df_0 = df[df["Iteration"] == 0]
+    food_len = len(df_0.iloc[0]["Binary"])
+    amount_of_food = len(df_0)
 
     total_slots = food_len * amount_of_food
 
-    df["1_count"] = df["Binary"].apply(lambda x: x.count("1"))
-    df["0_count"] = food_len - df["1_count"]
+    df_0["1_count"] = df_0["Binary"].apply(lambda x: x.count("1"))
+    df_0["0_count"] = food_len - df_0["1_count"]
 
-    number_of_1 = df["1_count"].sum()
-    mean_of_1 = df["1_count"].mean()
+    number_of_1 = df_0["1_count"].sum()
+    mean_of_1 = df_0["1_count"].mean()
 
     percentage_of_1 = number_of_1 / total_slots
+
+    mode_values = df["Mode"].value_counts()
     logging.info("Finish calculating food statistics")
 
     return _FoodData(
@@ -73,6 +83,18 @@ def _food_statistics(df: pd.DataFrame) -> _FoodData:
         number_of_1=number_of_1,
         mean_of_1=mean_of_1,
         percentage_of_1=percentage_of_1,
+        table_value_counts=mode_values,
+    )
+
+
+def _iteration_food(df: pd.DataFrame) -> pd.DataFrame:
+    each_type = (
+        df[["Mode", "Iteration", "Binary"]]
+        .groupby(by=["Mode", "Iteration"], as_index=False)
+        .count()
+    )
+    return each_type.pivot(index="Iteration", columns="Mode", values="Binary").drop(
+        labels="O", axis=1
     )
 
 
@@ -115,8 +137,14 @@ def main(data_folder_path: Path) -> None:
     except FileNotFoundError:
         logging.warning("food.csv wasn't found")
         return
-    food_object = _food_statistics(df[df["Iteration"] == 0])
+    food_object = _food_statistics(df)
     _write_food_data(data_folder_path, food_object)
+
+    rest_iteration = _iteration_food(df[df["Iteration"] > 0])
+
+    fig = fpl.stackplot_several_types(rest_iteration)
+    fpl.save_fig(fig, fpl.PlotType.FOOD_TYPE, data_folder_path / "graphs")
+    close(fig)
 
     for_stack_plot, size_per_iteration = _transform_df(df)
 

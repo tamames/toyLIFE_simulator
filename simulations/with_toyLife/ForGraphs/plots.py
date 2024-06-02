@@ -38,6 +38,7 @@ class PlotType(Enum):
     REPRODUCE = "reproduce"
     FOOD_STACK = "food_stack"
     FOOD_SIZE = "food_size"
+    FOOD_TYPE = "food_type"
 
 
 def energy_plot(data_folder_path: Path, plot_reproduce: bool = False) -> mplf.Figure:
@@ -228,6 +229,34 @@ def food_size(sizes: pd.Series) -> mplf.Figure:
     ax.set_ylabel("Size")
     ax.set_title("Size of Food pool after each iteration")
     logging.info("Finish creating the food sizes plot")
+    return fig
+
+
+def stackplot_several_types(df_to_plot: pd.DataFrame) -> mplf.Figure:
+
+    logging.info("Start creating the stacked area plot for all food")
+    # Create a new figure
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
+
+    # Create the stacked area plot
+    ax.stackplot(
+        df_to_plot.index,
+        df_to_plot.T,
+        labels=df_to_plot.columns,
+        colors=["#241E4E", "#CE6C47", "#960200"],
+        alpha=1.0,
+    )
+
+    # Customize the plot
+    ax.set_xlabel("Iteration")
+    ax.set_ylabel("Size of food pool")
+    ax.set_xlim(left=1)
+
+    ax.set_title("Type of food in the pool")
+    ax.legend(loc="upper left")
+    ax.grid(axis="y", linestyle="--", alpha=0.7)
+    logging.info("Finish creating the stacked area plot")
+
     return fig
 
 

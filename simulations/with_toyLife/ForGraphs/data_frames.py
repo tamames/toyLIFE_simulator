@@ -125,7 +125,7 @@ def get_food_df(data_folder_path: Path) -> pd.DataFrame:
         sep=",",
         header=0,
         index_col=False,
-        dtype={"Iteration": int, "Binary": str},
+        dtype={"Iteration": int, "Binary": str, "Mode": "category"},
     )
 
 
