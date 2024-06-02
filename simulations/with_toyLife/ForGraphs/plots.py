@@ -209,7 +209,7 @@ def dead_reproduce_plot(data_folder_path: Path) -> tuple[mplf.Figure, mplf.Figur
     return fig1, fig2
 
 
-def food_size(sizes: pd.Series) -> mplf.Figure:
+def food_size(sizes: pd.DataFrame) -> mplf.Figure:
     """This function creates a simple line plot with the size of the food pool after each iteration.
 
     Args:
@@ -223,7 +223,7 @@ def food_size(sizes: pd.Series) -> mplf.Figure:
     fig, ax = plt.subplots(figsize=FIG_SIZE)
 
     # Create the line plot
-    ax.plot(sizes, color="b", label="Food Size")
+    ax.plot(sizes["count"], color="b", label="Food Size")
 
     ax.set_xlabel("Generation")
     ax.set_ylabel("Size")
