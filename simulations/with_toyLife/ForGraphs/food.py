@@ -3,9 +3,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from warnings import simplefilter
 
-
-from ForGraphs.data_frames import get_food_df
-import ForGraphs.plots as fpl
+try:
+    from ForGraphs.data_frames import get_food_df
+    import ForGraphs.plots as fpl
+except ModuleNotFoundError:
+    from data_frames import get_food_df
+    import plots as fpl
 import pandas as pd
 from matplotlib.pyplot import close
 
@@ -61,6 +64,8 @@ def _food_statistics(data_folder_path: Path) -> _FoodData:
     df = get_food_df(data_folder_path, 1)
     logging.info("Start calculating food statistics")
     df_0 = df[df["Iteration"] == 0]
+
+    # the original food always have the same length
     food_len = len(df_0.iloc[0]["Binary"])
 
     amount_of_food = len(df_0)
@@ -124,3 +129,7 @@ def main(data_folder_path: Path) -> None:
     fig = fpl.food_size(size_per_iteration)
     fpl.save_fig(fig, fpl.PlotType.FOOD_SIZE, data_folder_path / "graphs")
     close(fig)
+
+
+if __name__ == "__main__":
+    main(Path("simulations/with_toyLife/data/simulation_57"))

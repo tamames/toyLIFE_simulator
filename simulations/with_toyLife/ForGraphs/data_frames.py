@@ -8,7 +8,7 @@ import pandas as pd
 try:
     from ForGraphs.general_functions import check_file_exists, get_initial_food
 except ModuleNotFoundError:
-    from general_functions import check_file_exists
+    from general_functions import check_file_exists, get_initial_food
 
 
 def get_total_df(
@@ -188,10 +188,9 @@ def get_food_df(data_folder_path: Path, mode: int) -> pd.DataFrame:
         ):
             chunk["1_count"] = chunk["Binary"].apply(lambda x: x.count("1"))
             chunk["1_count"] = chunk["1_count"].astype(int)
-
-            genotype_size = len(chunk["Binary"].iloc[0])
-
-            chunk["0_count"] = genotype_size - chunk["1_count"]
+            # sometimes the binary is not the same length
+            chunk["0_count"] = chunk["Binary"].apply(lambda x: x.count("0"))
+            chunk["0_count"] = chunk["0_count"].astype(int)
 
             by_iteration = chunk.groupby(by=["Iteration"], as_index=False).agg(
                 {"1_count": "sum", "0_count": "sum"}
