@@ -238,7 +238,7 @@ def get_fig_name(source_name: str, plot_type: str) -> str:
 
 
 def main() -> None:
-    file_name = "genotype_info_75.csv"
+    file_name = "genotype_info_10_25.csv"
     # the last two characters of the file name are the control parameter of the population
     #  that number gives us the way the foodList is distributed.
 

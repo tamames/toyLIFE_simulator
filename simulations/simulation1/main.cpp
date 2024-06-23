@@ -21,14 +21,14 @@ int main() {
         {"Max_1s", "Index", "Binary", "Total 1s", "Total 0s", "Total Elements"},
         {dataOfFood});
 
-    int numberOfGenerations = 100;
+    int numberOfGenerations = 500;
     std::vector<std::vector<std::string>> dataOfGenotypes;
     dataOfGenotypes.reserve(numberOfGenerations);
 
     //* Main loop where the simulation happens.
     for (int i = 1; i <= numberOfGenerations; ++i) {
         population.iteration(listOFFood, 2.5);
-        population.afterIteration(0.01);
+        population.afterIteration(0.1);
         std::vector<std::string> genotypes = population.getGenotypes();
         std::vector<std::string> infoGenotypes = statistic(genotypes);
         infoGenotypes.push_back(std::to_string(i));
@@ -60,7 +60,7 @@ int main() {
         dataOfPopulation.push_back(dataOfGeneration);
     }
 
-    fileName = "population_info";
+    fileName = "energy";
     writeResults(fileName, "The population information of the simulation. ",
                  {"Generation", "Average Energy Gain", "Max Energy Gain",
                   "Min Energy Gain"},
