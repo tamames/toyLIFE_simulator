@@ -2,7 +2,7 @@
 
 #include "func.h"
 
-std::string DIRECTORY = std::filesystem::current_path().generic_string();
+std::filesystem::path DIRECTORY = "./";
 int SIZE_GENOTYPE = 80;
 
 int INITIAL_FOOD_SIZE = 500;

@@ -178,7 +178,7 @@ std::map<std::string, int> sampleFood(std::map<std::string, int>& foodMap) {
 }
 
 void foodWriting(const std::vector<std::string>& foodVector,
-                 std::string folderPath, int iteration, char mode) {
+                 std::filesystem::path folderPath, int iteration, char mode) {
     /** Writes all the food into a file just to plot a histogram of the
      * distribution I had an idea about plotting the food but I am realizing
      * that this can also be used to plot the genotypes
@@ -186,7 +186,7 @@ void foodWriting(const std::vector<std::string>& foodVector,
      * @param foodList The list of food or genotypes that we want to write.
      */
 
-    std::string total_path = folderPath + "\\food.csv";
+    std::filesystem::path total_path = folderPath / "food.csv";
 
     std::ofstream myFile;
 
@@ -214,8 +214,8 @@ void foodWriting(const std::vector<std::string>& foodVector,
     myFile.close();
 }
 
-void foodWriting(const std::vector<mapa_met>& foodMap, std::string folderPath,
-                 int iteration, char mode) {
+void foodWriting(const std::vector<mapa_met>& foodMap,
+                 std::filesystem::path folderPath, int iteration, char mode) {
     /** Writes all the food into a file just to plot a histogram of the
      * distribution I had an idea about plotting the food but I am realizing
      * that this can also be used to plot the genotypes
@@ -223,7 +223,7 @@ void foodWriting(const std::vector<mapa_met>& foodMap, std::string folderPath,
      * @param foodList The list of food or genotypes that we want to write.
      */
 
-    std::string total_path = folderPath + "\\food.csv";
+    std::filesystem::path total_path = folderPath / "food.csv";
 
     std::ofstream myFile;
 
@@ -407,7 +407,7 @@ std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa, bool method_1,
     return std::make_pair(map1, map2);
 }
 
-void writeResults(std::string fileName, std::string folderPath,
+void writeResults(std::string fileName, std::filesystem::path folderPath,
                   std::vector<std::string> headers,
                   std::vector<std::vector<std::string>> results) {
     /**
@@ -433,7 +433,7 @@ void writeResults(std::string fileName, std::string folderPath,
 
     // Now we deal with the results file.
     // We check if the file already exists, so we don't lose any data.
-    std::string total_path = folderPath + "\\" + fileName + ".csv";
+    std::filesystem::path total_path = folderPath / (fileName + ".csv");
     if (std::filesystem::exists(total_path)) {
         std::cout << "The file " << fileName
                   << " already exists in the designated folder.\n";
@@ -442,7 +442,7 @@ void writeResults(std::string fileName, std::string folderPath,
         std::cin >> answer;
         if (answer == 'y') {
             std::cout << "Overwriting the file...\n";
-            std::filesystem::remove(DIRECTORY + "\\data\\" + fileName + ".csv");
+            std::filesystem::remove(DIRECTORY / ("data/" + fileName + ".csv"));
         } else {
             std::cout << "The file was not overwritten.\n";
             return;
@@ -482,7 +482,7 @@ void writeResults(std::string fileName, std::string folderPath,
 }
 
 void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
-                       int iteration, std::string folder_path) {
+                       int iteration, std::filesystem::path folder_path) {
     /**This is a modification of the writeResults function.
      * Basically I want to write all the information about the population in
      * each generation. We call this function each time for storage purposes and
@@ -491,9 +491,7 @@ void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
      * displayed is the one we obtain from the getAgentData function.
      */
 
-    std::string fileName = "total.csv";
-
-    std::string total_path = folder_path + "\\" + fileName;
+    std::filesystem::path total_path = folder_path / "total.csv";
     std::ofstream myFile;
 
     myFile.open(total_path, std::ios::app);
@@ -538,10 +536,15 @@ int getNumberOfSimulation() {
      * and return the number in it.
      * @return The number of the simulation.
      */
+
+    std::filesystem::path numberSimulationsPath =
+        "functions/number_of_simulation.txt";
+
     std::ifstream file;
-    file.open(DIRECTORY + "\\functions\\number_of_simulation.txt");
+    file.open(DIRECTORY / numberSimulationsPath);
     if (!file) {
-        std::cout << "There was an error while opening the file.\n";
+        std::cout << "There was an error while opening the file:\n"
+                  << (DIRECTORY / numberSimulationsPath) << "\n";
         exit(EXIT_FAILURE);
     }
     int number;
@@ -554,17 +557,22 @@ void increaseNumberOfSimulation() {
     /**
      * Increases the number of the simulation by one.
      */
+
+    std::filesystem::path numberSimulationsPath =
+        "functions/number_of_simulation.txt";
+
     std::ofstream file;
-    file.open(DIRECTORY + "\\functions\\number_of_simulation.txt");
+    file.open(DIRECTORY / numberSimulationsPath);
     if (!file) {
-        std::cout << "There was an error while opening the file.\n";
+        std::cout << "There was an error while opening the file:\n"
+                  << (DIRECTORY / numberSimulationsPath) << "\n";
         exit(EXIT_FAILURE);
     }
     file << NUMBER_OF_SIMULATION + 1;
     file.close();
 }
 
-std::string createDataDirectory() {
+std::filesystem::path createDataDirectory() {
     /**
      * Creates a directory to store the data of the corresponding simulation.
      * In this directory we have to have a Readme.md file that store the
@@ -574,14 +582,17 @@ std::string createDataDirectory() {
      */
 
     // first we check if the parent directory exists
-
-    if (!std::filesystem::exists(DIRECTORY + "\\data")) {
-        std::filesystem::create_directory(DIRECTORY + "\\data");
+    if (!std::filesystem::exists(DIRECTORY / "data")) {
+        std::filesystem::create_directory(DIRECTORY / "data");
     }
 
-    std::string path = DIRECTORY + "\\data\\" + "simulation_" +
-                       std::to_string(NUMBER_OF_SIMULATION);
-    if (std::filesystem::exists(path)) {
+    std::filesystem::path simulationFolderRelativePath(
+        "data/simulation_" + std::to_string(NUMBER_OF_SIMULATION));
+
+    std::filesystem::path simulationFolderPath =
+        DIRECTORY / simulationFolderRelativePath;
+
+    if (std::filesystem::exists(simulationFolderPath)) {
         std::cout << "The directory  " << std::to_string(NUMBER_OF_SIMULATION)
                   << " already exists.\n";
         std::cout << "Do you want to overwrite it? (y/n)\n";
@@ -589,15 +600,15 @@ std::string createDataDirectory() {
         std::cin >> answer;
         if (answer == 'y') {
             std::cout << "Overwriting the directory...\n";
-            std::filesystem::remove_all(path);
+            std::filesystem::remove_all(simulationFolderPath);
         } else {
             std::cout << "The directory was not overwritten.\n";
             exit(EXIT_FAILURE);
         }
     }
-    std::filesystem::create_directory(path);
+    std::filesystem::create_directory(simulationFolderPath);
 
-    return path;
+    return simulationFolderPath;
 }
 
 void createReadMe(int numberOfGenerations, int initPopulationSize,
@@ -605,18 +616,25 @@ void createReadMe(int numberOfGenerations, int initPopulationSize,
     /**
      * Creates and fill the ReadMe file inside the data directory
      */
-    std::string path = DIRECTORY + "\\data\\" + "simulation_" +
-                       std::to_string(NUMBER_OF_SIMULATION);
 
-    if (!std::filesystem::exists(path)) {
-        std::cout << "The directory doesn't exist.\n";
+    std::filesystem::path simulationFolderRelativePath(
+        "data/simulation_" + std::to_string(NUMBER_OF_SIMULATION));
+
+    std::filesystem::path simulationFolderPath =
+        DIRECTORY / simulationFolderRelativePath;
+
+    if (!std::filesystem::exists(simulationFolderPath)) {
+        std::cout << "The " << simulationFolderRelativePath
+                  << " directory doesn't exist.\n";
         exit(EXIT_FAILURE);
     }
 
     std::ofstream file;
-    file.open(path + "\\Readme.md");
+    file.open(simulationFolderPath / "Readme.md");
+
     if (!file) {
-        std::cout << "There was an error while opening the file.\n";
+        std::cout << "There was an error while opening the file:\n"
+                  << simulationFolderPath << "Readme.md" << "\n";
         exit(EXIT_FAILURE);
     }
     file << "## Params of the simulation: \n";

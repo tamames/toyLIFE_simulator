@@ -40,10 +40,10 @@ void addKeysToFoodMap(
 std::map<std::string, int> sampleFood(std::map<std::string, int>& foodMap);
 
 void foodWriting(const std::vector<std::string>& foodVector,
-                 std::string folderPath, int iteration, char mode);
+                 std::filesystem::path folderPath, int iteration, char mode);
 
 void foodWriting(const std::vector<std::map<std::string, int>>& foodMap,
-                 std::string folderPath, int iteration, char mode);
+                 std::filesystem::path folderPath, int iteration, char mode);
 
 std::vector<std::string> decimal2Binary(int numbers);
 
@@ -62,17 +62,17 @@ std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa,
                                               bool method_1 = true,
                                               float p = 0.5f);
 
-void writeResults(std::string fileName, std::string folderPath,
+void writeResults(std::string fileName, std::filesystem::path folderPath,
                   std::vector<std::string> headers,
                   std::vector<std::vector<std::string>> results);
 
 void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
-                       int iteration, std::string folder_path);
+                       int iteration, std::filesystem::path folder_path);
 
 int getNumberOfSimulation();
 void increaseNumberOfSimulation();
 
-std::string createDataDirectory();
+std::filesystem::path createDataDirectory();
 void createReadMe(int numberOfGenerations, int initialPopulationSize,
                   int foodSize);
 

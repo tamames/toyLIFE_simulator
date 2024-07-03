@@ -6,7 +6,7 @@
 #include <random>
 #include <string>
 
-extern std::string DIRECTORY;
+extern std::filesystem::path DIRECTORY;
 extern int SIZE_GENOTYPE;
 
 extern int INITIAL_FOOD_SIZE;

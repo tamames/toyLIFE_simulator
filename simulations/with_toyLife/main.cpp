@@ -11,7 +11,7 @@ int main() {
     std::cout << "We have created the ToyPlugin" << std::endl;
 
     std::cout << "Creating the data directory\n";
-    std::string dataDirectory = createDataDirectory();
+    std::filesystem::path dataDirectory = createDataDirectory();
 
     int numberOfGenerations = NUMBER_OF_GENERATIONS;
     int tenPercent = numberOfGenerations / 10;
@@ -153,110 +153,3 @@ int main() {
     increaseNumberOfSimulation();
     return 0;
 }
-
-// int main() {
-//     std::cout << "Start the simulation\n";
-//     ToyPlugin toy;
-//     std::cout << "We have created the ToyPlugin" << std::endl;
-
-//     std::vector<std::string> food = {
-//         "00010000", "00101000", "00101010", "01100101", "10010110",
-//         "10010111", "10100010", "11001110", "11100001", "11101010",
-//     };
-
-//     std::map<std::string, int> foodMap = fromList2Map(food);
-//     food.clear();
-
-//     // print the food map
-//     std::cout << "The map: \n";
-//     for (auto food : foodMap) {
-//         std::cout << food.first << "\t" << food.second << std::endl;
-//     }
-
-//     Agent a(10);
-
-//     std::map<std::string, int> ja = sampleFood(foodMap);
-
-//     std::cout << "The ja: \n";
-//     for (auto food : ja) {
-//         std::cout << food.first << "\t" << food.second << std::endl;
-//     }
-
-//     a.eat(ja, toy);
-
-//     std::cout << "The ja: \n";
-//     for (auto food : ja) {
-//         std::cout << food.first << "\t" << food.second << std::endl;
-//     }
-
-//     return 0;
-// }
-
-// int main(){
-//     std::cout << "Hello world!" << std::endl;
-
-//     int a = 10;
-//     int b = 20;
-//     std::cout << "a: " << a << "\tb: " << b << std::endl;
-// }
-
-// int main() {
-//     std::vector<std::string> food = listOfFood(10);
-//     // print the food vector
-//     std::cout << "The vector: \n";
-//     for (auto it = food.begin(); it != food.end(); ++it) {
-//         std::cout << *it << "\n";
-//     }
-
-//     std::vector<std::string> out = sampleFood(food);
-//     // std::sample(food.begin(), food.end(), std::back_inserter(out), 5,
-//     //             GENERATOR);
-
-//     std::cout << "The sample: \n";
-//     for (auto it = out.begin(); it != out.end(); ++it) {
-//         std::cout << *it << "\n";
-//     }
-
-//     // std::vector<std::string> out2;
-//     // std::sample(food.begin(), food.end(), std::back_inserter(out2), 5,
-//     //             GENERATOR);
-
-//     // std::cout << "The sample2: \n";
-//     // for (auto it = out2.begin(); it != out2.end(); ++it) {
-//     //     std::cout << *it << "\n";
-//     // }
-// }
-
-// this is an example with genotypes that breaks food
-// int main() {
-//     std::cout << "Hello world!" << std::endl;
-
-//     ToyPlugin toy;
-//     std::cout << "Se crea el toyPlugin" << std::endl;
-
-//     std::string gen =
-//         "111101010001110110101100100100100000101110111010101101011011";
-
-//     gen = "111101010001110110101011101010110101101111001001001000001011";
-
-//     std::cout << bintodec("11000101") << std::endl;
-
-//     std::vector<std::string> food = decimal2Binary(256);
-//     for (auto it = food.begin(); it != food.end(); ++it) {
-//         std::cout << *it << "\t" << bintodec(*it) << std::endl;
-//         Agent test(100.0, gen);
-//         std::map<std::string, int> foodMap;
-//         foodMap[*it] = 1;
-//         bool a = test.metabolism(foodMap, toy);
-//         if (a)
-//             std::cout << "Breaks " << *it << "\t" << bintodec(*it) <<
-//             std::endl;
-//     }
-
-//     std::cout << "End\n" << std::endl;
-
-//     int intFood = 47;
-
-//     // Examples of food that can be broken by the Agent 00010011,
-//     00010111
-// }
