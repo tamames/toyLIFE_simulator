@@ -688,7 +688,7 @@ void Population::print(bool complete) {
 }
 
 std::vector<std::map<std::string, int>> Population::iteration(
-    std::map<std::string, int> foodMap, const ToyPlugin& toy, bool print,
+    std::map<std::string, int>& foodMap, const ToyPlugin& toy, bool print,
     const int& iterationNumber) {
     /**
      * Here we do the iteration of the population. First we generate a random
