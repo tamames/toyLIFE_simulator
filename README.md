@@ -1,31 +1,13 @@
 # TFM
 
-Right now I only have a class defined with a few methods.
+This is the code made for the TFM of Pablo González at Universidad Carlos III de Madrid. This TFM is supervised by Pablo Catalán.
 
-An agent can interact with food and its energy changes. After each iteration I can generate a new population where the cells with energy >= 10 have divided. 
 
-The whole iteration is going to be something like this:
-1. generate the new population
-2. Make each individual of the population find food (I don't know if they have to eat every iteration or sometimes they don't)
-3. See if they have enough energy to split.
-4. Repeat the process.
+In this work we have built a simulator based on [toyLIFE](https://github.com/PabloCatalan/toylife), a C++ library created by Pablo Catalán that allows to simulate the iterations that occur inside a cell.
 
-# Already implemented
-* I have defined the main class `Agent`.
-    * This class has the following attributes:
-        * Genotype: a string of 0 and 1. If the cell has a parent the first half of the genotype is the genotype of the parent.
-        * Energy: a value representing the energy of the cell.
-    * And the following methods:
-        * check_energy: which tells us if the cell has enough energy to reproduce.
-        * check_die: tells us if the cell doesn't have energy.
-* The class `Population` with:
-    * Attributes
-        * generation: the number of generations that have occurred.
-        * population: a list with all the agents.
-    * Methods
-        * delete items: delete the necessary agents in each iteration.
-        * iteration: the main loop of our cells.
-        * after_iteration: First we check the dead ones and then the ones that can reproduce.
-* A function that gives us a random binary string.
-* A function that can divide a cell.
-* A function to define the new population each generation.
+For this TFM we have built two simulators that can be found in the [simulations](simulations) folder. The [first simulator](simulations/simulation1) is a test simulator that allowed us to familiarize ourselves with the C++ language as well as to prove that the idea we had could give coherent results. 
+
+The [second simulator](simulations/with_toyLife) is the main result of this work, a simulator that uses toyLIFE as an evolutionary simulation engine.
+
+
+In the [archive folder](archive) we can find a first sketch of the simulator in python and the same code in C++.
