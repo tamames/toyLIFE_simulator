@@ -571,8 +571,13 @@ std::string createDataDirectory() {
      * constants of the simulation. If the directory already exists, the
      * function asks if we want to overwrite it. This would happened in case the
      * previous simulation ended abruptly.
-     * @param name The name of the directory.
      */
+
+    // first we check if the parent directory exists
+
+    if (!std::filesystem::exists(DIRECTORY + "\\data")) {
+        std::filesystem::create_directory(DIRECTORY + "\\data");
+    }
 
     std::string path = DIRECTORY + "\\data\\" + "simulation_" +
                        std::to_string(NUMBER_OF_SIMULATION);
