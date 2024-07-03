@@ -32,6 +32,7 @@ class PlotType(Enum):
 
     ENERGY = "energy"
     GAIN = "energy_gain"
+    GAIN_TOTAL = "energy_gain_total"
     SIZES = "sizes"
     TOTAL = "total"
     DEAD = "dead"
@@ -61,13 +62,22 @@ def energy_plot(data_folder_path: Path, plot_reproduce: bool = False) -> mplf.Fi
 
     fig, ax = plt.subplots(figsize=FIG_SIZE)
 
+    energy_reproduce, energy_die, translation_energy, breaking_energy = (
+        get_energy_to_reproduce(data_folder_path)
+    )
+
     if plot_reproduce:
-        energy_to_reproduce = get_energy_to_reproduce(data_folder_path)
         ax.axhline(
-            y=int(energy_to_reproduce),
+            y=float(energy_reproduce),
             color="k",
             linestyle="--",
             label="Energy to Reproduce",
+        )
+        ax.axhline(
+            y=float(energy_die),
+            color="k",
+            linestyle="-.",
+            label="Energy to Die",
         )
 
     ax.plot(df["Max"], color="r", label="Max Energy")
@@ -76,13 +86,15 @@ def energy_plot(data_folder_path: Path, plot_reproduce: bool = False) -> mplf.Fi
 
     ax.set_xlabel("Generation")
     ax.set_ylabel("Energy")
-    ax.set_title("Energy of the population across each generation.")
+    ax.set_title(
+        f"Energy of the population across each generation.\nBreaking energy = {breaking_energy}, Translation energy = {translation_energy}"
+    )
     ax.legend()
     logging.info("Finish creating the energy plot")
     return fig
 
 
-def energy_gain_plot(data_folder_path: Path) -> mplf.Figure:
+def energy_gain_plot(data_folder_path: Path) -> tuple[mplf.Figure, mplf.Figure]:
     """This plot correspond to the max, min, total and average energy gains of the population at each generation.
 
     Args:
@@ -96,13 +108,29 @@ def energy_gain_plot(data_folder_path: Path) -> mplf.Figure:
     df = fdf.get_energy_gains_df(data_folder_path)
     logging.info("Finish loading the energy gains data")
 
+    _, _, translation_energy, breaking_energy = get_energy_to_reproduce(
+        data_folder_path
+    )
+
     # Create the line plot
     fig, ax = plt.subplots(figsize=FIG_SIZE)
+
+    ax.axhline(
+        y=-float(translation_energy),
+        color="k",
+        linestyle="--",
+        label="Translation Energy",
+    )
+    ax.axhline(
+        y=float(breaking_energy),
+        color="k",
+        linestyle="-.",
+        label="Breakin Energy",
+    )
 
     logging.info("Start creating the energy gains plot")
     ax.plot(df["Max_Gain"], color="r", label="Max Gain")
     ax.plot(df["Average_Gain"], color="y", label="Average Gain")
-    ax.plot(df["Total_Gain"], color="g", label="Total Gain")
     ax.plot(df["Min_Gain"], color="b", label="Min Gain")
 
     ax.set_xlabel("Generation")
@@ -110,7 +138,16 @@ def energy_gain_plot(data_folder_path: Path) -> mplf.Figure:
     ax.set_title("Energy gain of the population across each generation.")
     ax.legend()
     logging.info("Finish creating the energy gains plot")
-    return fig
+
+    fig2, ax2 = plt.subplots(figsize=FIG_SIZE)
+
+    ax2.plot(df["Total_Gain"], color="g", label="Total Gain")
+    ax2.set_xlabel("Generation")
+    ax2.set_ylabel("Total Energy Gain")
+    ax2.set_title("Total energy gain of the population across each generation.")
+    ax2.legend()
+
+    return fig, fig2
 
 
 def sizes_plot(data_folder_path: Path) -> mplf.Figure:
@@ -243,7 +280,7 @@ def stackplot_several_types(df_to_plot: pd.DataFrame) -> mplf.Figure:
         df_to_plot.index,
         df_to_plot.T,
         labels=df_to_plot.columns,
-        colors=["#241E4E", "#CE6C47", "#960200"],
+        colors=["#241E4E", "#CE6C47", "#960200", "#7180AC"],
         alpha=1.0,
     )
 
@@ -297,9 +334,11 @@ def main(data_folder_path: Path) -> None:
     save_fig(energy_fig, PlotType.ENERGY, graph_folder, extra_name="reproduce")
     plt.close(energy_fig)
 
-    energy_gain_fig = energy_gain_plot(data_folder_path)
+    energy_gain_fig, total_energy_gain = energy_gain_plot(data_folder_path)
     save_fig(energy_gain_fig, PlotType.GAIN, graph_folder)
+    save_fig(total_energy_gain, PlotType.GAIN_TOTAL, graph_folder)
     plt.close(energy_gain_fig)
+    plt.close(total_energy_gain)
 
     sizes_fig = sizes_plot(data_folder_path)
     save_fig(sizes_fig, PlotType.SIZES, graph_folder)
