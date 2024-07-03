@@ -21,7 +21,7 @@ int main() {
         {"Max_1s", "Index", "Binary", "Total 1s", "Total 0s", "Total Elements"},
         {dataOfFood});
 
-    int numberOfGenerations = 500;
+    int numberOfGenerations = 1000;
     std::vector<std::vector<std::string>> dataOfGenotypes;
     dataOfGenotypes.reserve(numberOfGenerations);
 
