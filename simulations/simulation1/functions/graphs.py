@@ -238,15 +238,32 @@ def get_fig_name(source_name: str, plot_type: str) -> str:
 
 
 def main() -> None:
-    file_name = "genotype_info_10_25.csv"
-    # the last two characters of the file name are the control parameter of the population
-    #  that number gives us the way the foodList is distributed.
+    # file_name = "genotype_info_10_25.csv"
+    # # the last two characters of the file name are the control parameter of the population
+    # #  that number gives us the way the foodList is distributed.
 
-    df = get_df(file_name)
-    fig1, plot_type = stackplot_1_0(df)
-    # print(df.head())
+    # df = get_df(file_name)
+    # fig1, plot_type = stackplot_1_0(df)
+    # # print(df.head())
 
-    save_and_write(fig1, file_name, plot_type)
+    # save_and_write(fig1, file_name, plot_type)
+
+    df_total = get_df("total_10_25.csv")
+    iteration_counts = df_total["Iteration"].value_counts()
+    iteration_counts = iteration_counts.sort_index(ascending=True)
+    fig2, ax2 = plt.subplots(figsize=(10, 6))
+    ax2.plot(iteration_counts.index, iteration_counts.values, color="b", alpha=0.7)
+    ax2.set_xlabel("Iteration")
+    ax2.set_ylabel("Count")
+    ax2.set_title("Size Evolution Across Generations")
+    ax2.grid(axis="y", linestyle="--", alpha=0.7)
+
+    fig2.savefig(
+        "simulations/simulation1/graphs/size.pdf", format="pdf", bbox_inches="tight"
+    )
+    # fig2.savefig("simulations/simulation1/graphs/bar_size_evolution.png")
+
+    # save_and_write(fig2, "total_0_25.csv", "bar_size_evolution")
 
 
 def do_all(file_name: str) -> None:
