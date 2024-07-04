@@ -186,16 +186,22 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
             if (count_mins) {  // if there are repeated energies
                 for (std::map<Prot, double>::iterator it1 =
                          binding_energies.first.begin();
-                     it1 != binding_energies.first.end(); ++it1)
+                     it1 != binding_energies.first.end(); ++it1) {
                     if (d_equal(it1->second,
                                 min))  // if the binding energies are the same
-                        binding_energies.first.erase(
-                            it1);  // we sum to the counter
+                        it1 = binding_energies.first.erase(it1);
+                    else
+                        ++it1;  // we sum to the counter
+                }
                 for (std::map<Dim, double>::iterator it2 =
                          binding_energies.second.begin();
-                     it2 != binding_energies.second.end(); ++it2)
+                     it2 != binding_energies.second.end(); ++it2) {
                     if (d_equal(it2->second, min))
-                        binding_energies.second.erase(it2);
+                        it2 = binding_energies.second.erase(it2);
+                    else
+                        ++it2;
+                }
+
             } else {  // if there is only one minimum, we check if PROM is
                       // activated
                 if (!i_min)
@@ -733,10 +739,19 @@ std::vector<std::map<std::string, int>> Population::iteration(
         if (energyGain < min)
             min = energyGain;
 
-        if (print & (i % tenPercent == 0)) {
-            std::cout << currentTime() << "   In iteration " << iterationNumber
-                      << " . Progress:" << i / tenPercent * 10
-                      << "%  Processed Agents: " << i + 1 << "\n";
+        // PRINT INFORMATION
+        if (print) {
+            if (tenPercent == 0 & i + 1 == sizePopulation) {
+                std::cout << currentTime() << "   In iteration "
+                          << iterationNumber
+                          << " . Progress:" << i / tenPercent * 10
+                          << "%  Processed Agents: " << i + 1 << "\n";
+            } else if (tenPercent > 0 & i % tenPercent == 0) {
+                std::cout << currentTime() << "   In iteration "
+                          << iterationNumber
+                          << " . Progress:" << i / tenPercent * 10
+                          << "%  Processed Agents: " << i + 1 << "\n";
+            }
         }
 
         // store the food that the agent return to the environment
