@@ -7,9 +7,9 @@ int SIZE_GENOTYPE = 80;
 
 int INITIAL_FOOD_SIZE = 500;
 int SIZE_EACH_FOOD = 8;
-float CONTROL = 0.9f;  // The probability of a 1 appearing in the binary string.
-int SAMPLE_SIZE = 8;   // the amount of food each individual is going to eat
-int FOOD_TO_ADD = 100;  // The amount of food to add each iteration
+float CONTROL = 0.5f;  // The probability of a 1 appearing in the binary string.
+int SAMPLE_SIZE = 3;   // the amount of food each individual is going to eat
+int FOOD_TO_ADD = 20;  // The amount of food to add each iteration
 
 int NUMBER_OF_SIMULATION =
     getNumberOfSimulation();  // Just to to keep track of which simulation we

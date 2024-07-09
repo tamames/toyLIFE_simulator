@@ -63,8 +63,8 @@ CXXFLAGS        = -fPIC -O4 -DNDEBUG
       $(error Unknown Operating system defined: $(OPSYSTEM))
     endif
 
-main: main.o classes.o toylife/helper_functions.o toylife/toy_plugin.o functions/func.o functions/globals.o
-	$(CXX) $(CXXFLAGS) main.o classes.o toylife/helper_functions.o toylife/toy_plugin.o functions/func.o functions/globals.o $(LDFLAGS) -o main
+simulation: main.o classes.o toylife/helper_functions.o toylife/toy_plugin.o functions/func.o functions/globals.o
+	$(CXX) $(CXXFLAGS) main.o classes.o toylife/helper_functions.o toylife/toy_plugin.o functions/func.o functions/globals.o $(LDFLAGS) -o simulation.exe
 
 main.o: main.cpp
 	$(CXX) $(CXXFLAGS) -c main.cpp -g -o main.o
@@ -88,4 +88,4 @@ clean:
 	del /S *.o
 	del /S toylife/*.o
 	del /S functions/*.o
-	del /S main.exe
+	del /S simulation.exe
