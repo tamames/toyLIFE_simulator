@@ -112,7 +112,6 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
                     toy.polymerase[prom];  // we subtract the binding energy of
                                            // the polymerase; if it is greater
                                            // than zero, binding energy is zero
-
         // WE LOOK FOR THE MINIMUM
         while (1) {
             double min = 0.0;
@@ -184,18 +183,16 @@ void Agent::promoter_expression(const ToyPlugin& toy) {
             }  // minimum is a dimer
 
             if (count_mins) {  // if there are repeated energies
-                for (std::map<Prot, double>::iterator it1 =
-                         binding_energies.first.begin();
-                     it1 != binding_energies.first.end(); ++it1) {
+                for (auto it1 = binding_energies.first.begin();
+                     it1 != binding_energies.first.end();) {
                     if (d_equal(it1->second,
                                 min))  // if the binding energies are the same
                         it1 = binding_energies.first.erase(it1);
                     else
                         ++it1;  // we sum to the counter
                 }
-                for (std::map<Dim, double>::iterator it2 =
-                         binding_energies.second.begin();
-                     it2 != binding_energies.second.end(); ++it2) {
+                for (auto it2 = binding_energies.second.begin();
+                     it2 != binding_energies.second.end();) {
                     if (d_equal(it2->second, min))
                         it2 = binding_energies.second.erase(it2);
                     else
