@@ -125,7 +125,7 @@ def energy_gain_plot(data_folder_path: Path) -> tuple[mplf.Figure, mplf.Figure]:
         y=float(breaking_energy),
         color="k",
         linestyle="-.",
-        label="Breakin Energy",
+        label="Breaking Energy",
     )
 
     logging.info("Start creating the energy gains plot")
