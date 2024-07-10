@@ -637,7 +637,7 @@ void createReadMe(int numberOfGenerations, int initPopulationSize,
                   << simulationFolderPath << "Readme.md" << "\n";
         exit(EXIT_FAILURE);
     }
-    file << "## Params of the simulation: \n";
+    file << "## Parameters of the simulation: \n";
     file << "* **Number of generations** &rarr; " << numberOfGenerations << "\n"
          << "* **Initial population size** &rarr; " << initPopulationSize
          << "\n"

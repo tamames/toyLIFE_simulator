@@ -1,4 +1,4 @@
-## Params of the simulation: 
+## Parameters of the simulation: 
 * **Number of generations** &rarr; 200
 * **Initial population size** &rarr; 50
 * **Energy to reproduce** &rarr; 40
