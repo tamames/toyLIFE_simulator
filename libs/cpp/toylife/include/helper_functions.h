@@ -11,7 +11,6 @@
 #include <string>   //std::string
 #include <vector>   //std::vector
 
-#include "../functions/globals.h"
 
 // BINOMIAL COEFFICIENT
 template <class T = unsigned long>

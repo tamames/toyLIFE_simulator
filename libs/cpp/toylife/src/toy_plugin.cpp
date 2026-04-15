@@ -1,6 +1,5 @@
 #include "toy_plugin.h"
 
-#include "../functions/globals.h"
 #include "helper_functions.h"
 
 // STRUCTURE FUNCTIONS
