@@ -1,9 +1,9 @@
 #include <time.h>
 
 #include "classes.h"
-#include "functions/func.h"
-#include "functions/globals.h"
-#include "toylife/toy_plugin.h"
+#include "func.h"
+#include "globals.h"
+#include "toy_plugin.h"
 
 int main() {
     std::cout << "Start the simulation\n";

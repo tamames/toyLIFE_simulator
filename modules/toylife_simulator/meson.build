@@ -8,6 +8,7 @@ target_name='toylife-sim'
 
 src = files([
     'src/main.cpp',
+    'src/classes.cpp',
 ])
 
 executable(

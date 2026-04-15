@@ -10,7 +10,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "../toylife/toy_plugin.h"
+#include "toy_plugin.h"
 #include "globals.h"
 
 std::string binaryGenerator(int length, float control) {

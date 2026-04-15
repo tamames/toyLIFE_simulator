@@ -12,7 +12,7 @@
 #include <string>
 #pragma once
 
-#include "../toylife/toy_plugin.h"
+#include "toy_plugin.h"
 #include "globals.h"
 
 std::string binaryGenerator(int length = 8, float control = CONTROL);

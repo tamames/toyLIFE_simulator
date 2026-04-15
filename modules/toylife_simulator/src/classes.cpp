@@ -1,12 +1,5 @@
 #include "classes.h"
 
-// my functions and variables
-#include "functions/func.h"
-#include "functions/globals.h"
-
-// toyLife code
-#include "toylife/helper_functions.h"
-#include "toylife/toy_plugin.h"
 
 Agent::Agent(float energy, std::string genotype, int parent, int sizeGenotype,
              mapa_prot prots, mapa_dim dims, mapa_met mets) {

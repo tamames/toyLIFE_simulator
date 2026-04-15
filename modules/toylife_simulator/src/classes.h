@@ -9,12 +9,12 @@
 #include <vector>
 
 // my functions and variables
-#include "functions/func.h"
-#include "functions/globals.h"
+#include "func.h"
+#include "globals.h"
 
 // toyLife code
-#include "toylife/helper_functions.h"
-#include "toylife/toy_plugin.h"
+#include "helper_functions.h"
+#include "toy_plugin.h"
 
 class Agent {
    public:
