@@ -1,22 +1,8 @@
 # My files
-prueba.*
-pruebas.*
 .vscode
-try_cpp/
-*.exe
-tempCodeRunnerFile.cpp
-patterns/
-graphs/
 test.*
-.vs/
-CppProperties.json
-*.o
-log.txt
 *.csv
 *.zip
-aver.txt
-in_depth_study.ipynb
-*.log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -26,6 +12,7 @@ __pycache__/
 # C extensions
 *.so
 
+.clang-format
 
 # Jupyter Notebook
 .ipynb_checkpoints
