@@ -3,13 +3,22 @@ name: C/C++ CI
 on:
   pull_request:
     branches: [ "main" ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v4
-    - name: meson setup
-      run: meson setup
-    - name: compile
-      run: meson compile -C builddir
 
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ninja-build
+        pip install meson
+
+    - name: Meson setup
+      run: meson setup builddir
+
+    - name: Compile
+      run: meson compile -C builddir
