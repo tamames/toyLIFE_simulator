@@ -5,7 +5,9 @@ from warnings import simplefilter
 
 try:
     from ForGraphs.data_frames import get_total_df
-    from ForGraphs.plots import stackplot_1_0, save_fig, PlotType
+    from ForGraphs.plots import PlotType
+    from ForGraphs.plots import save_fig
+    from ForGraphs.plots import stackplot_1_0
 except ModuleNotFoundError:
     from data_frames import get_total_df
     from plots import stackplot_1_0, save_fig, PlotType
@@ -133,9 +135,7 @@ def _process_molecules(molecule_column: pd.Series) -> _DataMolecules | None:
         return
 
     logging.debug("Replacing and splitting")
-    not_empty = not_empty.apply(
-        lambda x: x.replace(" ", "").replace("{", "").replace("}", "")
-    )
+    not_empty = not_empty.apply(lambda x: x.replace(" ", "").replace("{", "").replace("}", ""))
     df = not_empty.str.split(",", expand=True)
     # now we have a df where each row is an agent.
     # in each column we have the molecule and the amount.
@@ -152,9 +152,7 @@ def _process_molecules(molecule_column: pd.Series) -> _DataMolecules | None:
     logging.debug("Finish splitting molecule and amount")
     total_molecules.columns = ["molecule", "amount"]
 
-    total_molecules = total_molecules.astype(
-        dtype={"molecule": "category", "amount": int}
-    )
+    total_molecules = total_molecules.astype(dtype={"molecule": "category", "amount": int})
 
     logging.debug("Grouping by molecule")
     total_molecules = total_molecules.groupby("molecule").sum()
@@ -192,22 +190,14 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
         readme.write(f"median_age = {total_data.median_age:.2f}  \n")
         readme.write(f"maximum_iterations = {total_data.maximum_iterations}  \n")
         readme.write(f"number_of_children = {total_data.number_of_children}  \n")
-        readme.write(
-            f"number_of_total_individuals = {total_data.number_of_total_individuals}  \n"
-        )
-        readme.write(
-            f"number_of_total_genotypes = {total_data.number_of_total_genotypes}  \n"
-        )
+        readme.write(f"number_of_total_individuals = {total_data.number_of_total_individuals}  \n")
+        readme.write(f"number_of_total_genotypes = {total_data.number_of_total_genotypes}  \n")
 
         readme.write("### Prots  \n")
         if total_data.data_prots:
             # the prots column wasn't empty
-            readme.write(
-                f"maximum_prots_at_once = {total_data.data_prots.maximum_molecules}  \n"
-            )
-            readme.write(
-                f"number_unique_prots = {total_data.data_prots.number_unique_molecules}  \n\n"
-            )
+            readme.write(f"maximum_prots_at_once = {total_data.data_prots.maximum_molecules}  \n")
+            readme.write(f"number_unique_prots = {total_data.data_prots.number_unique_molecules}  \n\n")
             logging.debug("Writing prots table")
             readme.write(total_data.data_prots.table_molecules)
             logging.debug("Finish writing prots table")
@@ -217,12 +207,8 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
         readme.write("\n\n### Mets  \n")
         if total_data.data_mets:
             # the mets column wasn't empty
-            readme.write(
-                f"maximum_mets_at_once = {total_data.data_mets.maximum_molecules}  \n"
-            )
-            readme.write(
-                f"number_unique_mets = {total_data.data_mets.number_unique_molecules}  \n\n"
-            )
+            readme.write(f"maximum_mets_at_once = {total_data.data_mets.maximum_molecules}  \n")
+            readme.write(f"number_unique_mets = {total_data.data_mets.number_unique_molecules}  \n\n")
             logging.debug("Writing mets table")
             readme.write(total_data.data_mets.table_molecules)
             logging.debug("Finish writing mets table")
@@ -232,12 +218,8 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
         readme.write("\n\n### Dims  \n")
         if total_data.data_dims:
             # the dims column wasn't empty
-            readme.write(
-                f"maximum_dims_at_once = {total_data.data_dims.maximum_molecules}  \n"
-            )
-            readme.write(
-                f"number_unique_dims = {total_data.data_dims.number_unique_molecules}  \n\n"
-            )
+            readme.write(f"maximum_dims_at_once = {total_data.data_dims.maximum_molecules}  \n")
+            readme.write(f"number_unique_dims = {total_data.data_dims.number_unique_molecules}  \n\n")
             logging.debug("Writing dims table")
             readme.write(total_data.data_dims.table_molecules)
             logging.debug("Finish writing dims table")
@@ -246,15 +228,9 @@ def _write_total_data(data_folder_path: Path, total_data: _TotalData) -> None:
 
         readme.write("\n\n### Genotypes  \n")
         readme.write(f"genotype_len = {total_data.genotype_data.genotype_len}  \n")
-        readme.write(
-            f"total 1s in all genotypes = {total_data.genotype_data.number_of_1}  \n"
-        )
-        readme.write(
-            f"mean 1s in all genotypes = {total_data.genotype_data.mean_of_1}  \n"
-        )
-        readme.write(
-            f"percentage_of_1 = {total_data.genotype_data.percentage_of_1:.2%}  \n"
-        )
+        readme.write(f"total 1s in all genotypes = {total_data.genotype_data.number_of_1}  \n")
+        readme.write(f"mean 1s in all genotypes = {total_data.genotype_data.mean_of_1}  \n")
+        readme.write(f"percentage_of_1 = {total_data.genotype_data.percentage_of_1:.2%}  \n")
     logging.info("Finish writing the total data")
 
 
@@ -273,9 +249,7 @@ def _process_for_stackplot_1_0(df: pd.DataFrame) -> pd.DataFrame:
     logging.debug("Finish subtracting 1s from total slots")
 
     logging.debug("Grouping by iteration")
-    by_iteration = df.groupby(by=["Iteration"], as_index=False).agg(
-        {"1_count": "sum", "0_count": "sum"}
-    )
+    by_iteration = df.groupby(by=["Iteration"], as_index=False).agg({"1_count": "sum", "0_count": "sum"})
     logging.debug("Finish grouping by iteration")
 
     logging.debug("Calculating ratios")

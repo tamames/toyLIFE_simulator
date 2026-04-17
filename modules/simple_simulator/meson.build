@@ -18,4 +18,3 @@ executable(
     dependencies: dep,
     install: true,
 )
-

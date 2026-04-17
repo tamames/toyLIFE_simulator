@@ -11,12 +11,12 @@ extern int SIZE_GENOTYPE;
 
 extern int INITIAL_FOOD_SIZE;
 extern int SIZE_EACH_FOOD;
-extern float CONTROL;  // The probability of a 1 appearing in the binary string.
-extern int SAMPLE_SIZE;  // the amount of food each individual is going to eat
-extern int FOOD_TO_ADD;  // The amount of food to add each iteration
+extern float CONTROL;            // The probability of a 1 appearing in the binary string.
+extern int SAMPLE_SIZE;          // the amount of food each individual is going to eat
+extern int FOOD_TO_ADD;          // The amount of food to add each iteration
 
-extern int NUMBER_OF_SIMULATION;  // Jus to to keep track of which simulation we
-                                  // are doing
+extern int NUMBER_OF_SIMULATION; // Jus to to keep track of which simulation we
+                                 // are doing
 
 extern int ID_COUNT;
 
@@ -35,4 +35,4 @@ extern int NUMBER_OF_GENERATIONS;
 extern int INITIAL_POPULATION_SIZE;
 extern int MAXIMUM_POPULATION_SIZE;
 
-#endif  // GLOBALS_H
+#endif // GLOBALS_H

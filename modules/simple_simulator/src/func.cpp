@@ -1,8 +1,8 @@
 #pragma once
 
-#include <algorithm>  // std::count std::max_element
+#include <algorithm> // std::count std::max_element
 #include <iostream>
-#include <numeric>  // std::accumulate
+#include <numeric>   // std::accumulate
 #include <random>
 #include <stdexcept>
 #include <string>
@@ -20,7 +20,7 @@ std::string binaryGenerator(int length = 20, float control = 0.5f) {
      */
     std::string binary_string = "";
     for (int i = 0; i < length; i++) {
-        float numero = (float)rand() / (float)RAND_MAX;
+        float numero   = (float)rand() / (float)RAND_MAX;
         binary_string += numero < control ? '1' : '0';
     }
     return binary_string;
@@ -105,31 +105,27 @@ std::vector<std::string> statistic(std::vector<std::string> listOFBinaries) {
      */
 
     std::size_t totalSize = listOFBinaries.size();
-    std::size_t eachSize =
-        listOFBinaries[0]
-            .size();  // we assume that each binary string has the same size.
-    int totalElements = totalSize * eachSize;
+    std::size_t eachSize  = listOFBinaries[0].size(); // we assume that each binary string has the same size.
+    int totalElements     = totalSize * eachSize;
 
     // First the amount of 1s and 0s in each binary string.
     std::vector<int> ones(totalSize, 0);
     std::vector<int> zeros(totalSize, 0);
     for (int i = 0; i < totalSize; ++i) {
-        ones[i] =
-            std::count(listOFBinaries[i].begin(), listOFBinaries[i].end(), '1');
+        ones[i]  = std::count(listOFBinaries[i].begin(), listOFBinaries[i].end(), '1');
         zeros[i] = eachSize - ones[i];
     }
 
-    int totalOnes = std::accumulate(ones.begin(), ones.end(), 0);
+    int totalOnes  = std::accumulate(ones.begin(), ones.end(), 0);
     int totalZeros = std::accumulate(zeros.begin(), zeros.end(), 0);
 
-    auto maxOne = std::max_element(ones.begin(), ones.end());
+    auto maxOne     = std::max_element(ones.begin(), ones.end());
     int maxOneValue = *maxOne;
     int maxOneIndex = std::distance(ones.begin(), maxOne);
 
-    std::vector<std::string> results = {
-        std::to_string(maxOneValue), std::to_string(maxOneIndex),
-        listOFBinaries[maxOneIndex], std::to_string(totalOnes),
-        std::to_string(totalZeros),  std::to_string(totalElements)};
+    std::vector<std::string> results = {std::to_string(maxOneValue), std::to_string(maxOneIndex),
+                                        listOFBinaries[maxOneIndex], std::to_string(totalOnes),
+                                        std::to_string(totalZeros),  std::to_string(totalElements)};
 
     return results;
 }
@@ -146,10 +142,9 @@ void printVector(const std::vector<T>& vector2Print) {
     }
 }
 
-#include <filesystem>  // std::filesystem::exists
+#include <filesystem> // std::filesystem::exists
 #include <fstream>
-void writeResults(std::string fileName, std::string description,
-                  std::vector<std::string> headers,
+void writeResults(std::string fileName, std::string description, std::vector<std::string> headers,
                   std::vector<std::vector<std::string>> results) {
     /**
      * Writes the results of the simulation in a file.
@@ -175,15 +170,13 @@ void writeResults(std::string fileName, std::string description,
         exit(EXIT_FAILURE);
     }
 
-    fileName = fileName + "_" + std::to_string(NUMBER_OF_SIMULATION) + "_" +
-               std::to_string((int)(CONTROL * 100)) + ".csv";
-    description =
-        description + "Correspond to simulation number **" +
-        std::to_string(NUMBER_OF_SIMULATION) +
-        "**. **Control = " + std::to_string(CONTROL) + "**" +
-        "**Energy to reproduce = " + std::to_string(ENERGY_TO_REPRODUCE) +
-        "**, **Energy to die = " + std::to_string(ENERGY_TO_DIE) +
-        "**, **Age to die = " + std::to_string(AGE_TO_DIE) + "**.";
+    fileName =
+        fileName + "_" + std::to_string(NUMBER_OF_SIMULATION) + "_" + std::to_string((int)(CONTROL * 100)) + ".csv";
+    description = description + "Correspond to simulation number **" + std::to_string(NUMBER_OF_SIMULATION) +
+                  "**. **Control = " + std::to_string(CONTROL) + "**" +
+                  "**Energy to reproduce = " + std::to_string(ENERGY_TO_REPRODUCE) +
+                  "**, **Energy to die = " + std::to_string(ENERGY_TO_DIE) +
+                  "**, **Age to die = " + std::to_string(AGE_TO_DIE) + "**.";
 
     desFile << fileName << " &rarr; " << description << "  \n";
     desFile.close();
@@ -255,14 +248,13 @@ void foodWriting(std::vector<std::string> foodList) {
     }
 
     // Now we write the results
-    std::string fileName = "food_total";
-    std::string desc = "The food used in this simulation.";
+    std::string fileName          = "food_total";
+    std::string desc              = "The food used in this simulation.";
     std::vector<std::string> head = {"Binary"};
     writeResults(fileName, desc, head, foodList2D);
 }
 
-void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
-                       int iteration) {
+void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation, int iteration) {
     /**This is a modification of the writeResults function.
      * Basically I want to write all the information about the population in
      * each generation, The csv contains one row for each agent in each
@@ -273,8 +265,8 @@ void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
      */
 
     // First we define some variables that we always need.
-    std::string fileName = "total_" + std::to_string(NUMBER_OF_SIMULATION) +
-                           "_" + std::to_string((int)(CONTROL * 100)) + ".csv";
+    std::string fileName =
+        "total_" + std::to_string(NUMBER_OF_SIMULATION) + "_" + std::to_string((int)(CONTROL * 100)) + ".csv";
 
     std::string path = DIRECTORY + "\\data\\" + fileName;
     std::ofstream myFile;
@@ -289,14 +281,12 @@ void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
             exit(EXIT_FAILURE);
         }
 
-        std::string description =
-            "All the info about the simulation. Correspond to simulation "
-            "number **" +
-            std::to_string(NUMBER_OF_SIMULATION) +
-            "**. **Control = " + std::to_string(CONTROL) + "**" +
-            "**Energy to reproduce = " + std::to_string(ENERGY_TO_REPRODUCE) +
-            "**, **Energy to die = " + std::to_string(ENERGY_TO_DIE) +
-            "**, **Age to die = " + std::to_string(AGE_TO_DIE) + "**.";
+        std::string description = "All the info about the simulation. Correspond to simulation "
+                                  "number **" +
+                                  std::to_string(NUMBER_OF_SIMULATION) + "**. **Control = " + std::to_string(CONTROL) +
+                                  "**" + "**Energy to reproduce = " + std::to_string(ENERGY_TO_REPRODUCE) +
+                                  "**, **Energy to die = " + std::to_string(ENERGY_TO_DIE) +
+                                  "**, **Age to die = " + std::to_string(AGE_TO_DIE) + "**.";
 
         desFile << fileName << " &rarr; " << description << "  \n";
         desFile.close();
@@ -309,8 +299,7 @@ void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
             exit(EXIT_FAILURE);
         }
 
-        std::vector<std::string> headers = {"ID",  "Genotype", "Energy",
-                                            "Age", "Parent",   "Iteration"};
+        std::vector<std::string> headers = {"ID", "Genotype", "Energy", "Age", "Parent", "Iteration"};
         // First we write the headers
         for (std::size_t i = 0; i < headers.size(); ++i) {
             myFile << headers[i];

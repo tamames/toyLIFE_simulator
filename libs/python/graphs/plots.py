@@ -62,8 +62,8 @@ def energy_plot(data_folder_path: Path, plot_reproduce: bool = False) -> mplf.Fi
 
     fig, ax = plt.subplots(figsize=FIG_SIZE)
 
-    energy_reproduce, energy_die, translation_energy, breaking_energy = (
-        get_energy_to_reproduce(data_folder_path)
+    energy_reproduce, energy_die, translation_energy, breaking_energy = get_energy_to_reproduce(
+        data_folder_path
     )
 
     if plot_reproduce:
@@ -108,9 +108,7 @@ def energy_gain_plot(data_folder_path: Path) -> tuple[mplf.Figure, mplf.Figure]:
     df = fdf.get_energy_gains_df(data_folder_path)
     logging.info("Finish loading the energy gains data")
 
-    _, _, translation_energy, breaking_energy = get_energy_to_reproduce(
-        data_folder_path
-    )
+    _, _, translation_energy, breaking_energy = get_energy_to_reproduce(data_folder_path)
 
     # Create the line plot
     fig, ax = plt.subplots(figsize=FIG_SIZE)
@@ -196,11 +194,7 @@ def stackplot_1_0(by_iteration: pd.DataFrame, total: bool) -> mplf.Figure:
     x_label = "Generation" if total else "Iteration"
     ax.set_xlabel(x_label)
     ax.set_ylabel("Ratio")
-    title = (
-        "Distribution of 1s and 0s in Population"
-        if total
-        else "Distribution of 1s and 0s in Food"
-    )
+    title = "Distribution of 1s and 0s in Population" if total else "Distribution of 1s and 0s in Food"
     ax.set_title(title)
     ax.legend()
     ax.grid(axis="y", linestyle="--", alpha=0.7)
@@ -297,9 +291,7 @@ def stackplot_several_types(df_to_plot: pd.DataFrame) -> mplf.Figure:
     return fig
 
 
-def save_fig(
-    fig: mplf.Figure, plot_type: PlotType, graph_folder: Path, extra_name: str = ""
-) -> None:
+def save_fig(fig: mplf.Figure, plot_type: PlotType, graph_folder: Path, extra_name: str = "") -> None:
     """This function saves the figure in the corresponding folder.
 
     Args:
@@ -309,11 +301,7 @@ def save_fig(
     """
 
     logging.info(f"Saving the {plot_type.value} plot")
-    fig_name = (
-        f"{plot_type.value}_{extra_name}.pdf"
-        if extra_name
-        else f"{plot_type.value}.pdf"
-    )
+    fig_name = f"{plot_type.value}_{extra_name}.pdf" if extra_name else f"{plot_type.value}.pdf"
     fig_path = graph_folder / fig_name
     fig.savefig(str(fig_path), format="pdf", bbox_inches="tight")
     logging.info(f"Finish saving the {plot_type.value} plot")

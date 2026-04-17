@@ -3,14 +3,13 @@
 
 // Header for toyLIFE's general functions
 #include <chrono>
-#include <cmath>    //std::pow
-#include <fstream>  //std::ofstream
-#include <map>      //std::map
+#include <cmath>   //std::pow
+#include <fstream> //std::ofstream
+#include <map>     //std::map
 #include <random>
-#include <sstream>  //std::stringstream
-#include <string>   //std::string
-#include <vector>   //std::vector
-
+#include <sstream> //std::stringstream
+#include <string>  //std::string
+#include <vector>  //std::vector
 
 // BINOMIAL COEFFICIENT
 template <class T = unsigned long>
@@ -56,29 +55,27 @@ double d_min(double e1, double e2);
 double union_seq(int side1, int side2);
 double union_seq3(int side1, const std::string& met);
 // DECIMAL TO BINARY
-inline std::string dectobin(
-    int decimal,
-    const int size) {  // converts decimal integers into binary std::strings
+inline std::string dectobin(int decimal,
+                            const int size) { // converts decimal integers into binary std::strings
     std::string binary(size, '0');
     for (int i = size - 1; i > -1; --i)
         if (decimal / std::pow(2, i) >= 1) {
             binary[size - i - 1] = '1';
-            decimal = decimal - pow(2, i);
+            decimal              = decimal - pow(2, i);
         }
     return binary;
 };
 // BINARY TO DECIMAL
-inline int bintodec(const std::string& binary) {  // converts binary strings
-                                                  // into decimal integers
-    int decimal = 0;
+inline int bintodec(const std::string& binary) { // converts binary strings
+                                                 // into decimal integers
+    int decimal     = 0;
     int binary_size = binary.size();
     for (int i = 0; i < binary_size; ++i)
         decimal += std::pow(2, binary_size - i - 1) * (binary[i] - '0');
     return decimal;
 };
 // BASE 10 TO BASE n
-inline std::vector<int> base_10_to_n(
-    int decimal, int n) {  // converts decimal integers into (4,4,4)
+inline std::vector<int> base_10_to_n(int decimal, int n) { // converts decimal integers into (4,4,4)
     int size = 3;
     std::vector<int> seq(size, 0);
     for (int i = size - 1; i > -1; --i) {
@@ -93,10 +90,9 @@ inline std::vector<int> base_10_to_n(
     return seq;
 };
 // BASE n TO BASE 10
-inline int base_n_to_10(
-    const std::string& binary,
-    int n) {  // converts binary strings into decimal integers
-    int decimal = 0;
+inline int base_n_to_10(const std::string& binary,
+                        int n) { // converts binary strings into decimal integers
+    int decimal     = 0;
     int binary_size = binary.size();
     for (int i = 0; i < binary_size; ++i)
         decimal += std::pow(n, binary_size - i - 1) * (binary[i] - '0');
@@ -125,11 +121,9 @@ int str_hamming(const std::string& v1, const std::string& v2);
 // REVERSE
 std::string reverse(const std::string& s1);
 // RANDOM_GENOTYPE
-std::vector<std::pair<int, int> > vec_random_genotype(
-    int gene_number, std::uniform_real_distribution<double>& RNG,
-    std::default_random_engine& generator);
-std::string random_genotype(int gene_number,
-                            std::uniform_real_distribution<double>& RNG,
+std::vector<std::pair<int, int>> vec_random_genotype(int gene_number, std::uniform_real_distribution<double>& RNG,
+                                                     std::default_random_engine& generator);
+std::string random_genotype(int gene_number, std::uniform_real_distribution<double>& RNG,
                             std::default_random_engine& generator);
 // MUTATION
 std::string mutation(const std::string& genotype, int pos);

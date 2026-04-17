@@ -4,11 +4,12 @@ from pathlib import Path
 from warnings import simplefilter
 
 try:
-    from ForGraphs.data_frames import get_food_df
     import ForGraphs.plots as fpl
+    from ForGraphs.data_frames import get_food_df
 except ModuleNotFoundError:
     from data_frames import get_food_df
     import plots as fpl
+
 import pandas as pd
 from matplotlib.pyplot import close
 
@@ -24,9 +25,7 @@ class _FoodData:
     percentage_of_1: float
 
 
-def _write_food_data(
-    data_folder_path: Path, food_data: _FoodData, value_counts_mode: pd.DataFrame
-) -> None:
+def _write_food_data(data_folder_path: Path, food_data: _FoodData, value_counts_mode: pd.DataFrame) -> None:
     """Writes the food data into the Readme.md file.
 
     Args:

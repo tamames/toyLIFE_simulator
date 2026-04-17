@@ -1,10 +1,10 @@
-#ifndef CLASSES_H  // include guard
+#ifndef CLASSES_H // include guard
 #define CLASSES_H
 
-#include <algorithm>  // std::count std::min
-#include <bitset>     // std::bitset
+#include <algorithm> // std::count std::min
+#include <bitset>    // std::bitset
 #include <iostream>
-#include <stdexcept>  // std::invalid_argument
+#include <stdexcept> // std::invalid_argument
 #include <string>
 #include <vector>
 
@@ -22,7 +22,7 @@ class Agent {
     float energy;
     int age;
     int id;
-    int parent;  // If it's 0 it's from the first generation
+    int parent; // If it's 0 it's from the first generation
 
     // toyLife things
     mapa_prot prots;
@@ -30,9 +30,8 @@ class Agent {
     mapa_met mets;
     mapa_owm owns;
 
-    Agent(float energy, std::string genotype = "", int parent = 0,
-          int sizeGenotype = SIZE_GENOTYPE, mapa_prot prots = {},
-          mapa_dim dims = {}, mapa_met mets = {});
+    Agent(float energy, std::string genotype = "", int parent = 0, int sizeGenotype = SIZE_GENOTYPE,
+          mapa_prot prots = {}, mapa_dim dims = {}, mapa_met mets = {});
 
     void print(bool complete = false);
 
@@ -65,9 +64,8 @@ class Population {
 
     void print(bool complete = false);
 
-    std::vector<std::map<std::string, int>> iteration(
-        std::map<std::string, int>& foodMap, const ToyPlugin& toy, bool print,
-        const int& iterationNumber);
+    std::vector<std::map<std::string, int>> iteration(std::map<std::string, int>& foodMap, const ToyPlugin& toy,
+                                                      bool print, const int& iterationNumber);
 
     void afterIteration(bool print);
 
@@ -93,11 +91,9 @@ class Population {
 
     void addAges();
 
-    void deleteElements(std::vector<Agent>& agents,
-                        const std::vector<int>& indexes);
+    void deleteElements(std::vector<Agent>& agents, const std::vector<int>& indexes);
 
-    std::vector<Agent>::iterator eraseFast(std::vector<Agent>& c,
-                                           std::vector<Agent>::iterator it);
+    std::vector<Agent>::iterator eraseFast(std::vector<Agent>& c, std::vector<Agent>::iterator it);
 };
 
-#endif  // CLASSES_H
+#endif // CLASSES_H

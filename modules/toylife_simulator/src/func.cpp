@@ -10,8 +10,8 @@
 #include <stdexcept>
 #include <string>
 
-#include "toy_plugin.h"
 #include "globals.h"
+#include "toy_plugin.h"
 
 std::string binaryGenerator(int length, float control) {
     /**
@@ -24,7 +24,7 @@ std::string binaryGenerator(int length, float control) {
      */
     std::string binary_string = "";
     for (int i = 0; i < length; i++) {
-        float numero = (float)rand() / (float)RAND_MAX;
+        float numero   = (float)rand() / (float)RAND_MAX;
         binary_string += numero < control ? '1' : '0';
     }
     return binary_string;
@@ -63,8 +63,7 @@ std::string mutate(std::string binString) {
 
     std::string newString(binString.size(), ' ');
     for (int i = 0; i < binString.size(); ++i) {
-        if (std::generate_canonical<double, 5>(GENERATOR) <
-            MUTATION_PROBABILITY)
+        if (std::generate_canonical<double, 5>(GENERATOR) < MUTATION_PROBABILITY)
             newString[i] = binString[i] == '0' ? '1' : '0';
         else
             newString[i] = binString[i];
@@ -72,8 +71,7 @@ std::string mutate(std::string binString) {
     return newString;
 }
 
-std::vector<std::string> listOfFood(
-    unsigned int length, unsigned int food_size /*= SIZE_EACH_FOOD*/) {
+std::vector<std::string> listOfFood(unsigned int length, unsigned int food_size /*= SIZE_EACH_FOOD*/) {
     /**
      * Generates a list of random binary strings that represent the
      *  food available for a population.
@@ -106,8 +104,7 @@ std::map<std::string, int> fromList2Map(std::vector<std::string> list) {
 }
 
 // Function to randomly select N keys from the map
-std::vector<std::string> randomSelectFood(
-    const std::map<std::string, int>& foodMap, int N) {
+std::vector<std::string> randomSelectFood(const std::map<std::string, int>& foodMap, int N) {
     std::vector<std::string> keys;
     keys.reserve(foodMap.size());
 
@@ -115,15 +112,13 @@ std::vector<std::string> randomSelectFood(
         keys.push_back(pair.first);
     }
 
-    std::shuffle(keys.begin(), keys.end(), GENERATOR);  // Shuffle keys randomly
-    keys.resize(
-        std::min(N, static_cast<int>(keys.size())));  // Select first N keys
+    std::shuffle(keys.begin(), keys.end(), GENERATOR);       // Shuffle keys randomly
+    keys.resize(std::min(N, static_cast<int>(keys.size()))); // Select first N keys
 
     return keys;
 }
 
-void subtractFromFoodMap(std::map<std::string, int>& foodMap,
-                         const std::vector<std::string>& keys) {
+void subtractFromFoodMap(std::map<std::string, int>& foodMap, const std::vector<std::string>& keys) {
     /**
      * Substracts 1 from the value of the keys in the foodMap.
      * If the value is 0, the key is removed from the map.
@@ -131,17 +126,15 @@ void subtractFromFoodMap(std::map<std::string, int>& foodMap,
      * @param keys The keys to substract from the map.
      */
     for (const auto& key : keys) {
-        foodMap[key]--;  // Decrease value by 1
+        foodMap[key]--;         // Decrease value by 1
         if (foodMap[key] == 0) {
-            foodMap.erase(key);  // Mark key for deletion
+            foodMap.erase(key); // Mark key for deletion
         }
     }
 }
 
-void addKeysToFoodMap(
-    std::map<std::string, int>& foodMap,
-    const std::vector<std::map<std::string, int>>& returnedFood,
-    const std::vector<std::string>& newFood) {
+void addKeysToFoodMap(std::map<std::string, int>& foodMap, const std::vector<std::map<std::string, int>>& returnedFood,
+                      const std::vector<std::string>& newFood) {
     /**
      * Adds the keys to the foodMap.
      * @param foodMap The map of food.
@@ -177,8 +170,8 @@ std::map<std::string, int> sampleFood(std::map<std::string, int>& foodMap) {
     return selectedFood;
 }
 
-void foodWriting(const std::vector<std::string>& foodVector,
-                 std::filesystem::path folderPath, int iteration, char mode) {
+void foodWriting(const std::vector<std::string>& foodVector, std::filesystem::path folderPath, int iteration,
+                 char mode) {
     /** Writes all the food into a file just to plot a histogram of the
      * distribution I had an idea about plotting the food but I am realizing
      * that this can also be used to plot the genotypes
@@ -207,15 +200,13 @@ void foodWriting(const std::vector<std::string>& foodVector,
     }
 
     for (std::size_t i = 0; i < foodVector.size(); ++i) {
-        myFile << std::to_string(iteration) << "," << foodVector[i] << ","
-               << mode << "\n";
+        myFile << std::to_string(iteration) << "," << foodVector[i] << "," << mode << "\n";
     }
 
     myFile.close();
 }
 
-void foodWriting(const std::vector<mapa_met>& foodMap,
-                 std::filesystem::path folderPath, int iteration, char mode) {
+void foodWriting(const std::vector<mapa_met>& foodMap, std::filesystem::path folderPath, int iteration, char mode) {
     /** Writes all the food into a file just to plot a histogram of the
      * distribution I had an idea about plotting the food but I am realizing
      * that this can also be used to plot the genotypes
@@ -248,8 +239,7 @@ void foodWriting(const std::vector<mapa_met>& foodMap,
             // we iterate over the map consisting on food: amount
             for (int j = 0; j < pair.second; ++j) {
                 // we write the food once per amount there is
-                myFile << std::to_string(iteration) << "," << pair.first << ","
-                       << mode << "\n";
+                myFile << std::to_string(iteration) << "," << pair.first << "," << mode << "\n";
             }
         }
     }
@@ -309,15 +299,12 @@ void printMap(mapa_owm& mapa) {
      */
 
     for (auto const& pair : mapa) {
-        std::cout << "{Prot: " << pair.first.prot
-                  << ", Dim: " << pair.first.dim.id
-                  << ", Met: " << pair.first.met << ": " << pair.second
-                  << "}\n";
+        std::cout << "{Prot: " << pair.first.prot << ", Dim: " << pair.first.dim.id << ", Met: " << pair.first.met
+                  << ": " << pair.second << "}\n";
     }
 }
 
-std::pair<mapa_met, mapa_met> mapDistribution(mapa_met mapa, bool method_1,
-                                              float p) {
+std::pair<mapa_met, mapa_met> mapDistribution(mapa_met mapa, bool method_1, float p) {
     /**
      * Shuffles a map. We can choose between two methods of dealing the map. One
      * where we give a component to each child map in an orderly fashion
@@ -335,9 +322,7 @@ std::pair<mapa_met, mapa_met> mapDistribution(mapa_met mapa, bool method_1,
 
     int i = 0;
     for (auto const& pair : mapa) {
-        if (((i % 2 == 0) && method_1) ||
-            ((std::generate_canonical<double, 5>(GENERATOR) < p) &&
-             !method_1)) {
+        if (((i % 2 == 0) && method_1) || ((std::generate_canonical<double, 5>(GENERATOR) < p) && !method_1)) {
             map1[pair.first] = pair.second;
         } else {
             map2[pair.first] = pair.second;
@@ -347,8 +332,7 @@ std::pair<mapa_met, mapa_met> mapDistribution(mapa_met mapa, bool method_1,
     return std::make_pair(map1, map2);
 }
 
-std::pair<mapa_prot, mapa_prot> mapDistribution(mapa_prot mapa, bool method_1,
-                                                float p) {
+std::pair<mapa_prot, mapa_prot> mapDistribution(mapa_prot mapa, bool method_1, float p) {
     /**
      * Shuffles a map. We can choose between two methods of dealing the map. One
      * where we give a component to each child map in an orderly fashion
@@ -365,9 +349,7 @@ std::pair<mapa_prot, mapa_prot> mapDistribution(mapa_prot mapa, bool method_1,
     }
     int i = 0;
     for (auto const& pair : mapa) {
-        if (((i % 2 == 0) && method_1) ||
-            ((std::generate_canonical<double, 5>(GENERATOR) < p) &&
-             !method_1)) {
+        if (((i % 2 == 0) && method_1) || ((std::generate_canonical<double, 5>(GENERATOR) < p) && !method_1)) {
             map1[pair.first] = pair.second;
         } else {
             map2[pair.first] = pair.second;
@@ -377,8 +359,7 @@ std::pair<mapa_prot, mapa_prot> mapDistribution(mapa_prot mapa, bool method_1,
     return std::make_pair(map1, map2);
 }
 
-std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa, bool method_1,
-                                              float p) {
+std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa, bool method_1, float p) {
     /**
      * Shuffles a map. We can choose between two methods of dealing the map. One
      * where we give a component to each child map in an orderly fashion
@@ -395,9 +376,7 @@ std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa, bool method_1,
     }
     int i = 0;
     for (auto const& pair : mapa) {
-        if (((i % 2 == 0) && method_1) ||
-            ((std::generate_canonical<double, 5>(GENERATOR) < p) &&
-             !method_1)) {
+        if (((i % 2 == 0) && method_1) || ((std::generate_canonical<double, 5>(GENERATOR) < p) && !method_1)) {
             map1[pair.first] = pair.second;
         } else {
             map2[pair.first] = pair.second;
@@ -407,8 +386,7 @@ std::pair<mapa_dim, mapa_dim> mapDistribution(mapa_dim mapa, bool method_1,
     return std::make_pair(map1, map2);
 }
 
-void writeResults(std::string fileName, std::filesystem::path folderPath,
-                  std::vector<std::string> headers,
+void writeResults(std::string fileName, std::filesystem::path folderPath, std::vector<std::string> headers,
                   std::vector<std::vector<std::string>> results) {
     /**
      * Writes the results of the simulation in a file.
@@ -435,8 +413,7 @@ void writeResults(std::string fileName, std::filesystem::path folderPath,
     // We check if the file already exists, so we don't lose any data.
     std::filesystem::path total_path = folderPath / (fileName + ".csv");
     if (std::filesystem::exists(total_path)) {
-        std::cout << "The file " << fileName
-                  << " already exists in the designated folder.\n";
+        std::cout << "The file " << fileName << " already exists in the designated folder.\n";
         std::cout << "Do you want to overwrite it? (y/n)\n";
         char answer;
         std::cin >> answer;
@@ -481,8 +458,8 @@ void writeResults(std::string fileName, std::filesystem::path folderPath,
     std::cout << "Finished writing the results.\n";
 }
 
-void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
-                       int iteration, std::filesystem::path folder_path) {
+void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation, int iteration,
+                       std::filesystem::path folder_path) {
     /**This is a modification of the writeResults function.
      * Basically I want to write all the information about the population in
      * each generation. We call this function each time for storage purposes and
@@ -504,9 +481,8 @@ void populationWriting(std::vector<std::vector<std::string>> dataOfPopulation,
     if (iteration == 0) {
         // If we are in the first iteration we write the headers.
 
-        std::vector<std::string> headers = {"ID",   "Genotype", "Energy",
-                                            "Age",  "Parent",   "Prots",
-                                            "Mets", "Dims",     "Iteration"};
+        std::vector<std::string> headers = {"ID",    "Genotype", "Energy", "Age",      "Parent",
+                                            "Prots", "Mets",     "Dims",   "Iteration"};
         // First we write the headers
         for (std::size_t i = 0; i < headers.size(); ++i) {
             myFile << headers[i];
@@ -537,14 +513,12 @@ int getNumberOfSimulation() {
      * @return The number of the simulation.
      */
 
-    std::filesystem::path numberSimulationsPath =
-        "functions/number_of_simulation.txt";
+    std::filesystem::path numberSimulationsPath = "functions/number_of_simulation.txt";
 
     std::ifstream file;
     file.open(DIRECTORY / numberSimulationsPath);
     if (!file) {
-        std::cout << "There was an error while opening the file:\n"
-                  << (DIRECTORY / numberSimulationsPath) << "\n";
+        std::cout << "There was an error while opening the file:\n" << (DIRECTORY / numberSimulationsPath) << "\n";
         exit(EXIT_FAILURE);
     }
     int number;
@@ -558,14 +532,12 @@ void increaseNumberOfSimulation() {
      * Increases the number of the simulation by one.
      */
 
-    std::filesystem::path numberSimulationsPath =
-        "functions/number_of_simulation.txt";
+    std::filesystem::path numberSimulationsPath = "functions/number_of_simulation.txt";
 
     std::ofstream file;
     file.open(DIRECTORY / numberSimulationsPath);
     if (!file) {
-        std::cout << "There was an error while opening the file:\n"
-                  << (DIRECTORY / numberSimulationsPath) << "\n";
+        std::cout << "There was an error while opening the file:\n" << (DIRECTORY / numberSimulationsPath) << "\n";
         exit(EXIT_FAILURE);
     }
     file << NUMBER_OF_SIMULATION + 1;
@@ -586,15 +558,12 @@ std::filesystem::path createDataDirectory() {
         std::filesystem::create_directory(DIRECTORY / "data");
     }
 
-    std::filesystem::path simulationFolderRelativePath(
-        "data/simulation_" + std::to_string(NUMBER_OF_SIMULATION));
+    std::filesystem::path simulationFolderRelativePath("data/simulation_" + std::to_string(NUMBER_OF_SIMULATION));
 
-    std::filesystem::path simulationFolderPath =
-        DIRECTORY / simulationFolderRelativePath;
+    std::filesystem::path simulationFolderPath = DIRECTORY / simulationFolderRelativePath;
 
     if (std::filesystem::exists(simulationFolderPath)) {
-        std::cout << "The directory  " << std::to_string(NUMBER_OF_SIMULATION)
-                  << " already exists.\n";
+        std::cout << "The directory  " << std::to_string(NUMBER_OF_SIMULATION) << " already exists.\n";
         std::cout << "Do you want to overwrite it? (y/n)\n";
         char answer;
         std::cin >> answer;
@@ -611,21 +580,17 @@ std::filesystem::path createDataDirectory() {
     return simulationFolderPath;
 }
 
-void createReadMe(int numberOfGenerations, int initPopulationSize,
-                  int foodSize) {
+void createReadMe(int numberOfGenerations, int initPopulationSize, int foodSize) {
     /**
      * Creates and fill the ReadMe file inside the data directory
      */
 
-    std::filesystem::path simulationFolderRelativePath(
-        "data/simulation_" + std::to_string(NUMBER_OF_SIMULATION));
+    std::filesystem::path simulationFolderRelativePath("data/simulation_" + std::to_string(NUMBER_OF_SIMULATION));
 
-    std::filesystem::path simulationFolderPath =
-        DIRECTORY / simulationFolderRelativePath;
+    std::filesystem::path simulationFolderPath = DIRECTORY / simulationFolderRelativePath;
 
     if (!std::filesystem::exists(simulationFolderPath)) {
-        std::cout << "The " << simulationFolderRelativePath
-                  << " directory doesn't exist.\n";
+        std::cout << "The " << simulationFolderRelativePath << " directory doesn't exist.\n";
         exit(EXIT_FAILURE);
     }
 
@@ -633,16 +598,13 @@ void createReadMe(int numberOfGenerations, int initPopulationSize,
     file.open(simulationFolderPath / "Readme.md");
 
     if (!file) {
-        std::cout << "There was an error while opening the file:\n"
-                  << simulationFolderPath << "Readme.md" << "\n";
+        std::cout << "There was an error while opening the file:\n" << simulationFolderPath << "Readme.md" << "\n";
         exit(EXIT_FAILURE);
     }
     file << "## Parameters of the simulation: \n";
     file << "* **Number of generations** &rarr; " << numberOfGenerations << "\n"
-         << "* **Initial population size** &rarr; " << initPopulationSize
-         << "\n"
-         << "* **Maximum population size** &rarr; " << MAXIMUM_POPULATION_SIZE
-         << "\n"
+         << "* **Initial population size** &rarr; " << initPopulationSize << "\n"
+         << "* **Maximum population size** &rarr; " << MAXIMUM_POPULATION_SIZE << "\n"
          << "* **Energy to reproduce** &rarr; " << ENERGY_TO_REPRODUCE << "\n"
          << "* **Energy to die** &rarr; " << ENERGY_TO_DIE << "\n"
          << "* **Age to die** &rarr; " << AGE_TO_DIE << "\n"
@@ -668,8 +630,7 @@ std::string fromMapToString(mapa_prot& mapa) {
         return "";
     std::string out = "{";
     for (auto const& pair : mapa) {
-        out += std::to_string(pair.first) + ": " + std::to_string(pair.second) +
-               ", ";
+        out += std::to_string(pair.first) + ": " + std::to_string(pair.second) + ", ";
     }
     // to remove the last comma and space
     out.pop_back();
@@ -710,8 +671,7 @@ std::string fromMapToString(mapa_dim& mapa) {
         return "";
     std::string out = "{";
     for (auto const& pair : mapa) {
-        out += std::to_string(pair.first.id) + ": " +
-               std::to_string(pair.second) + ", ";
+        out += std::to_string(pair.first.id) + ": " + std::to_string(pair.second) + ", ";
     }
     out.pop_back();
     out.pop_back();
@@ -725,7 +685,7 @@ std::string currentTime() {
      * @return The string with the current hour, minute and second.
      */
     std::time_t now = time(0);
-    std::tm* ltm = localtime(&now);
+    std::tm* ltm    = localtime(&now);
 
     // Format the time as HH:MM:SS
     std::stringstream ss;

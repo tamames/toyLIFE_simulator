@@ -2,8 +2,8 @@
 
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import matplotlib.figure as mplf  # just for type hints
+import matplotlib.pyplot as plt
 import pandas as pd
 
 DIR_PATH = Path("simulations/simulation1/graphs")
@@ -42,9 +42,7 @@ def get_df(file: str) -> pd.DataFrame:
                 "Total 0s": int,
                 "Total Elements": int,
             }
-            df = pd.read_csv(
-                file_to_open, sep=",", header=0, dtype=types, index_col=False
-            )
+            df = pd.read_csv(file_to_open, sep=",", header=0, dtype=types, index_col=False)
         elif type_of_food.startswith("total"):
             types = {"Binary": str}
             df = pd.read_csv(file_to_open, sep=",", header=0, dtype=types)
@@ -116,9 +114,7 @@ def write_results(file_name: str, description: str, data_source: str = "") -> No
         des_file.write(file_name + ".png" + " &rarr " + description + "  \n")
 
 
-def save_and_write(
-    fig: mplf.Figure, data_source: str, plot_type: str, description: str = ""
-) -> None:
+def save_and_write(fig: mplf.Figure, data_source: str, plot_type: str, description: str = "") -> None:
     """Handle the call of the save_fig and write_results functions.
 
     Args:
@@ -258,9 +254,7 @@ def main() -> None:
     ax2.set_title("Size Evolution Across Generations")
     ax2.grid(axis="y", linestyle="--", alpha=0.7)
 
-    fig2.savefig(
-        "simulations/simulation1/graphs/size.pdf", format="pdf", bbox_inches="tight"
-    )
+    fig2.savefig("simulations/simulation1/graphs/size.pdf", format="pdf", bbox_inches="tight")
     # fig2.savefig("simulations/simulation1/graphs/bar_size_evolution.png")
 
     # save_and_write(fig2, "total_0_25.csv", "bar_size_evolution")

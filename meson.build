@@ -28,5 +28,3 @@ subdir('modules')
 # gmock_dep                 = dependency('gmock', required: true, main: true)
 # boost_dep                 = dependency('boost', required: true, version :'>=1.81')
 # boost_program_options_dep = dependency('boost', required: true, version :'>=1.81', modules: ['program_options'])
-
-

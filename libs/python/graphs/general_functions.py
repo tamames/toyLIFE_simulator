@@ -12,9 +12,7 @@ def check_file_exists(file_path: Path) -> None:
         FileNotFoundError: in case the file doesn't exists.
     """
     if not file_path.exists():
-        raise FileNotFoundError(
-            f"The file {file_path.name} doesn't exists in {file_path.parent}."
-        )
+        raise FileNotFoundError(f"The file {file_path.name} doesn't exists in {file_path.parent}.")
 
 
 def get_energy_to_reproduce(data_folder_path: Path) -> tuple[str, str, str, str]:
@@ -47,9 +45,7 @@ def get_energy_to_reproduce(data_folder_path: Path) -> tuple[str, str, str, str]
                 breaking_energy = line.split(" ")[-1].strip()
                 return energy_reproduce, energy_die, translation_energy, breaking_energy
 
-    raise ValueError(
-        f"The energy to reproduce parameter wasn't found in {data_folder_path=}"
-    )
+    raise ValueError(f"The energy to reproduce parameter wasn't found in {data_folder_path=}")
 
 
 def get_initial_food(data_folder_path: Path) -> str:
@@ -71,6 +67,4 @@ def get_initial_food(data_folder_path: Path) -> str:
                 logging.info("Finish reading the Readme.md")
                 return line.split(" ")[-1].strip()
 
-    raise ValueError(
-        f"The energy to reproduce parameter wasn't found in {data_folder_path=}"
-    )
+    raise ValueError(f"The energy to reproduce parameter wasn't found in {data_folder_path=}")

@@ -1,19 +1,19 @@
 """In this file we put the functions related with getting the data frames for statistics and graphs"""
 
-from pathlib import Path
 import logging
+from pathlib import Path
 
 import pandas as pd
 
 try:
-    from ForGraphs.general_functions import check_file_exists, get_initial_food
+    from ForGraphs.general_functions import check_file_exists
+    from ForGraphs.general_functions import get_initial_food
 except ModuleNotFoundError:
-    from general_functions import check_file_exists, get_initial_food
+    from general_functions import check_file_exists
+    from general_functions import get_initial_food
 
 
-def get_total_df(
-    data_folder_path: Path, usecols: None | list[str] = None
-) -> pd.DataFrame:
+def get_total_df(data_folder_path: Path, usecols: None | list[str] = None) -> pd.DataFrame:
     """Returns the total DataFrame from the data_folder_path.
 
     Args:
@@ -241,9 +241,7 @@ def get_food_df(data_folder_path: Path, mode: int) -> pd.DataFrame:
             usecols=["Iteration", "Mode"],
         ):
 
-            grouped_chunk = (
-                chunk.groupby(["Iteration", "Mode"]).size().reset_index(name="count")
-            )
+            grouped_chunk = chunk.groupby(["Iteration", "Mode"]).size().reset_index(name="count")
 
             for _, row in grouped_chunk.iterrows():
                 iteration = row["Iteration"]
