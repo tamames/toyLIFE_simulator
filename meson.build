@@ -1,4 +1,4 @@
-project('G2STB', 'cpp', 'c',
+project('toyLiFe', 'cpp', 'c',
         meson_version:  '>=1.0.0',
         version: 'V01.09.00.00',
         default_options: ['buildtype=debugoptimized',

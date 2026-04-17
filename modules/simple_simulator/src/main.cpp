@@ -1,8 +1,8 @@
 #include <iostream>
 
 #include "classes.cpp"
-#include "functions/func.h"
-#include "functions/globals.cpp"
+#include "func.h"
+#include "globals.cpp"
 
 int main() {
     Population population(100);

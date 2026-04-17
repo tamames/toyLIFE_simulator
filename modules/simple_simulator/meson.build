@@ -1,16 +1,14 @@
 inc = include_directories('src')
 
-dep = [
-    toylife_dep,
-]
+dep = []
 
-target_name='toylife-sim'
+target_name='simple-sim'
 
 src = files([
     'src/main.cpp',
     'src/classes.cpp',
-    'src/func.cpp',
     'src/globals.cpp',
+    'src/func.cpp',
 ])
 
 executable(

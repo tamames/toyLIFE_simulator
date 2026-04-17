@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "functions/func.h"
-#include "functions/globals.h"
+#include "func.h"
+#include "globals.h"
 
 class Agent {
    public:
