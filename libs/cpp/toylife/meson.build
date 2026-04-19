@@ -1,9 +1,9 @@
 inc = include_directories('include')
 
-src = files([
+src = files(
     'src/helper_functions.cpp',
     'src/toy_plugin.cpp',
-])
+)
 
 deps = []
 
