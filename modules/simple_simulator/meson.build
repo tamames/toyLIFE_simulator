@@ -2,14 +2,14 @@ inc = include_directories('src')
 
 dep = []
 
-target_name='simple-sim'
+target_name = 'simple-sim'
 
-src = files([
-    'src/main.cpp',
+src = files(
     'src/classes.cpp',
-    'src/globals.cpp',
     'src/func.cpp',
-])
+    'src/globals.cpp',
+    'src/main.cpp',
+)
 
 executable(
     target_name,

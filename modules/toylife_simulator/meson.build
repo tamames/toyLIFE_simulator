@@ -4,14 +4,14 @@ dep = [
     toylife_dep,
 ]
 
-target_name='toylife-sim'
+target_name = 'toylife-sim'
 
-src = files([
-    'src/main.cpp',
+src = files(
     'src/classes.cpp',
     'src/func.cpp',
     'src/globals.cpp',
-])
+    'src/main.cpp',
+)
 
 executable(
     target_name,
