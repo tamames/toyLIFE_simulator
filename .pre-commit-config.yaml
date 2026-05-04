@@ -12,6 +12,12 @@ repos:
         language: system
         entry: clang-format -i
         types_or: [ c++ ]
+      - id: no-commit-to-main
+        name: no-commit-to-main
+        language: system
+        entry: bash -c 'branch=$(git symbolic-ref HEAD 2>/dev/null | sed "s|refs/heads/||"); if [ "$branch" = "main" ]; then echo "❌ Direct commits to main are not allowed."; exit 1; fi'
+        pass_filenames: false
+        always_run: true
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
