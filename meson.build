@@ -9,7 +9,7 @@ project(
     'cpp_std=c++20',
     'default_library=static',
     'prefix=' + meson.current_source_dir(),
-    'warning_level=2',
+    'warning_level=3',
   ],
 )
 
@@ -18,6 +18,12 @@ add_project_arguments(
     '-DtoyLiFe_VERSION="' + meson.project_version() + '"',
     '-fdiagnostics-show-option',
     '-Werror=reorder',
+    '-Wall',
+    '-Wextra',
+    '-Wshadow',
+    '-Wconversion',
+    '-Wpedantic',
+    # '-Werror',
   ],
   language: 'cpp',
 )
